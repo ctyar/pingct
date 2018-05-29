@@ -1,16 +1,42 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
+using CommandLine;
+using SharpConfig;
 
 namespace Tether
 {
-    class Program
+    internal class Program
     {
-        private static WebClient WebClient = new WebClient(); 
+        private const string ConfigFileName = "config.cfg";
+        private static readonly WebClient WebClient = new WebClient();
 
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
+        {
+            Parser.Default.ParseArguments<Config>(args)
+                .WithParsed(async opts => await SaveConfigAndScan(opts))
+                .WithNotParsed(async errs => await LoadConfigAndScan());
+        }
+
+        private static async Task LoadConfigAndScan()
+        {
+            var config = LoadConfig();
+
+            await Scan(config);
+        }
+
+        private static async Task SaveConfigAndScan(Config config)
+        {
+            SaveConfig(config);
+
+            await Scan(config);
+        }
+
+        private static async Task Scan(Config config)
         {
             while (true)
             {
@@ -31,9 +57,51 @@ namespace Tether
             }
         }
 
+        private static Config LoadConfig()
+        {
+            var config = new Config();
+            try
+            {
+                var configuration = Configuration.LoadFromFile(ConfigFileName);
+                config = configuration[0].ToObject<Config>();
+            }
+            catch (FileNotFoundException)
+            {
+                PrintInfo("Config file not found. Loading default configurations.");
+            }
+            catch
+            {
+                PrintFailure("Loading config file failed. Loading default configurations.");
+            }
+
+            return config;
+        }
+
+        private static void SaveConfig(Config config)
+        {
+            var configuration = new Configuration();
+
+            var props = typeof(Config).GetProperties().Where(
+                prop => !Attribute.IsDefined(prop, typeof(IgnoreAttribute)));
+
+            foreach (var propertyInfo in props)
+            {
+                configuration[nameof(Config)].Add(propertyInfo.Name, propertyInfo.GetValue(config));
+            }
+
+            try
+            {
+                configuration.SaveToFile(ConfigFileName);
+            }
+            catch
+            {
+                PrintFailure("Saving config file failed.");
+            }
+        }
+
         private static void TestDns()
         {
-            bool succeed = false;
+            var succeed = false;
             try
             {
                 var ipHostEntry = Dns.GetHostEntry("www.google.com");
@@ -67,7 +135,7 @@ namespace Tether
             PrintResult(result);
         }
 
-        private async static Task TestGateway(string ip)
+        private static async Task TestGateway(string ip)
         {
             var ping = new Ping();
 
@@ -82,7 +150,7 @@ namespace Tether
             PrintValue(pingReply.RoundtripTime, 120, 170);
         }
 
-        private async static Task TestOverseaServer(string host)
+        private static async Task TestOverseaServer(string host)
         {
             var ping = new Ping();
 
@@ -97,7 +165,7 @@ namespace Tether
             PrintValue(pingReply.RoundtripTime, 120, 170);
         }
 
-        private async static Task TestIsp(string ip)
+        private static async Task TestIsp(string ip)
         {
             var ping = new Ping();
 
@@ -162,6 +230,11 @@ namespace Tether
             Console.WriteLine(message);
 
             Console.ResetColor();
+        }
+
+        private static void PrintInfo(string message)
+        {
+            Console.WriteLine(message);
         }
     }
 }
