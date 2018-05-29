@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using System.Collections.Generic;
+using CommandLine;
 
 namespace Tether
 {
@@ -8,7 +9,7 @@ namespace Tether
         [Option('c', "config", Required = true, HelpText = "Change the default configurations.")]
         public bool SetConfig { get; set; }
 
-        [Option('o', "oversea", Required = true, HelpText = "Over sea server to ping.")]
-        public string OverseaServer { get; set; } = "4.2.2.4";
+        [Option('t', "tests", Required = true, HelpText = "List of the tests.")]
+        public IDictionary<string, string> Tests { get; set; } = new Dictionary<string, string>();
     }
 }
