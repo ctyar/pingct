@@ -7,15 +7,10 @@ using SharpConfig;
 
 namespace Tether
 {
-    internal interface IConfigurationManager
-    {
-        Config GetConfig(IEnumerable<string> args);
-    }
-
-    internal class ConfigurationManager : IConfigurationManager
+    internal class ConfigurationManager
     {
         private const string ConfigFileName = "config.cfg";
-        private readonly IReportManager _reportManager;
+        private readonly ConsoleReportManager _reportManager;
 
         public ConfigurationManager() => _reportManager = new ConsoleReportManager();
 

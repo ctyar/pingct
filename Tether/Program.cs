@@ -6,8 +6,8 @@ namespace Tether
     {
         private static async Task Main(string[] args)
         {
-            IConfigurationManager configurationManager = new ConfigurationManager();
-            ITestManager testManager = new TestManager();
+            var configurationManager = new ConfigurationManager();
+            var testManager = new TestManager();
 
             var config = configurationManager.GetConfig(args);
             await testManager.Scan(config);

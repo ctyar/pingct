@@ -2,7 +2,7 @@
 
 namespace Tether
 {
-    internal class ConsoleReportManager : IReportManager
+    internal class ConsoleReportManager
     {
         public void ReportResult(bool isSuccess)
         {

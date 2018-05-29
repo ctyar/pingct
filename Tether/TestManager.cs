@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace Tether
 {
-    internal class TestManager : ITestManager
+    internal class TestManager
     {
         private static readonly WebClient WebClient = new WebClient();
-        private readonly IReportManager _reportManager;
+        private readonly ConsoleReportManager _reportManager;
 
         public TestManager() => _reportManager = new ConsoleReportManager();
 
