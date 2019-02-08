@@ -3,7 +3,7 @@
     internal enum MessageType
     {
         Info,
-        Sucess,
+        Success,
         Warning,
         Failure
     }

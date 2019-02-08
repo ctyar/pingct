@@ -1,117 +1,169 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.NetworkInformation;
+using System.Text;
 using System.Threading.Tasks;
+using SocksSharp;
+using SocksSharp.Proxy;
 
 namespace Tether
 {
     internal class TestManager
     {
-        private static readonly WebClient WebClient = new WebClient();
-        private readonly ConsoleReportManager _reportManager;
+        private const long MaxPingSuccessTime = 120;
+        private const long MaxPingWarningTime = 170;
+        private const int DelayTime = 1000;
 
-        public TestManager() => _reportManager = new ConsoleReportManager();
+        private static readonly ProxySettings ProxySettings = new ProxySettings
+        {
+            Host = "127.0.0.1",
+            Port = 9150
+        };
+        private static readonly ProxyClientHandler<Socks5> ProxyClientHandler =
+            new ProxyClientHandler<Socks5>(ProxySettings);
+        private static readonly HttpClient HttpClient = new HttpClient(ProxyClientHandler);
+        private readonly ConsoleManager _console;
+        private static readonly string FreedomTestHost = Encoding.UTF8.GetString(Convert.FromBase64String("aHR0cHM6Ly9wb3JuaHViLmNvbQ=="));
 
-        public async Task Scan(Config config)
+        public TestManager() => _console = new ConsoleManager();
+
+        public async Task Scan()
         {
             while (true)
             {
-                await TestGateway("192.168.1.1");
+                await KeepPinging("4.2.2.4");
 
-                // TODO: Needs improvment
-                TestProxy();
+                while (true)
+                {
+                    await TestGateway("192.168.1.1");
 
-                await TestIsp("91.98.29.182");
+                    await TestInCountryConnection("aparat.com");
 
-                TestDns();
+                    await TestDns("www.facebook.com");
 
-                await TestOverseaServer("4.2.2.4");
+                    await TestFreedom(FreedomTestHost);
 
-                Console.WriteLine();
+                    var areWeBackOnline = await AreWeBackOnline("4.2.2.4");
 
-                await Task.Delay(2000);
+                    await Task.Delay(DelayTime);
+
+                    if (areWeBackOnline)
+                    {
+                        break;
+                    }
+                }
             }
         }
 
-        private void TestDns()
+        private async Task TestDns(string hostName)
         {
-            var succeed = false;
+            bool succeed;
             try
             {
-                var ipHostEntry = Dns.GetHostEntry("www.google.com");
-                succeed = ipHostEntry.AddressList.Length != 0;
+                var ipAddresses = await Dns.GetHostAddressesAsync(hostName);
+                succeed = ipAddresses.Any();
             }
             catch
             {
                 succeed = false;
             }
 
-            Console.Write("DNS working: ");
-            _reportManager.ReportResult(succeed);
+            _console.Print("DNS: ", MessageType.Info);
+            _console.PrintResult(succeed, "OK", "Not working");
         }
 
-        private void TestProxy()
+        private async Task TestFreedom(string host)
         {
-            bool result;
+            bool succeed;
             try
             {
-                using (WebClient.OpenRead("http://clients3.google.com/generate_204"))
-                {
-                    result = true;
-                }
+                var stream = await HttpClient.GetStreamAsync(host);
+                succeed = true;
             }
             catch
             {
-                result = false;
+                succeed = false;
             }
 
-            Console.Write("Proxy working: ");
-            _reportManager.ReportResult(result);
+            _console.Print("Freedom: ", MessageType.Info);
+            _console.PrintResult(succeed, "OK", "Not working");
         }
 
-        private async Task TestGateway(string ip)
+        private async Task TestGateway(string host)
+        {
+            await Ping(host);
+        }
+
+        private async Task TestInCountryConnection(string host)
+        {
+            await Ping(host);
+        }
+
+        private async Task KeepPinging(string ip)
+        {
+            var ping = new Ping();
+            
+            while (true)
+            {
+                bool success;
+                PingReply pingReply = default;
+                try
+                {
+                    pingReply = await ping.SendPingAsync(ip);
+                    success = pingReply.Status == IPStatus.Success;
+                }
+                catch
+                {
+                    success = false;
+                }
+
+                if (!success)
+                {
+                    return;
+                }
+
+                _console.PrintPing(ip, pingReply.RoundtripTime, MaxPingSuccessTime, MaxPingWarningTime);
+
+                await Task.Delay(DelayTime);
+            }
+        }
+
+        private async Task<bool> AreWeBackOnline(string ip)
         {
             var ping = new Ping();
 
-            var pingReply = await ping.SendPingAsync(ip);
+            bool success;
+            try
+            {
+                var pingReply = await ping.SendPingAsync(ip);
+                success = pingReply.Status == IPStatus.Success;
+            }
+            catch
+            {
+                success = false;
+            }
 
-            var success = pingReply.Status == IPStatus.Success;
-
-            Console.Write("Reaching gateway: ");
-            _reportManager.ReportResult(success);
-
-            Console.Write("Gateway ping time: ");
-            _reportManager.ReportValue(pingReply.RoundtripTime, 120, 170);
+            return success;
         }
 
-        private async Task TestOverseaServer(string host)
+        private async Task Ping(string host)
         {
             var ping = new Ping();
 
-            var pingReply = await ping.SendPingAsync(host);
+            long roundTripTime;
+            try
+            {
+                roundTripTime = (await ping.SendPingAsync(host)).RoundtripTime;
+            }
+            catch
+            {
+                roundTripTime = 0;
+            }
 
-            var success = pingReply.Status == IPStatus.Success;
-
-            Console.Write("Reaching oversea server: ");
-            _reportManager.ReportResult(success);
-
-            Console.Write("Oversea server ping time: ");
-            _reportManager.ReportValue(pingReply.RoundtripTime, 120, 170);
-        }
-
-        private async Task TestIsp(string ip)
-        {
-            var ping = new Ping();
-
-            var pingReply = await ping.SendPingAsync(ip);
-
-            var success = pingReply.Status == IPStatus.Success;
-
-            Console.Write("Reaching ISP: ");
-            _reportManager.ReportResult(success);
-
-            Console.Write("ISP ping time: ");
-            _reportManager.ReportValue(pingReply.RoundtripTime, 120, 170);
+            _console.Print(string.Empty, MessageType.Info);
+            _console.PrintPing(host, roundTripTime, MaxPingSuccessTime, MaxPingWarningTime);
         }
     }
 }
