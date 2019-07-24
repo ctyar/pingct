@@ -14,6 +14,8 @@ namespace Tether
         private readonly string _hostName;
         private readonly PingReportType _reportType;
 
+        private long _roundTripTime;
+
         public PingTest(ConsoleManager consoleManager, string hostName, PingReportType reportType)
         {
             _consoleManager = consoleManager;
@@ -26,40 +28,35 @@ namespace Tether
             var ping = new Ping();
             var result = false;
 
-            long roundTripTime;
             try
             {
-                roundTripTime = (await ping.SendPingAsync(_hostName)).RoundtripTime;
+                _roundTripTime = (await ping.SendPingAsync(_hostName)).RoundtripTime;
 
                 // Sometime the ping doesn't throw but it fails with zero roundtrip time
-                if (roundTripTime != 0)
+                if (_roundTripTime != 0)
                 {
                     result = true;
                 }
             }
             catch (Exception e) when (e is PingException || e is SocketException)
             {
-                roundTripTime = 0;
-            }
-
-            if (_reportType == PingReportType.TestResult)
-            {
-                _consoleManager.Print(string.Empty, MessageType.Info);
-                _consoleManager.PrintPing(_hostName, roundTripTime, MaxPingSuccessTime, MaxPingWarningTime);
-            }
-            else if (_reportType == PingReportType.JustValue)
-            {
-                _consoleManager.PrintPing(_hostName, roundTripTime, MaxPingSuccessTime, MaxPingWarningTime);
+                _roundTripTime = 0;
             }
 
             return result;
         }
 
-        public enum PingReportType
+        public void Report()
         {
-            NoReport = 1,
-            JustValue = 2,
-            TestResult = 4
+            if (_reportType == PingReportType.TestResult)
+            {
+                _consoleManager.Print(string.Empty, MessageType.Info);
+                _consoleManager.PrintPing(_hostName, _roundTripTime, MaxPingSuccessTime, MaxPingWarningTime);
+            }
+            else if (_reportType == PingReportType.JustValue)
+            {
+                _consoleManager.PrintPing(_hostName, _roundTripTime, MaxPingSuccessTime, MaxPingWarningTime);
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 
 namespace Tether
 {
@@ -28,15 +29,12 @@ namespace Tether
 
                 while (true)
                 {
-                    foreach (var test in tests)
-                    {
-                        await test.Run();
-                    }
+                    await RunAllTests(tests);
+
+                    PrintAllTests(tests);
 
                     var areWeBackOnline = await AreWeBackOnline("4.2.2.4");
-
-                    await Task.Delay(DelayTime);
-
+                    
                     if (areWeBackOnline)
                     {
                         break;
@@ -45,18 +43,35 @@ namespace Tether
             }
         }
 
+        private async Task RunAllTests(ITest[] tests)
+        {
+            var tasks = tests.Select(item => item.Run()).ToList();
+
+            await Task.WhenAll(tasks);
+        }
+
+        private void PrintAllTests(ITest[] tests)
+        {
+            foreach (var test in tests)
+            {
+                test.Report();
+            }
+        }
+
         private async Task KeepPinging(string hostName)
         {
-            var pingTest = new PingTest(_consoleManager, hostName, PingTest.PingReportType.JustValue);
+            var pingTest = new PingTest(_consoleManager, hostName, PingReportType.JustValue);
 
             while (true)
             {
-                var result = await pingTest.Run();
+                var isStillOnline = await pingTest.Run();
 
-                if (!result)
+                if (!isStillOnline)
                 {
                     return;
                 }
+
+                pingTest.Report();
 
                 await Task.Delay(DelayTime);
             }
@@ -64,7 +79,7 @@ namespace Tether
 
         private Task<bool> AreWeBackOnline(string hostName)
         {
-            var pingTest = new PingTest(_consoleManager, hostName, PingTest.PingReportType.NoReport);
+            var pingTest = new PingTest(_consoleManager, hostName, PingReportType.NoReport);
 
             return pingTest.Run();
         }

@@ -4,11 +4,10 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.4.3" />
-    <PackageReference Include="sharpconfig" Version="3.2.8" />
     <PackageReference Include="SocksSharp" Version="1.1.1" />
   </ItemGroup>
 

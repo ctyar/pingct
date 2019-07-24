@@ -10,6 +10,8 @@ namespace Tether
         private readonly ConsoleManager _consoleManager;
         private readonly string _hostName;
 
+        private bool _result;
+
         public DnsTest(ConsoleManager consoleManager, string hostName)
         {
             _consoleManager = consoleManager;
@@ -18,20 +20,23 @@ namespace Tether
 
         public async Task<bool> Run()
         {
-            var result = false;
+            _result = false;
             try
             {
                 var ipAddresses = await Dns.GetHostAddressesAsync(_hostName);
-                result = ipAddresses.Any();
+                _result = ipAddresses.Any();
             }
             catch (SocketException)
             {
             }
+            
+            return _result;
+        }
 
+        public void Report()
+        {
             _consoleManager.Print("DNS: ", MessageType.Info);
-            _consoleManager.PrintResult(result, "OK", "Not working");
-
-            return result;
+            _consoleManager.PrintResult(_result, "OK", "Not working");
         }
     }
 }

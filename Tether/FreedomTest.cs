@@ -23,6 +23,8 @@ namespace Tether
         private readonly ConsoleManager _consoleManager;
         private readonly string _hostName;
 
+        private bool _result;
+
         public FreedomTest(ConsoleManager consoleManager)
         {
             _consoleManager = consoleManager;
@@ -31,20 +33,23 @@ namespace Tether
 
         public async Task<bool> Run()
         {
-            var result = false;
+            _result = false;
             try
             {
                 var stream = await HttpClient.GetStreamAsync(_hostName);
-                result = true;
+                _result = true;
             }
             catch (Exception e) when (e is HttpRequestException || e is ProxyException)
             {
             }
 
-            _consoleManager.Print("Freedom: ", MessageType.Info);
-            _consoleManager.PrintResult(result, "OK", "Not working");
+            return _result;
+        }
 
-            return result;
+        public void Report()
+        {
+            _consoleManager.Print("Freedom: ", MessageType.Info);
+            _consoleManager.PrintResult(_result, "OK", "Not working");
         }
     }
 }
