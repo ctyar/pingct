@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,7 +40,8 @@ namespace Tether
                 var stream = await HttpClient.GetStreamAsync(_hostName);
                 _result = true;
             }
-            catch (Exception e) when (e is HttpRequestException || e is ProxyException)
+            catch (Exception e) when (e is HttpRequestException || e is ProxyException ||
+                                      e is OperationCanceledException || e is IOException)
             {
             }
 
