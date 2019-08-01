@@ -10,26 +10,28 @@ namespace Tether
         private const long MaxPingSuccessTime = 120;
         private const long MaxPingWarningTime = 170;
 
-        private readonly ConsoleManager _consoleManager;
+        private readonly IReportManager _reportManager;
         private readonly string _hostName;
         private readonly PingReportType _reportType;
 
         private long _roundTripTime;
 
-        public PingTest(ConsoleManager consoleManager, string hostName, PingReportType reportType)
+        public PingTest(IReportManager reportManager, string hostName, PingReportType reportType)
         {
-            _consoleManager = consoleManager;
+            _reportManager = reportManager;
             _hostName = hostName;
             _reportType = reportType;
         }
 
         public async Task<bool> Run()
         {
-            var ping = new Ping();
             var result = false;
+            Ping? ping = default;
 
             try
             {
+                ping = new Ping();
+
                 _roundTripTime = (await ping.SendPingAsync(_hostName)).RoundtripTime;
 
                 // Sometime the ping doesn't throw but it fails with zero roundtrip time
@@ -42,6 +44,10 @@ namespace Tether
             {
                 _roundTripTime = 0;
             }
+            finally
+            {
+                ping?.Dispose();
+            }
 
             return result;
         }
@@ -50,12 +56,43 @@ namespace Tether
         {
             if (_reportType == PingReportType.TestResult)
             {
-                _consoleManager.Print(string.Empty, MessageType.Info);
-                _consoleManager.PrintPing(_hostName, _roundTripTime, MaxPingSuccessTime, MaxPingWarningTime);
+                _reportManager.Print(string.Empty, MessageType.Info);
+                PrintPing(_hostName, _roundTripTime, MaxPingSuccessTime, MaxPingWarningTime);
             }
             else if (_reportType == PingReportType.JustValue)
             {
-                _consoleManager.PrintPing(_hostName, _roundTripTime, MaxPingSuccessTime, MaxPingWarningTime);
+                PrintPing(_hostName, _roundTripTime, MaxPingSuccessTime, MaxPingWarningTime);
+            }
+        }
+
+        private void PrintPing(string ip, long time, long maxSuccessTime, long maxWarningTime)
+        {
+            _reportManager.Print($"Reply from {ip}: time=", MessageType.Info);
+
+            PrintPingValue(time, maxSuccessTime, maxWarningTime);
+
+            _reportManager.Print("ms", MessageType.Info);
+
+            _reportManager.PrintLine();
+        }
+
+        private void PrintPingValue(long value, long maxSuccessValue, long maxWarningValue)
+        {
+            if (value == 0)
+            {
+                _reportManager.Print(value.ToString(), MessageType.Failure);
+            }
+            else if (value <= maxSuccessValue)
+            {
+                _reportManager.Print(value.ToString(), MessageType.Success);
+            }
+            else if (value <= maxWarningValue)
+            {
+                _reportManager.Print(value.ToString(), MessageType.Warning);
+            }
+            else
+            {
+                _reportManager.Print(value.ToString(), MessageType.Failure);
             }
         }
     }

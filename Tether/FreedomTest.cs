@@ -21,14 +21,14 @@ namespace Tether
 
         private static readonly HttpClient HttpClient = new HttpClient(ProxyClientHandler);
 
-        private readonly ConsoleManager _consoleManager;
+        private readonly IReportManager _reportManager;
         private readonly string _hostName;
 
         private bool _result;
 
-        public FreedomTest(ConsoleManager consoleManager)
+        public FreedomTest(IReportManager reportManager)
         {
-            _consoleManager = consoleManager;
+            _reportManager = reportManager;
             _hostName = Encoding.UTF8.GetString(Convert.FromBase64String("aHR0cHM6Ly9wb3JuaHViLmNvbQ=="));
         }
 
@@ -50,8 +50,11 @@ namespace Tether
 
         public void Report()
         {
-            _consoleManager.Print("Freedom: ", MessageType.Info);
-            _consoleManager.PrintResult(_result, "OK", "Not working");
+            var (message, type) = _result ? ("OK", MessageType.Success) : ("Not working", MessageType.Failure);
+            
+            _reportManager.Print("Freedom: ", MessageType.Info);
+            _reportManager.Print(message, type);
+            _reportManager.PrintLine();
         }
     }
 }

@@ -6,21 +6,21 @@ namespace Tether
     internal class TestManager
     {
         private const int DelayTime = 1000;
-        private readonly ConsoleManager _consoleManager;
+        private readonly IReportManager _reportManager;
 
         public TestManager()
         {
-            _consoleManager = new ConsoleManager();
+            _reportManager = new ReportManager();
         }
 
         public async Task Scan()
         {
             ITest[] tests =
             {
-                new GatewayTest(_consoleManager, "192.168.1.1"),
-                new InCountryConnectionTest(_consoleManager, "aparat.com"),
-                new DnsTest(_consoleManager, "www.facebook.com"),
-                new FreedomTest(_consoleManager)
+                new GatewayTest(_reportManager, "192.168.1.1"),
+                new InCountryConnectionTest(_reportManager, "aparat.com"),
+                new DnsTest(_reportManager, "www.facebook.com"),
+                new FreedomTest(_reportManager)
             };
 
             while (true)
@@ -54,13 +54,14 @@ namespace Tether
         {
             foreach (var test in tests)
             {
+                _reportManager.Print("    ", MessageType.Info);
                 test.Report();
             }
         }
 
         private async Task KeepPinging(string hostName)
         {
-            var pingTest = new PingTest(_consoleManager, hostName, PingReportType.JustValue);
+            var pingTest = new PingTest(_reportManager, hostName, PingReportType.JustValue);
 
             while (true)
             {
@@ -79,7 +80,7 @@ namespace Tether
 
         private Task<bool> AreWeBackOnline(string hostName)
         {
-            var pingTest = new PingTest(_consoleManager, hostName, PingReportType.NoReport);
+            var pingTest = new PingTest(_reportManager, hostName, PingReportType.NoReport);
 
             return pingTest.Run();
         }

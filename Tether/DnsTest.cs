@@ -7,14 +7,14 @@ namespace Tether
 {
     internal class DnsTest : ITest
     {
-        private readonly ConsoleManager _consoleManager;
         private readonly string _hostName;
+        private readonly IReportManager _reportManager;
 
         private bool _result;
 
-        public DnsTest(ConsoleManager consoleManager, string hostName)
+        public DnsTest(IReportManager reportManager, string hostName)
         {
-            _consoleManager = consoleManager;
+            _reportManager = reportManager;
             _hostName = hostName;
         }
 
@@ -29,14 +29,17 @@ namespace Tether
             catch (SocketException)
             {
             }
-            
+
             return _result;
         }
 
         public void Report()
         {
-            _consoleManager.Print("DNS: ", MessageType.Info);
-            _consoleManager.PrintResult(_result, "OK", "Not working");
+            var (message, type) = _result ? ("OK", MessageType.Success) : ("Not working", MessageType.Failure);
+
+            _reportManager.Print("DNS: ", MessageType.Info);
+            _reportManager.Print(message, type);
+            _reportManager.PrintLine();
         }
     }
 }

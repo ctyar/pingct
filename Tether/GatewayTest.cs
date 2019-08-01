@@ -2,7 +2,7 @@
 {
     internal class GatewayTest : PingTest
     {
-        public GatewayTest(ConsoleManager consoleManager, string hostName) : base(consoleManager, hostName, PingReportType.TestResult)
+        public GatewayTest(IReportManager reportManager, string hostName) : base(reportManager, hostName, PingReportType.TestResult)
         {
         }
     }

@@ -2,7 +2,7 @@
 {
     internal class InCountryConnectionTest : PingTest
     {
-        public InCountryConnectionTest(ConsoleManager consoleManager, string hostName) : base(consoleManager, hostName,
+        public InCountryConnectionTest(IReportManager reportManager, string hostName) : base(reportManager, hostName,
             PingReportType.TestResult)
         {
         }
