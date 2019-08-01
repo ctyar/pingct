@@ -19,18 +19,11 @@ namespace Tether
             {
                 logger.Info("Application started.");
 
-                var config = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json", true, true)
-                    .Build();
+                var serviceCollection = new ServiceCollection();
+                ConfigureServices(serviceCollection);
+                var serviceProvider = serviceCollection.BuildServiceProvider();
 
-                var servicesProvider = BuildDi(config);
-                using (servicesProvider as IDisposable)
-                {
-                    var testManager = servicesProvider.GetRequiredService<TestManager>();
-
-                    await testManager.Scan();
-                }
+                await serviceProvider.GetRequiredService<TestManager>().Scan();
             }
             catch (Exception ex)
             {
@@ -44,17 +37,28 @@ namespace Tether
             }
         }
 
-        private static IServiceProvider BuildDi(IConfiguration config)
+        private static void ConfigureServices(ServiceCollection serviceCollection)
         {
-            return new ServiceCollection()
-                .AddTransient<TestManager>()
-                .AddLogging(loggingBuilder =>
-                {
-                    loggingBuilder.ClearProviders();
-                    loggingBuilder.SetMinimumLevel(LogLevel.Trace);
-                    loggingBuilder.AddNLog(config);
-                })
-                .BuildServiceProvider();
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("settings.json", true, true)
+                .Build();
+            serviceCollection.AddOptions();
+            serviceCollection.Configure<Settings>(config.GetSection("Configuration"));
+
+            serviceCollection.AddTransient<TestManager>()
+                .AddTransient<IReportManager, ReportManager>()
+                .AddTransient<ITest, GatewayTest>()
+                .AddTransient<ITest, InCountryConnectionTest>()
+                .AddTransient<ITest, DnsTest>()
+                .AddTransient<ITest, FreedomTest>();
+
+            serviceCollection.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.ClearProviders();
+                loggingBuilder.SetMinimumLevel(LogLevel.Trace);
+                loggingBuilder.AddNLog(config);
+            });
         }
     }
 }

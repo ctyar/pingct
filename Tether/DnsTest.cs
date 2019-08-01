@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace Tether
 {
@@ -12,10 +13,10 @@ namespace Tether
 
         private bool _result;
 
-        public DnsTest(IReportManager reportManager, string hostName)
+        public DnsTest(IReportManager reportManager, IOptions<Settings> settings)
         {
             _reportManager = reportManager;
-            _hostName = hostName;
+            _hostName = settings.Value.Dns;
         }
 
         public async Task<bool> Run()

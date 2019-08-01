@@ -7,20 +7,22 @@ namespace Tether
 {
     internal class PingTest : ITest
     {
-        private const long MaxPingSuccessTime = 120;
-        private const long MaxPingWarningTime = 170;
-
-        private readonly IReportManager _reportManager;
         private readonly string _hostName;
+        private readonly long _maxPingSuccessTime;
+        private readonly long _maxPingWarningTime;
+        private readonly IReportManager _reportManager;
         private readonly PingReportType _reportType;
 
         private long _roundTripTime;
 
-        public PingTest(IReportManager reportManager, string hostName, PingReportType reportType)
+        public PingTest(IReportManager reportManager, PingReportType reportType, string hostName,
+            long maxPingSuccessTime, long maxPingWarningTime)
         {
             _reportManager = reportManager;
-            _hostName = hostName;
             _reportType = reportType;
+            _hostName = hostName;
+            _maxPingSuccessTime = maxPingSuccessTime;
+            _maxPingWarningTime = maxPingWarningTime;
         }
 
         public async Task<bool> Run()
@@ -57,11 +59,11 @@ namespace Tether
             if (_reportType == PingReportType.TestResult)
             {
                 _reportManager.Print(string.Empty, MessageType.Info);
-                PrintPing(_hostName, _roundTripTime, MaxPingSuccessTime, MaxPingWarningTime);
+                PrintPing(_hostName, _roundTripTime, _maxPingSuccessTime, _maxPingWarningTime);
             }
             else if (_reportType == PingReportType.JustValue)
             {
-                PrintPing(_hostName, _roundTripTime, MaxPingSuccessTime, MaxPingWarningTime);
+                PrintPing(_hostName, _roundTripTime, _maxPingSuccessTime, _maxPingWarningTime);
             }
         }
 
