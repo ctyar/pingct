@@ -1,4 +1,4 @@
-﻿namespace Tether
+﻿namespace Ctyar.Pingct
 {
     internal class Settings
     {

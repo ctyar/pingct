@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 
-namespace Tether
+namespace Ctyar.Pingct
 {
     internal class DnsTest : ITest
     {

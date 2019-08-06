@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "Tether": {
-      "commandName": "Project",
-      "commandLineArgs": "-c -o 8.8.8.8"
-    }
-  }
-}

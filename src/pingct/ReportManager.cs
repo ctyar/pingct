@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tether
+namespace Ctyar.Pingct
 {
     internal class ReportManager : IReportManager
     {

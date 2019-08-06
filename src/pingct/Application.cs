@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Serilog;
 
-namespace Tether
+namespace Ctyar.Pingct
 {
     internal class Application
     {

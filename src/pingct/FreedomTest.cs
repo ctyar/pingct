@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SocksSharp;
 using SocksSharp.Proxy;
 
-namespace Tether
+namespace Ctyar.Pingct
 {
     internal class FreedomTest : ITest
     {

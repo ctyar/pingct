@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 
-namespace Tether
+namespace Ctyar.Pingct
 {
     internal class GatewayTest : PingTest
     {

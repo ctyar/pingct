@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Tether
+namespace Ctyar.Pingct
 {
     internal interface ITest
     {

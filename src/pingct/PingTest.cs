@@ -3,7 +3,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace Tether
+namespace Ctyar.Pingct
 {
     internal class PingTest : ITest
     {

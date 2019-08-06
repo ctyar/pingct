@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pingct", "src\pingct\pingct.csproj", "{7F907512-98EE-4506-AC02-7E26C49A8B51}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{199CEDCF-0997-41B1-A9E7-5952E2F95D39}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		Build.bat = Build.bat
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{63B1EA83-0218-4BFE-8D74-DD3EBF1781C2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7F907512-98EE-4506-AC02-7E26C49A8B51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F907512-98EE-4506-AC02-7E26C49A8B51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F907512-98EE-4506-AC02-7E26C49A8B51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F907512-98EE-4506-AC02-7E26C49A8B51}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7F907512-98EE-4506-AC02-7E26C49A8B51} = {63B1EA83-0218-4BFE-8D74-DD3EBF1781C2}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {97F7258C-DD1A-4893-BC16-76B818C4F44F}
+	EndGlobalSection
+EndGlobal
