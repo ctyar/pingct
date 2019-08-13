@@ -8,7 +8,7 @@ namespace Ctyar.Pingct
 {
     internal class Program
     {
-        private static async Task Main(string[] args)
+        private static async Task Main(string[] _)
         {
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
