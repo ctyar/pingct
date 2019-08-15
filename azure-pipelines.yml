@@ -1,0 +1,27 @@
+steps:
+# We need this only for cake
+- task: UseDotNet@2
+  displayName: Install .NET Core 2.1 SDK
+  inputs:
+    packageType: 'sdk'
+    version: '2.2.401'
+
+- task: UseDotNet@2
+  displayName: Install .NET Core 3 SDK
+  inputs:
+    packageType: 'sdk'
+    version: '3.0.100-preview8-013656'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Install Cake'
+  inputs:
+    command: custom
+    custom: tool
+    arguments: 'install -g cake.tool'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run Cake'
+  inputs:
+    command: custom
+    custom: cake
+    arguments: 'build.cake'
