@@ -1,3 +1,0 @@
-dotnet-cake
-
-pause

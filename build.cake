@@ -15,6 +15,9 @@ Task("Clean")
     };
 
     DotNetCoreClean(projectDir, settings);
+
+	var directoriesToClean = GetDirectories(outputDirectory);
+	CleanDirectories(directoriesToClean);
 });
 
 
@@ -22,14 +25,13 @@ Task("Build")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    var settings = new DotNetCorePublishSettings
-    {
-        Framework = framework,
-        Configuration = configuration,
-        OutputDirectory = outputDirectory
-    };
+	var settings = new DotNetCorePackSettings
+	{
+		Configuration = configuration,
+		OutputDirectory = outputDirectory
+	};
 
-    DotNetCorePublish(projectDir, settings);
+	DotNetCorePack(projectDir, settings);
 }); 
 
 
