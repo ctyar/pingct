@@ -17,18 +17,12 @@ namespace Ctyar.Pingct
         {
             try
             {
-                Log.Information("Application started.");
-
                 await _testManager.Scan();
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Stopped program because of exception");
                 throw;
-            }
-            finally
-            {
-                Log.Information("Exiting application.");
             }
         }
     }
