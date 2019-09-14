@@ -15,12 +15,12 @@ Currently, the tests are:
 Output sample:
 ```
 > pingct 
-Reply from 4.2.2.4: time=111ms                                                                                                                                                               
-Reply from 4.2.2.4: time=106ms                                                                                                                                                                
-Reply from 4.2.2.4: time=105ms                                                                                                                                                                
-Reply from 4.2.2.4: time=107ms                                                                                                                                                                
-Reply from 4.2.2.4: time=105ms                                                                                                                                                                
-Reply from 4.2.2.4: time=112ms 
+Reply from 4.2.2.4: time=111ms
+Reply from 4.2.2.4: time=106ms
+Reply from 4.2.2.4: time=105ms
+Reply from 4.2.2.4: time=107ms
+Reply from 4.2.2.4: time=105ms
+Reply from 4.2.2.4: time=112ms
     Reply from 192.168.1.1: time=2ms
     Reply from aparat.com: time=0ms
     DNS: OK
