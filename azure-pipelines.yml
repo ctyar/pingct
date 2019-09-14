@@ -1,8 +1,5 @@
 # https://docs.microsoft.com/azure/devops/pipelines/yaml-schema
 
-variables:
-  system.debug: true
-
 stages:
 - stage: Build
   displayName: Build
@@ -23,7 +20,7 @@ stages:
     - task: UseDotNet@2
       displayName: Install .NET Core 3
       inputs:
-        version: '3.0.100-preview8-013656'
+        version: '3.0.100-preview9-014004'
 
     - task: DotNetCoreCLI@2
       displayName: 'Install Cake'
@@ -38,10 +35,6 @@ stages:
         command: custom
         custom: cake
         arguments: 'build.cake'
-
-    - publish: 'artifacts/'
-      artifact: 'Packages'
-      displayName: Publish artifacts
 
   - job: Windows
     pool:
@@ -73,26 +66,3 @@ stages:
         command: custom
         custom: cake
         arguments: 'build.cake'
-
-- stage: Staging
-  condition: ne(variables['build.reason'], 'PullRequest')
-  jobs:
-  - deployment: alphafeed
-    displayName: 'Azure feed'
-    environment: 'azure feed'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: NuGetToolInstaller@1
-            displayName: 'Install latest NuGet'
-            inputs:
-              checkLatest: true
-
-          - task: NuGetCommand@2
-            displayName: 'NuGet push'
-            inputs:
-              command: push
-              packagesToPush: '$(Pipeline.Workspace)/**/*.nupkg'
-              publishVstsFeed: 'pingct'
-
