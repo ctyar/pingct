@@ -19,23 +19,6 @@ Currently, the tests are:
 1. Testing DNS
 1. Trying to access a restricted IP to see if our restriction bypass solution is working
 
-Output sample:
-```
-> pingct 
-Reply from 4.2.2.4: time=111ms
-Reply from 4.2.2.4: time=106ms
-Reply from 4.2.2.4: time=105ms
-Reply from 4.2.2.4: time=107ms
-Reply from 4.2.2.4: time=105ms
-Reply from 4.2.2.4: time=112ms
-    Reply from 192.168.1.1: time=2ms
-    Reply from aparat.com: time=0ms
-    DNS: OK
-    Freedom: Not working
-Reply from 4.2.2.4: time=148ms
-Reply from 4.2.2.4: time=152ms
-Reply from 4.2.2.4: time=154ms
-Reply from 4.2.2.4: time=159ms
-Reply from 4.2.2.4: time=154ms
-Reply from 4.2.2.4: time=153ms
-```
+
+### Sample output:
+![image](https://user-images.githubusercontent.com/1432648/64917273-a76b9f00-d7a3-11e9-8c0c-d249224ec0c7.png)
