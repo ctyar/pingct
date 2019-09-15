@@ -30,9 +30,9 @@ Install the [Cake.Tool](https://www.nuget.org/packages/Cake.Tool)
 
 Run:
 ```
-.\Build.ps1
+dotnet-cake
 ```
 or
 ```
-dotnet-cake
+.\Build.ps1
 ```
