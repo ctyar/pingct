@@ -32,7 +32,3 @@ Run:
 ```
 dotnet-cake
 ```
-or
-```
-.\Build.ps1
-```
