@@ -1,2 +1,7 @@
-$version = Read-Host -Prompt 'Enter the version'
+dotnet-cake
+
+$version = (get-item .\artifacts\*.nupkg).Name -replace "pingct.","" -replace ".nupkg",""
+
+dotnet tool uninstall pingct --global
+
 dotnet tool install --global --add-source .\artifacts pingct --version $version

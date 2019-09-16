@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 
 namespace Ctyar.Pingct
 {
@@ -13,10 +12,10 @@ namespace Ctyar.Pingct
 
         private bool _result;
 
-        public DnsTest(IReportManager reportManager, IOptions<Settings> settings)
+        public DnsTest(IReportManager reportManager, Settings settings)
         {
             _reportManager = reportManager;
-            _hostName = settings.Value.Dns;
+            _hostName = settings.Dns;
         }
 
         public async Task<bool> Run()

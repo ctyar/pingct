@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 
 namespace Ctyar.Pingct
 {
@@ -14,14 +13,14 @@ namespace Ctyar.Pingct
         private readonly IReportManager _reportManager;
         private readonly IEnumerable<ITest> _tests;
 
-        public TestManager(IEnumerable<ITest> tests, IReportManager reportManager, IOptions<Settings> settings)
+        public TestManager(IEnumerable<ITest> tests, IReportManager reportManager, Settings settings)
         {
             _tests = tests;
             _reportManager = reportManager;
-            _delay = settings.Value.Delay;
-            _ping = settings.Value.Ping;
-            _maxPingSuccessTime = settings.Value.MaxPingSuccessTime;
-            _maxPingWarningTime = settings.Value.MaxPingWarningTime;
+            _delay = settings.Delay;
+            _ping = settings.Ping;
+            _maxPingSuccessTime = settings.MaxPingSuccessTime;
+            _maxPingWarningTime = settings.MaxPingWarningTime;
         }
 
         public async Task Scan()

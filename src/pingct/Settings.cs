@@ -2,8 +2,6 @@
 {
     internal class Settings
     {
-        public const string FileName = "settings.json";
-
         public string Ping { get; set; } = "4.2.2.4";
 
         public int Delay { get; set; } = 1000;
