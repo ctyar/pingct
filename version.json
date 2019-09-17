@@ -1,12 +1,16 @@
 {
-  "version": "0.1",
+  "version": "0.1.0",
   "publicReleaseRefSpec": [
     "^refs/heads/master$",
-    "^refs/heads/v\\d+(?:\\.\\d+)?$"
+    "^refs/tags/v\\d+\\.\\d+"
   ],
+  "nugetPackageVersion": {
+    "semVer": 2
+  },
   "cloudBuild": {
     "buildNumber": {
-      "enabled": true
+      "enabled": true,
+      "setVersionVariables": true
     }
   }
 }
