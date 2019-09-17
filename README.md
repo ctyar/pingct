@@ -13,6 +13,23 @@ Once installed, run this command:
 dotnet tool install --global pingct
 ```
 
+And run with:
+```
+pingct
+```
+
+## Usage
+
+```
+pingct [options] [command]
+
+Options:
+  --version    Display version information
+
+Commands:
+  config    Run a wizard to change the default settings.
+```
+
 Currently, the tests are:
 1. Pinging the gateway IP address
 1. Pinging `aparat.com` to see if the country's internal network is accessible
