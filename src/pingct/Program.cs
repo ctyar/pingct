@@ -22,7 +22,8 @@ namespace Ctyar.Pingct
 
                 var configCommand = new Command("config")
                 {
-                    Handler = CommandHandler.Create(Config)
+                    Handler = CommandHandler.Create(Config),
+                    Description = "Run a wizard to change the default settings"
                 };
 
                 rootCommand.Add(configCommand);
