@@ -42,7 +42,7 @@ namespace Ctyar.Pingct
 
         private static void Config()
         {
-            GetServiceProvider().GetRequiredService<ConfigManager>().Config();
+            GetServiceProvider().GetRequiredService<SettingsManager>().RunWizard();
         }
 
         private static ServiceProvider GetServiceProvider()
@@ -58,15 +58,15 @@ namespace Ctyar.Pingct
         {
             serviceCollection
                 .AddTransient<StorageManager>()
-                .AddTransient<ConfigManager>()
+                .AddTransient<SettingsManager>()
                 .AddSingleton(provider =>
                 {
-                    var configManager = provider.GetService<ConfigManager>();
+                    var configManager = provider.GetService<SettingsManager>();
                     var settings = configManager.Read();
                     return settings;
                 })
                 .AddTransient<TestManager>()
-                .AddTransient<IReportManager, ReportManager>()
+                .AddTransient<IConsoleManager, ConsoleManager>()
                 .AddTransient<ITest, GatewayTest>()
                 .AddTransient<ITest, InCountryConnectionTest>()
                 .AddTransient<ITest, DnsTest>()

@@ -10,15 +10,15 @@ namespace Ctyar.Pingct
         private readonly string _hostName;
         private readonly long _maxPingSuccessTime;
         private readonly long _maxPingWarningTime;
-        private readonly IReportManager _reportManager;
+        private readonly IConsoleManager _consoleManager;
         private readonly PingReportType _reportType;
 
         private long _roundTripTime;
 
-        public PingTest(IReportManager reportManager, PingReportType reportType, string hostName,
+        public PingTest(IConsoleManager consoleManager, PingReportType reportType, string hostName,
             long maxPingSuccessTime, long maxPingWarningTime)
         {
-            _reportManager = reportManager;
+            _consoleManager = consoleManager;
             _reportType = reportType;
             _hostName = hostName;
             _maxPingSuccessTime = maxPingSuccessTime;
@@ -58,7 +58,7 @@ namespace Ctyar.Pingct
         {
             if (_reportType == PingReportType.TestResult)
             {
-                _reportManager.Print(string.Empty, MessageType.Info);
+                _consoleManager.Print(string.Empty, MessageType.Info);
                 PrintPing(_hostName, _roundTripTime, _maxPingSuccessTime, _maxPingWarningTime);
             }
             else if (_reportType == PingReportType.JustValue)
@@ -69,32 +69,32 @@ namespace Ctyar.Pingct
 
         private void PrintPing(string ip, long time, long maxSuccessTime, long maxWarningTime)
         {
-            _reportManager.Print($"Reply from {ip}: time=", MessageType.Info);
+            _consoleManager.Print($"Reply from {ip}: time=", MessageType.Info);
 
             PrintPingValue(time, maxSuccessTime, maxWarningTime);
 
-            _reportManager.Print("ms", MessageType.Info);
+            _consoleManager.Print("ms", MessageType.Info);
 
-            _reportManager.PrintLine();
+            _consoleManager.PrintLine();
         }
 
         private void PrintPingValue(long value, long maxSuccessValue, long maxWarningValue)
         {
             if (value == 0)
             {
-                _reportManager.Print(value.ToString(), MessageType.Failure);
+                _consoleManager.Print(value.ToString(), MessageType.Failure);
             }
             else if (value <= maxSuccessValue)
             {
-                _reportManager.Print(value.ToString(), MessageType.Success);
+                _consoleManager.Print(value.ToString(), MessageType.Success);
             }
             else if (value <= maxWarningValue)
             {
-                _reportManager.Print(value.ToString(), MessageType.Warning);
+                _consoleManager.Print(value.ToString(), MessageType.Warning);
             }
             else
             {
-                _reportManager.Print(value.ToString(), MessageType.Failure);
+                _consoleManager.Print(value.ToString(), MessageType.Failure);
             }
         }
     }

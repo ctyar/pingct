@@ -21,14 +21,14 @@ namespace Ctyar.Pingct
 
         private static readonly HttpClient HttpClient = new HttpClient(ProxyClientHandler);
 
-        private readonly IReportManager _reportManager;
+        private readonly IConsoleManager _consoleManager;
         private readonly string _hostName;
 
         private bool _result;
 
-        public FreedomTest(IReportManager reportManager)
+        public FreedomTest(IConsoleManager consoleManager)
         {
-            _reportManager = reportManager;
+            _consoleManager = consoleManager;
             _hostName = Encoding.UTF8.GetString(Convert.FromBase64String("aHR0cHM6Ly9wb3JuaHViLmNvbQ=="));
         }
 
@@ -52,9 +52,9 @@ namespace Ctyar.Pingct
         {
             var (message, type) = _result ? ("OK", MessageType.Success) : ("Not working", MessageType.Failure);
             
-            _reportManager.Print("Freedom: ", MessageType.Info);
-            _reportManager.Print(message, type);
-            _reportManager.PrintLine();
+            _consoleManager.Print("Freedom: ", MessageType.Info);
+            _consoleManager.Print(message, type);
+            _consoleManager.PrintLine();
         }
     }
 }

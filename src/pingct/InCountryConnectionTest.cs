@@ -2,7 +2,7 @@
 {
     internal class InCountryConnectionTest : PingTest
     {
-        public InCountryConnectionTest(IReportManager reportManager, Settings settings) : base(reportManager,
+        public InCountryConnectionTest(IConsoleManager consoleManager, Settings settings) : base(consoleManager,
             PingReportType.TestResult, settings.InCountryHost, settings.MaxPingSuccessTime, settings.MaxPingWarningTime)
         {
         }

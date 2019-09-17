@@ -2,11 +2,11 @@
 
 namespace Ctyar.Pingct
 {
-    internal class ReportManager : IReportManager
+    internal class ConsoleManager : IConsoleManager
     {
-        public void PrintLine()
+        public void Print(string message)
         {
-            Console.WriteLine();
+            Print(message, MessageType.Info);
         }
 
         public void Print(string message, MessageType messageType)
@@ -27,6 +27,16 @@ namespace Ctyar.Pingct
             {
                 PrintFailure(message);
             }
+        }
+
+        public void PrintLine()
+        {
+            Console.WriteLine();
+        }
+
+        public string ReadLine()
+        {
+            return Console.ReadLine();
         }
 
         private static void PrintSuccess(string message)

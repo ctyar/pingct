@@ -10,13 +10,13 @@ namespace Ctyar.Pingct
         private readonly long _maxPingSuccessTime;
         private readonly long _maxPingWarningTime;
         private readonly string _ping;
-        private readonly IReportManager _reportManager;
+        private readonly IConsoleManager _consoleManager;
         private readonly IEnumerable<ITest> _tests;
 
-        public TestManager(IEnumerable<ITest> tests, IReportManager reportManager, Settings settings)
+        public TestManager(IEnumerable<ITest> tests, IConsoleManager consoleManager, Settings settings)
         {
             _tests = tests;
-            _reportManager = reportManager;
+            _consoleManager = consoleManager;
             _delay = settings.Delay;
             _ping = settings.Ping;
             _maxPingSuccessTime = settings.MaxPingSuccessTime;
@@ -56,14 +56,14 @@ namespace Ctyar.Pingct
         {
             foreach (var test in _tests)
             {
-                _reportManager.Print("    ", MessageType.Info);
+                _consoleManager.Print("    ", MessageType.Info);
                 test.Report();
             }
         }
 
         private async Task KeepPinging(string hostName)
         {
-            var pingTest = new PingTest(_reportManager, PingReportType.JustValue, hostName, _maxPingSuccessTime,
+            var pingTest = new PingTest(_consoleManager, PingReportType.JustValue, hostName, _maxPingSuccessTime,
                 _maxPingWarningTime);
 
             while (true)
@@ -83,7 +83,7 @@ namespace Ctyar.Pingct
 
         private Task<bool> AreWeBackOnline(string hostName)
         {
-            var pingTest = new PingTest(_reportManager, PingReportType.NoReport, hostName, _maxPingSuccessTime,
+            var pingTest = new PingTest(_consoleManager, PingReportType.NoReport, hostName, _maxPingSuccessTime,
                 _maxPingWarningTime);
 
             return pingTest.Run();
