@@ -22,7 +22,7 @@ namespace Ctyar.Pingct
             File.WriteAllText(GetFilePath(fileName), content);
         }
 
-        private string GetFilePath(string fileName)
+        public string GetFilePath(string fileName)
         {
             var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData,
                 Environment.SpecialFolderOption.Create), "pingct");

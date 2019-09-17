@@ -1,4 +1,5 @@
-﻿using System.CommandLine;
+﻿using System;
+using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,23 +11,33 @@ namespace Ctyar.Pingct
     {
         private static int Main(string[] args)
         {
-            var rootCommand = new RootCommand
-            {
-                Handler = CommandHandler.Create(async () => { await Run(); })
-            };
+            InitializeLogger();
 
-            var configCommand = new Command("config")
+            try
             {
-                Handler = CommandHandler.Create(Config)
-            };
+                var rootCommand = new RootCommand
+                {
+                    Handler = CommandHandler.Create(async () => { await Run(); })
+                };
 
-            rootCommand.Add(configCommand);
-            return rootCommand.InvokeAsync(args).Result;
+                var configCommand = new Command("config")
+                {
+                    Handler = CommandHandler.Create(Config)
+                };
+
+                rootCommand.Add(configCommand);
+                return rootCommand.InvokeAsync(args).Result;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Stopped program because of exception");
+                throw;
+            }
         }
 
         private static async Task Run()
         {
-            await GetServiceProvider().GetRequiredService<Application>().Run();
+            await GetServiceProvider().GetRequiredService<TestManager>().Scan();
         }
 
         private static void Config()
@@ -45,10 +56,6 @@ namespace Ctyar.Pingct
 
         private static void ConfigureServices(ServiceCollection serviceCollection)
         {
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.File("log.txt")
-                .CreateLogger();
-
             serviceCollection
                 .AddTransient<StorageManager>()
                 .AddTransient<ConfigManager>()
@@ -58,13 +65,22 @@ namespace Ctyar.Pingct
                     var settings = configManager.Read();
                     return settings;
                 })
-                .AddTransient<Application>()
                 .AddTransient<TestManager>()
                 .AddTransient<IReportManager, ReportManager>()
                 .AddTransient<ITest, GatewayTest>()
                 .AddTransient<ITest, InCountryConnectionTest>()
                 .AddTransient<ITest, DnsTest>()
                 .AddTransient<ITest, FreedomTest>();
+        }
+
+        private static void InitializeLogger()
+        {
+            var storageManager = new StorageManager();
+            var filePath = storageManager.GetFilePath("log.txt");
+
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.File(filePath)
+                .CreateLogger();
         }
     }
 }
