@@ -11,12 +11,12 @@ Download the .NET Core SDK [3.0](https://dotnet.microsoft.com/download/dotnet-co
 Once installed, run this command:
 
 ```
-dotnet tool install --global pingct
+$ dotnet tool install --global pingct
 ```
 
 And run with:
 ```
-pingct
+$ pingct
 ```
 
 ## Usage
@@ -41,12 +41,12 @@ Currently, the tests are:
 ### Sample output:
 ![image](https://user-images.githubusercontent.com/1432648/64917273-a76b9f00-d7a3-11e9-8c0c-d249224ec0c7.png)
 
-## Building
-Install the .NET Core SDK [3.0](https://dotnet.microsoft.com/download/dotnet-core/3.0)
+## Build
+Install .NET Core SDK [3.0](https://dotnet.microsoft.com/download/dotnet-core/3.0)
 
-Install the [Cake.Tool](https://www.nuget.org/packages/Cake.Tool)
+Install [Cake.Tool](https://www.nuget.org/packages/Cake.Tool)
 
 Run:
 ```
-dotnet-cake
+$ dotnet-cake
 ```
