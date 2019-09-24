@@ -23,15 +23,15 @@ namespace Ctyar.Pingct
             _maxPingWarningTime = settings.MaxPingWarningTime;
         }
 
-        public async Task Scan()
+        public async Task ScanAsync()
         {
             while (true)
             {
-                await KeepPinging(_ping);
+                await KeepPingingAsync(_ping);
 
                 while (true)
                 {
-                    await RunAllTests();
+                    await RunAllTestsAsync();
 
                     PrintAllTests();
 
@@ -45,9 +45,9 @@ namespace Ctyar.Pingct
             }
         }
 
-        private async Task RunAllTests()
+        private async Task RunAllTestsAsync()
         {
-            var tasks = _tests.Select(item => item.Run()).ToList();
+            var tasks = _tests.Select(item => item.RunAsync()).ToList();
 
             await Task.WhenAll(tasks);
         }
@@ -61,14 +61,14 @@ namespace Ctyar.Pingct
             }
         }
 
-        private async Task KeepPinging(string hostName)
+        private async Task KeepPingingAsync(string hostName)
         {
             var pingTest = new PingTest(_consoleManager, PingReportType.JustValue, hostName, _maxPingSuccessTime,
                 _maxPingWarningTime);
 
             while (true)
             {
-                var isStillOnline = await pingTest.Run();
+                var isStillOnline = await pingTest.RunAsync();
 
                 if (!isStillOnline)
                 {
@@ -86,7 +86,7 @@ namespace Ctyar.Pingct
             var pingTest = new PingTest(_consoleManager, PingReportType.NoReport, hostName, _maxPingSuccessTime,
                 _maxPingWarningTime);
 
-            return pingTest.Run();
+            return pingTest.RunAsync();
         }
     }
 }

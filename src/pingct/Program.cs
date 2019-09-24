@@ -17,7 +17,7 @@ namespace Ctyar.Pingct
             {
                 var rootCommand = new RootCommand
                 {
-                    Handler = CommandHandler.Create(async () => { await Run(); })
+                    Handler = CommandHandler.Create(async () => { await RunAsync(); })
                 };
 
                 var configCommand = new Command("config")
@@ -36,9 +36,9 @@ namespace Ctyar.Pingct
             }
         }
 
-        private static async Task Run()
+        private static async Task RunAsync()
         {
-            await GetServiceProvider().GetRequiredService<TestManager>().Scan();
+            await GetServiceProvider().GetRequiredService<TestManager>().ScanAsync();
         }
 
         private static void Config()

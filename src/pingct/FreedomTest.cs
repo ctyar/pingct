@@ -32,7 +32,7 @@ namespace Ctyar.Pingct
             _hostName = Encoding.UTF8.GetString(Convert.FromBase64String("aHR0cHM6Ly9wb3JuaHViLmNvbQ=="));
         }
 
-        public async Task<bool> Run()
+        public async Task<bool> RunAsync()
         {
             _result = false;
             try

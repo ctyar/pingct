@@ -18,7 +18,7 @@ namespace Ctyar.Pingct
             _hostName = settings.Dns;
         }
 
-        public async Task<bool> Run()
+        public async Task<bool> RunAsync()
         {
             _result = false;
             try

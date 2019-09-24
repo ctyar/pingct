@@ -4,7 +4,7 @@ namespace Ctyar.Pingct
 {
     internal interface ITest
     {
-        Task<bool> Run();
+        Task<bool> RunAsync();
 
         void Report();
     }

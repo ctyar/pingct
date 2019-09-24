@@ -25,7 +25,7 @@ namespace Ctyar.Pingct
             _maxPingWarningTime = maxPingWarningTime;
         }
 
-        public async Task<bool> Run()
+        public async Task<bool> RunAsync()
         {
             var result = false;
             Ping? ping = default;
