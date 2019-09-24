@@ -20,7 +20,7 @@ stages:
     - task: UseDotNet@2
       displayName: Install .NET Core 3
       inputs:
-        version: '3.0.100-rc1-014190'
+        version: '3.0.100'
 
     - task: DotNetCoreCLI@2
       displayName: 'Install Cake'
@@ -51,7 +51,7 @@ stages:
     - task: UseDotNet@2
       displayName: Install .NET Core 3
       inputs:
-        version: '3.0.100-rc1-014190'
+        version: '3.0.100'
 
     - task: DotNetCoreCLI@2
       displayName: 'Install Cake'
