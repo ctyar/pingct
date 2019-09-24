@@ -1,14 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using SocksSharp;
 using SocksSharp.Proxy;
 
 namespace Ctyar.Pingct
 {
-    internal class FreedomTest : ITest
+    internal class FreeInternetTest : ITest
     {
         private static readonly ProxySettings ProxySettings = new ProxySettings
         {
@@ -26,10 +25,10 @@ namespace Ctyar.Pingct
 
         private bool _result;
 
-        public FreedomTest(IConsoleManager consoleManager)
+        public FreeInternetTest(IConsoleManager consoleManager)
         {
             _consoleManager = consoleManager;
-            _hostName = Encoding.UTF8.GetString(Convert.FromBase64String("aHR0cHM6Ly9wb3JuaHViLmNvbQ=="));
+            _hostName = "https://twitter.com";
         }
 
         public async Task<bool> RunAsync()
