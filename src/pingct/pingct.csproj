@@ -6,7 +6,17 @@
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>Ctyar.Pingct</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <PackAsTool>true</PackAsTool>
+    <PackageId>pingct</PackageId>
+    <PackageTags>network;ping;ip;dns;proxy;socks5</PackageTags>
+    <Title>Pingct</Title>
+    <Description>A simple ping like tool to check the network connectivity.</Description>
+    <Authors>Shahriyar Qulami</Authors>
+    <PackageProjectUrl>https://github.com/ctyar/pingct</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ctyar/pingct</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
