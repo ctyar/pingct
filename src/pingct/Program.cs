@@ -20,11 +20,12 @@ namespace Ctyar.Pingct
                     Handler = CommandHandler.Create(async () => { await RunAsync(); })
                 };
 
-                var configCommand = new Command("config")
+                var configCommand = new Command("--config")
                 {
                     Handler = CommandHandler.Create(Config),
-                    Description = "Run a wizard to change the default settings"
+                    Description = "Prints the path to config file.",
                 };
+                configCommand.AddAlias("-c");
 
                 rootCommand.Add(configCommand);
                 return rootCommand.InvokeAsync(args).Result;
@@ -43,7 +44,7 @@ namespace Ctyar.Pingct
 
         private static void Config()
         {
-            GetServiceProvider().GetRequiredService<SettingsManager>().RunWizard();
+            GetServiceProvider().GetRequiredService<SettingsManager>().Config();
         }
 
         private static ServiceProvider GetServiceProvider()
