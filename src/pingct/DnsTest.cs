@@ -16,6 +16,7 @@ namespace Ctyar.Pingct
         {
             _consoleManager = consoleManager;
             _hostName = settings.Dns;
+            ServicePointManager.DnsRefreshTimeout = 0;
         }
 
         public async Task<bool> RunAsync()
