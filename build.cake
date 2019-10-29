@@ -33,31 +33,8 @@ Task("Build")
 	DotNetCorePack(projectDir, settings);
 });
 
-Task("PublishNuget")
-	.IsDependentOn("Build")
-	.Does(() => {
-		if (string.IsNullOrEmpty(nugetApiKey))
-		{
-			Information("Skipping Nuget deploy.");
-			return;
-		}
-
-		var packageOutputPath = MakeAbsolute(Directory(outputDirectory));
-		var settings = new DotNetCoreNuGetPushSettings
-		{
-			 Source = "https://api.nuget.org/v3/index.json",
-			 ApiKey = nugetApiKey
-		};
-		
-		foreach(var file in GetFiles($"{packageOutputPath}/*.nupkg"))
-		{
-			DotNetCoreNuGetPush(file.FullPath, settings);
-		}
-});
-
-
 Task("Default")
-  .IsDependentOn("PublishNuget");
+  .IsDependentOn("Build");
 
 
 var target = Argument("target", "Default");
