@@ -1,26 +1,29 @@
 # https://docs.microsoft.com/azure/devops/pipelines/yaml-schema
 
 stages:
-- stage: Build
-  displayName: Build
+- stage: BuildStage
+  displayName: Build stage
   jobs:
-  - job: Linux
+  - job: BuildJob
+    displayName: Build job
+    strategy:
+      matrix:
+        linux:
+          imageName: 'ubuntu-latest'
+        mac:
+          imageName: 'windows-latest'
+        windows:
+          imageName: 'macOS-latest'
     pool:
-      vmImage: ubuntu-16.04
+      vmImage: $(imageName)
     workspace:
       clean: all
- 
-    steps:
-    # We need this only for cake
-    - task: UseDotNet@2
-      displayName: Install .NET Core 2.2
-      inputs:
-        version: '2.2.x'
 
+    steps:
     - task: UseDotNet@2
       displayName: Install .NET Core 3
       inputs:
-        version: '3.0.100'
+        version: '3.0.x'
 
     - task: DotNetCoreCLI@2
       displayName: 'Install Cake'
@@ -36,33 +39,32 @@ stages:
         custom: cake
         arguments: 'build.cake'
 
-  - job: Windows
+    - publish: '$(Build.Repository.LocalPath)/artifacts'
+      displayName: Publish artifacts
+      condition: eq(variables['imageName'], 'ubuntu-latest')
+      artifact: 'packages'
+
+- stage: PublishAlphaPackageStage
+  displayName: Publish alpha package stage
+  dependsOn: BuildStage
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+  jobs:
+  - job: PublishAlphaPackageJob
+    displayName: Publish alpha package job
     pool:
-      vmImage: windows-2019
-    workspace:
-      clean: all
+      vmImage: 'ubuntu-latest'
+
     steps:
-    # We need this only for cake
-    - task: UseDotNet@2
-      displayName: Install .NET Core 2.2
-      inputs:
-        version: '2.2.x'
+    - checkout: none
 
-    - task: UseDotNet@2
-      displayName: Install .NET Core 3
-      inputs:
-        version: '3.0.100'
+    - download: current
+      displayName: Download artifacts
+      artifact: 'packages'
 
     - task: DotNetCoreCLI@2
-      displayName: 'Install Cake'
       inputs:
-        command: custom
-        custom: tool
-        arguments: 'install -g cake.tool'
-
-    - task: DotNetCoreCLI@2
-      displayName: 'Run Cake'
-      inputs:
-        command: custom
-        custom: cake
-        arguments: 'build.cake'
+        command: 'push'
+        packagesToPush: '$(Pipeline.Workspace)/packages/*.nupkg'
+        nuGetFeedType: 'internal'
+        publishVstsFeed: 'pingct'

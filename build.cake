@@ -2,7 +2,6 @@ var configuration = Argument("configuration", "Release");
 var projectDir = Directory("./src/pingct");
 var outputDirectory = "./artifacts/";
 var framework = "netcoreapp3.0";
-var nugetApiKey = Argument("nugetApiKey", string.Empty);
 
 Task("Clean")
     .Does(() =>
