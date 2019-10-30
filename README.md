@@ -7,7 +7,7 @@ A simple Ping like tool to check the common network connection issues in Iran. `
 
 ## Get started
 
-Download the .NET Core SDK [3.0](https://dotnet.microsoft.com/download/dotnet-core/3.0).
+Download the [.NET Core SDK 3.0](https://get.dot.net/) or newer.
 Once installed, run this command:
 
 ```
@@ -28,21 +28,21 @@ Options:
   --version    Display version information
 
 Commands:
-  config    Run a wizard to change the default settings.
+  -c|--config    Prints the path to config file..
 ```
 
 Currently, the tests are:
 1. Pinging the gateway IP address
 1. Pinging `aparat.com` to see if the country's internal network is accessible
 1. Testing DNS
-1. Trying to access a restricted IP to see if our restriction bypass solution is working
+1. Trying to access a restricted website to see if our restriction bypass solution is working
 
 
 ### Sample output:
 ![image](https://user-images.githubusercontent.com/1432648/64917273-a76b9f00-d7a3-11e9-8c0c-d249224ec0c7.png)
 
 ## Build
-Install .NET Core SDK [3.0](https://dotnet.microsoft.com/download/dotnet-core/3.0)
+Install [.NET Core SDK 3.0](https://get.dot.net/) or newer.
 
 Install [Cake.Tool](https://www.nuget.org/packages/Cake.Tool)
 
