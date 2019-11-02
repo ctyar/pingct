@@ -44,9 +44,8 @@ Currently, the tests are:
 ## Build
 Install [.NET Core SDK 3.0](https://get.dot.net/) or newer.
 
-Install [Cake.Tool](https://www.nuget.org/packages/Cake.Tool)
-
 Run:
 ```
+$ dotnet tool restore
 $ dotnet-cake
 ```
