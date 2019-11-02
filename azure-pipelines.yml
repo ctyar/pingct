@@ -45,30 +45,31 @@ stages:
       artifact: 'packages'
 
 - stage: PublishAlphaPackageStage
-  displayName: 'Publish alpha packages'
+  displayName: 'Publish alpha package'
   dependsOn: BuildStage
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-
   jobs:
-  - job: PublishAlphaPackageJob
-    displayName: 'Publish alpha packages'
+  - deployment:
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'windows-latest'
+    environment: 'Github package repository'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
 
-    steps:
-    - checkout: none
+          - download: current
+            displayName: 'Download artifacts'
+            artifact: 'packages'
 
-    - download: current
-      displayName: 'Download artifacts'
-      artifact: 'packages'
-
-    - task: DotNetCoreCLI@2
-      displayName: 'Push the packages to Azure Artifacts feed'
-      inputs:
-        command: 'push'
-        packagesToPush: '$(Pipeline.Workspace)/packages/*.nupkg'
-        nuGetFeedType: 'internal'
-        publishVstsFeed: 'pingct'
+          # https://github.com/Microsoft/azure-pipelines-tasks/issues/7160
+          - task: NuGetCommand@2
+            displayName: 'Push the packages to Nuget.org'
+            inputs:
+              command: 'push'
+              packagesToPush: '$(Pipeline.Workspace)/packages/*.nupkg'
+              nuGetFeedType: 'external'
+              publishFeedCredentials: 'PingctGithubPackageRepository'
 
 - stage: PublishFinalPackageStage
   displayName: 'Publish final package'
@@ -78,17 +79,16 @@ stages:
   - deployment:
     pool:
       vmImage: 'ubuntu-latest'
-    environment: 'ManualRelease'
+    environment: 'Nuget org'
     strategy:
       runOnce:
         deploy:
           steps:
-          
+
           - download: current
             displayName: 'Download artifacts'
             artifact: 'packages'
 
-          # https://github.com/Microsoft/azure-pipelines-tasks/issues/7160
           - task: NuGetCommand@2
             displayName: 'Push the packages to Nuget.org'
             inputs:
