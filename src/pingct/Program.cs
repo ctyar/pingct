@@ -68,6 +68,8 @@ namespace Ctyar.Pingct
                     return settings;
                 })
                 .AddTransient<TestManager>()
+                .AddTransient<EventManager>()
+                .AddTransient<CommandManager>()
                 .AddTransient<IConsoleManager, ConsoleManager>()
                 .AddTransient<ITest, GatewayTest>()
                 .AddTransient<ITest, InCountryConnectionTest>()

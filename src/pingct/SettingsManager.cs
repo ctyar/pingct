@@ -25,16 +25,32 @@ namespace Ctyar.Pingct
 
         public Settings Read()
         {
+            Settings result;
+
             var fileContent = _storageManager.Read(SettingsFileName);
 
             if (fileContent is null)
             {
-                return new Settings();
+                result = new Settings();
+
+                SaveSettings(result);
+                
+                return result;
             }
 
-            var settings = JsonSerializer.Deserialize<Settings>(fileContent);
+            result = JsonSerializer.Deserialize<Settings>(fileContent);
 
-            return settings;
+            return result;
+        }
+
+        private void SaveSettings(Settings settings)
+        {
+            var fileContent = JsonSerializer.Serialize(settings, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+
+            _storageManager.Write(SettingsFileName, fileContent);
         }
     }
 }

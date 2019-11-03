@@ -1,4 +1,6 @@
-﻿namespace Ctyar.Pingct
+﻿using System;
+
+namespace Ctyar.Pingct
 {
     internal class Settings
     {
@@ -15,5 +17,13 @@
         public string InCountryHost { get; set; } = "aparat.com";
 
         public string Dns { get; set; } = "facebook.com";
+
+        public string OnConnected { get; set; } = string.Empty;
+
+        public string OnConnectedArgs { get; set; } = string.Empty;
+
+        public string OnDisconnected { get; set; } = string.Empty;
+
+        public string OnDisconnectedArgs { get; set; } = string.Empty;
     }
 }

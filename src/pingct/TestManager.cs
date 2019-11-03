@@ -11,12 +11,14 @@ namespace Ctyar.Pingct
         private readonly long _maxPingWarningTime;
         private readonly string _ping;
         private readonly IConsoleManager _consoleManager;
+        private readonly EventManager _eventManager;
         private readonly IEnumerable<ITest> _tests;
 
-        public TestManager(IEnumerable<ITest> tests, IConsoleManager consoleManager, Settings settings)
+        public TestManager(IEnumerable<ITest> tests, IConsoleManager consoleManager, EventManager eventManager, Settings settings)
         {
             _tests = tests;
             _consoleManager = consoleManager;
+            _eventManager = eventManager;
             _delay = settings.Delay;
             _ping = settings.Ping;
             _maxPingSuccessTime = settings.MaxPingSuccessTime;
@@ -29,6 +31,8 @@ namespace Ctyar.Pingct
             {
                 await KeepPingingAsync(_ping);
 
+                _eventManager.Disconnected();
+
                 while (true)
                 {
                     await RunAllTestsAsync();
@@ -39,6 +43,7 @@ namespace Ctyar.Pingct
 
                     if (areWeBackOnline)
                     {
+                        _eventManager.Connected();
                         break;
                     }
                 }
