@@ -41,6 +41,13 @@ Currently, the tests are:
 ### Sample output:
 ![image](https://user-images.githubusercontent.com/1432648/64917273-a76b9f00-d7a3-11e9-8c0c-d249224ec0c7.png)
 
+## Pre-release builds
+Download the package from [here](https://github.com/ctyar/pingct/packages/48026) and run:
+```
+$ dotnet tool install --global --add-source .\ pingct
+```
+or follow [this guide](https://help.github.com/en/github/managing-packages-with-github-package-registry/configuring-nuget-for-use-with-github-package-registry#installing-a-package).
+
 ## Build
 Install [.NET Core SDK 3.0](https://get.dot.net/) or newer.
 

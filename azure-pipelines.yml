@@ -71,6 +71,7 @@ stages:
               nuGetFeedType: 'external'
               publishFeedCredentials: 'PingctGithubPackageRepository'
 
+#https://github.com/microsoft/azure-pipelines-yaml/issues/344
 - stage: PublishFinalPackageStage
   displayName: 'Publish final package'
   dependsOn: PublishAlphaPackageStage
