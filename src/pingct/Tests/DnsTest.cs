@@ -1,33 +1,34 @@
-﻿using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using DnsClient;
 
 namespace Ctyar.Pingct.Tests
 {
     internal class DnsTest : ITest
     {
-        private readonly string _hostName;
         private readonly IConsoleManager _consoleManager;
 
+        private readonly string _hostName;
         private bool _result;
 
         public DnsTest(IConsoleManager consoleManager, Settings settings)
         {
             _consoleManager = consoleManager;
             _hostName = settings.Dns;
-            ServicePointManager.DnsRefreshTimeout = 0;
         }
 
         public async Task<bool> RunAsync()
         {
             _result = false;
+
             try
             {
-                var ipAddresses = await Dns.GetHostAddressesAsync(_hostName);
-                _result = ipAddresses.Any();
+                var client = new LookupClient {UseCache = false};
+
+                var dnsQueryResponse = await client.QueryAsync(_hostName, QueryType.A);
+
+                _result = !dnsQueryResponse.HasError;
             }
-            catch (SocketException)
+            catch (DnsResponseException)
             {
             }
 
