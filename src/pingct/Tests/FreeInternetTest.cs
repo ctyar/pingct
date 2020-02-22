@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using SocksSharp;
 using SocksSharp.Proxy;
 
-namespace Ctyar.Pingct
+namespace Ctyar.Pingct.Tests
 {
     internal class FreeInternetTest : ITest
     {

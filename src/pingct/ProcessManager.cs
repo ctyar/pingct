@@ -2,7 +2,7 @@
 
 namespace Ctyar.Pingct
 {
-    internal class CommandManager
+    internal class ProcessManager
     {
         public void Execute(string command, string arguments)
         {

@@ -1,4 +1,4 @@
-﻿namespace Ctyar.Pingct
+﻿namespace Ctyar.Pingct.Tests
 {
     internal class InCountryConnectionTest : PingTest
     {

@@ -2,15 +2,15 @@
 {
     internal class EventManager
     {
-        private readonly CommandManager _commandManager;
+        private readonly ProcessManager _processManager;
         private readonly string _onConnectedCommand;
         private readonly string _onConnectedCommandArgs;
         private readonly string _onDisconnectedCommand;
         private readonly string _onDisconnectedCommandArgs;
 
-        public EventManager(CommandManager commandManager, Settings settings)
+        public EventManager(ProcessManager processManager, Settings settings)
         {
-            _commandManager = commandManager;
+            _processManager = processManager;
             _onConnectedCommand = settings.OnConnected;
             _onConnectedCommandArgs = settings.OnConnectedArgs;
             _onDisconnectedCommand = settings.OnDisconnected;
@@ -19,12 +19,12 @@
 
         public void Connected()
         {
-            _commandManager.Execute(_onConnectedCommand, _onConnectedCommandArgs);
+            _processManager.Execute(_onConnectedCommand, _onConnectedCommandArgs);
         }
 
         public void Disconnected()
         {
-            _commandManager.Execute(_onDisconnectedCommand, _onDisconnectedCommandArgs);
+            _processManager.Execute(_onDisconnectedCommand, _onDisconnectedCommandArgs);
         }
     }
 }

@@ -3,16 +3,16 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace Ctyar.Pingct
+namespace Ctyar.Pingct.Tests
 {
     internal class PingTest : ITest
     {
-        private readonly string _hostName;
-        private readonly long _maxPingSuccessTime;
-        private readonly long _maxPingWarningTime;
         private readonly IConsoleManager _consoleManager;
         private readonly PingReportType _reportType;
 
+        private readonly string _hostName;
+        private readonly long _maxPingSuccessTime;
+        private readonly long _maxPingWarningTime;
         private long _roundTripTime;
 
         public PingTest(IConsoleManager consoleManager, PingReportType reportType, string hostName,
@@ -36,7 +36,7 @@ namespace Ctyar.Pingct
 
                 _roundTripTime = (await ping.SendPingAsync(_hostName)).RoundtripTime;
 
-                // Sometime the ping doesn't throw but it fails with zero roundtrip time
+                // Sometimes the ping doesn't throw but it fails with zero roundtrip time
                 if (_roundTripTime != 0)
                 {
                     result = true;
@@ -56,15 +56,17 @@ namespace Ctyar.Pingct
 
         public void Report()
         {
+            if (_reportType == PingReportType.NoReport)
+            {
+                return;
+            }
+
             if (_reportType == PingReportType.TestResult)
             {
                 _consoleManager.Print(string.Empty, MessageType.Info);
-                PrintPing(_hostName, _roundTripTime, _maxPingSuccessTime, _maxPingWarningTime);
             }
-            else if (_reportType == PingReportType.JustValue)
-            {
-                PrintPing(_hostName, _roundTripTime, _maxPingSuccessTime, _maxPingWarningTime);
-            }
+
+            PrintPing(_hostName, _roundTripTime, _maxPingSuccessTime, _maxPingWarningTime);
         }
 
         private void PrintPing(string ip, long time, long maxSuccessTime, long maxWarningTime)
@@ -80,22 +82,15 @@ namespace Ctyar.Pingct
 
         private void PrintPingValue(long value, long maxSuccessValue, long maxWarningValue)
         {
-            if (value == 0)
+            var messageType = value switch
             {
-                _consoleManager.Print(value.ToString(), MessageType.Failure);
-            }
-            else if (value <= maxSuccessValue)
-            {
-                _consoleManager.Print(value.ToString(), MessageType.Success);
-            }
-            else if (value <= maxWarningValue)
-            {
-                _consoleManager.Print(value.ToString(), MessageType.Warning);
-            }
-            else
-            {
-                _consoleManager.Print(value.ToString(), MessageType.Failure);
-            }
+                0 => MessageType.Failure,
+                _ when value <= maxSuccessValue => MessageType.Success,
+                _ when value <= maxWarningValue => MessageType.Warning,
+                _ => MessageType.Failure
+            };
+
+            _consoleManager.Print(value.ToString(), messageType);
         }
     }
 }

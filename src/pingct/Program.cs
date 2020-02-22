@@ -2,6 +2,7 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Threading.Tasks;
+using Ctyar.Pingct.Tests;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -23,7 +24,7 @@ namespace Ctyar.Pingct
                 var configCommand = new Command("--config")
                 {
                     Handler = CommandHandler.Create(Config),
-                    Description = "Prints the path to the config file.",
+                    Description = "Prints the path to the config file"
                 };
                 configCommand.AddAlias("-c");
 
@@ -69,7 +70,7 @@ namespace Ctyar.Pingct
                 })
                 .AddTransient<TestManager>()
                 .AddTransient<EventManager>()
-                .AddTransient<CommandManager>()
+                .AddTransient<ProcessManager>()
                 .AddTransient<IConsoleManager, ConsoleManager>()
                 .AddTransient<ITest, GatewayTest>()
                 .AddTransient<ITest, InCountryConnectionTest>()

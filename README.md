@@ -29,7 +29,7 @@ Options:
   --version    Display version information
 
 Commands:
-  -c|--config    Prints the path to the config file..
+  -c|--config    Prints the path to the config file
 ```
 
 Currently, the tests are:

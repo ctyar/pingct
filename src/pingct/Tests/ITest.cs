@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Ctyar.Pingct
+namespace Ctyar.Pingct.Tests
 {
     internal interface ITest
     {

@@ -7,7 +7,5 @@
         void Print(string message, MessageType messageType);
         
         void PrintLine();
-
-        string ReadLine();
     }
 }

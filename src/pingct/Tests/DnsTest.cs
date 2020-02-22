@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace Ctyar.Pingct
+namespace Ctyar.Pingct.Tests
 {
     internal class DnsTest : ITest
     {

@@ -34,11 +34,6 @@ namespace Ctyar.Pingct
             Console.WriteLine();
         }
 
-        public string ReadLine()
-        {
-            return Console.ReadLine();
-        }
-
         private static void PrintSuccess(string message)
         {
             Console.ForegroundColor = ConsoleColor.Green;
