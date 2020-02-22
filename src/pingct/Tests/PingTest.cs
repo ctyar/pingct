@@ -34,7 +34,7 @@ namespace Ctyar.Pingct.Tests
             {
                 ping = new Ping();
 
-                _roundTripTime = (await ping.SendPingAsync(_hostName)).RoundtripTime;
+                _roundTripTime = (await ping.SendPingAsync(_hostName, 2000)).RoundtripTime;
 
                 // Sometimes the ping doesn't throw but it fails with zero roundtrip time
                 if (_roundTripTime != 0)
