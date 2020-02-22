@@ -7,7 +7,7 @@ A simple Ping like tool to check the common network connection issues in Iran. `
 
 ## Get started
 
-Download the [.NET Core SDK 3.0](https://get.dot.net/) or newer.
+Download the [.NET Core SDK](https://get.dot.net/) or newer.
 Once installed, run this command:
 
 ```
@@ -49,7 +49,7 @@ $ dotnet tool install --global --add-source .\ pingct
 or follow [this guide](https://help.github.com/en/github/managing-packages-with-github-package-registry/configuring-nuget-for-use-with-github-package-registry#installing-a-package).
 
 ## Build
-Install [.NET Core SDK 3.0](https://get.dot.net/) or newer.
+Install [.NET Core SDK](https://get.dot.net/) or newer.
 
 Run:
 ```
