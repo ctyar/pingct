@@ -1,19 +1,11 @@
 var configuration = Argument("configuration", "Release");
 var projectDir = Directory("./src/pingct");
 var outputDirectory = "./artifacts/";
-var framework = "netcoreapp3.0";
 
 Task("Clean")
     .Does(() =>
 {
-    var settings = new DotNetCoreCleanSettings
-    {
-        Framework = framework,
-        Configuration = configuration,
-        OutputDirectory = outputDirectory
-    };
-
-    DotNetCoreClean(projectDir, settings);
+    DotNetCoreClean(projectDir);
 
 	var directoriesToClean = GetDirectories(outputDirectory);
 	CleanDirectories(directoriesToClean);
