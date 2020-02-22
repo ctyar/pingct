@@ -2,6 +2,8 @@
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Polly;
+using Polly.Timeout;
 using SocksSharp;
 using SocksSharp.Proxy;
 
@@ -18,7 +20,7 @@ namespace Ctyar.Pingct.Tests
         private static readonly ProxyClientHandler<Socks5> ProxyClientHandler =
             new ProxyClientHandler<Socks5>(ProxySettings);
 
-        private static readonly HttpClient HttpClient = new HttpClient(ProxyClientHandler);
+        private static readonly HttpClient HttpClient = new HttpClient();
 
         private readonly IConsoleManager _consoleManager;
         private readonly string _hostName;
@@ -36,11 +38,17 @@ namespace Ctyar.Pingct.Tests
             _result = false;
             try
             {
-                var stream = await HttpClient.GetStreamAsync(_hostName);
+                var timeoutPolicy = Policy.TimeoutAsync(2, TimeoutStrategy.Pessimistic);
+
+                var stream = await timeoutPolicy.ExecuteAsync(
+                    async () => await HttpClient.GetStreamAsync(_hostName)
+                );
+
                 _result = true;
             }
             catch (Exception e) when (e is HttpRequestException || e is ProxyException ||
-                                      e is OperationCanceledException || e is IOException)
+                                      e is OperationCanceledException || e is IOException ||
+                                      e is TimeoutRejectedException)
             {
             }
 
