@@ -23,7 +23,7 @@ namespace Ctyar.Pingct
                 var configCommand = new Command("--config")
                 {
                     Handler = CommandHandler.Create(Config),
-                    Description = "Prints the path to config file.",
+                    Description = "Prints the path to the config file.",
                 };
                 configCommand.AddAlias("-c");
 
