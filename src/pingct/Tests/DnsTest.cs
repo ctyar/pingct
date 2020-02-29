@@ -1,22 +1,25 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using DnsClient;
+using Polly;
+using Polly.Timeout;
 
 namespace Ctyar.Pingct.Tests
 {
-    internal class DnsTest : ITest
+    internal class DnsTest : TestBase
     {
         private readonly IConsoleManager _consoleManager;
 
         private readonly string _hostName;
         private bool _result;
 
-        public DnsTest(IConsoleManager consoleManager, Settings settings)
+        public DnsTest(IConsoleManager consoleManager, Settings settings) : base(consoleManager)
         {
             _consoleManager = consoleManager;
             _hostName = settings.Dns;
         }
 
-        public async Task<bool> RunAsync()
+        public override async Task<bool> RunCoreAsync()
         {
             _result = false;
 
@@ -24,18 +27,20 @@ namespace Ctyar.Pingct.Tests
             {
                 var client = new LookupClient {UseCache = false};
 
-                var dnsQueryResponse = await client.QueryAsync(_hostName, QueryType.A);
+                var dnsQueryResponse = await ExecuteWithTimeoutAsync(
+                    async () => await client.QueryAsync(_hostName, QueryType.A)
+                );
 
                 _result = !dnsQueryResponse.HasError;
             }
-            catch (DnsResponseException)
+            catch (Exception e) when (e is DnsResponseException || e is TimeoutRejectedException)
             {
             }
 
             return _result;
         }
 
-        public void Report()
+        public override void ReportCore()
         {
             var (message, type) = _result ? ("OK", MessageType.Success) : ("Not working", MessageType.Failure);
 

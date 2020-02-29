@@ -9,7 +9,7 @@ using SocksSharp.Proxy;
 
 namespace Ctyar.Pingct.Tests
 {
-    internal class FreeInternetTest : ITest
+    internal class FreeInternetTest : TestBase
     {
         private static readonly ProxySettings ProxySettings = new ProxySettings
         {
@@ -27,20 +27,19 @@ namespace Ctyar.Pingct.Tests
 
         private bool _result;
 
-        public FreeInternetTest(IConsoleManager consoleManager)
+        public FreeInternetTest(IConsoleManager consoleManager) : base(consoleManager)
         {
             _consoleManager = consoleManager;
             _hostName = "https://twitter.com";
         }
 
-        public async Task<bool> RunAsync()
+        public override async Task<bool> RunCoreAsync()
         {
             _result = false;
+
             try
             {
-                var timeoutPolicy = Policy.TimeoutAsync(2, TimeoutStrategy.Pessimistic);
-
-                var stream = await timeoutPolicy.ExecuteAsync(
+                var stream = await ExecuteWithTimeoutAsync(
                     async () => await HttpClient.GetStreamAsync(_hostName)
                 );
 
@@ -55,7 +54,7 @@ namespace Ctyar.Pingct.Tests
             return _result;
         }
 
-        public void Report()
+        public override void ReportCore()
         {
             var (message, type) = _result ? ("OK", MessageType.Success) : ("Not working", MessageType.Failure);
             

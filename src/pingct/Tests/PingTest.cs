@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Ctyar.Pingct.Tests
 {
-    internal class PingTest : ITest
+    internal class PingTest : TestBase
     {
         private readonly IConsoleManager _consoleManager;
         private readonly PingReportType _reportType;
@@ -16,7 +16,7 @@ namespace Ctyar.Pingct.Tests
         private long _roundTripTime;
 
         public PingTest(IConsoleManager consoleManager, PingReportType reportType, string hostName,
-            long maxPingSuccessTime, long maxPingWarningTime)
+            long maxPingSuccessTime, long maxPingWarningTime) : base(consoleManager)
         {
             _consoleManager = consoleManager;
             _reportType = reportType;
@@ -25,7 +25,7 @@ namespace Ctyar.Pingct.Tests
             _maxPingWarningTime = maxPingWarningTime;
         }
 
-        public async Task<bool> RunAsync()
+        public override async Task<bool> RunCoreAsync()
         {
             var result = false;
             Ping? ping = default;
@@ -54,7 +54,7 @@ namespace Ctyar.Pingct.Tests
             return result;
         }
 
-        public void Report()
+        public override void ReportCore()
         {
             if (_reportType == PingReportType.NoReport)
             {
