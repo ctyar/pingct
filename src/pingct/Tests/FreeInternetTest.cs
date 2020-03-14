@@ -2,24 +2,12 @@
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Polly;
 using Polly.Timeout;
-using SocksSharp;
-using SocksSharp.Proxy;
 
 namespace Ctyar.Pingct.Tests
 {
     internal class FreeInternetTest : TestBase
     {
-        private static readonly ProxySettings ProxySettings = new ProxySettings
-        {
-            Host = "127.0.0.1",
-            Port = 9150
-        };
-
-        private static readonly ProxyClientHandler<Socks5> ProxyClientHandler =
-            new ProxyClientHandler<Socks5>(ProxySettings);
-
         private static readonly HttpClient HttpClient = new HttpClient();
 
         private readonly IConsoleManager _consoleManager;
@@ -45,9 +33,8 @@ namespace Ctyar.Pingct.Tests
 
                 _result = true;
             }
-            catch (Exception e) when (e is HttpRequestException || e is ProxyException ||
-                                      e is OperationCanceledException || e is IOException ||
-                                      e is TimeoutRejectedException)
+            catch (Exception e) when (e is HttpRequestException || e is OperationCanceledException ||
+                                      e is IOException || e is TimeoutRejectedException)
             {
             }
 
