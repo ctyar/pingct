@@ -24,13 +24,15 @@ $ pingct
 ## Usage
 
 ```
-pingct [options] [command]
+  pingct [options] [command]
 
 Options:
-  --version    Display version information
+  --version         Show version information
+  -?, -h, --help    Show help and usage information
 
 Commands:
-  -c|--config    Prints the path to the config file
+  -c, --config    Prints the path to the config file
+  -t, --test      Just runs the tests
 ```
 
 Currently, the tests are:
