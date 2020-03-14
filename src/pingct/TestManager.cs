@@ -34,20 +34,30 @@ namespace Ctyar.Pingct
 
                 _eventManager.Disconnected();
 
-                while (true)
+                await TestAsync(true);
+
+                _eventManager.Connected();
+            }
+        }
+
+        public async Task TestAsync(bool breakOnReconnect)
+        {
+            while (true)
+            {
+                await RunAllTestsAsync();
+
+                PrintAllTests();
+
+                if (breakOnReconnect)
                 {
-                    await RunAllTestsAsync();
-
-                    PrintAllTests();
-
                     var areWeBackOnline = await AreWeBackOnline(_ping);
-
                     if (areWeBackOnline)
                     {
-                        _eventManager.Connected();
                         break;
                     }
                 }
+
+                await Task.Delay(_delay);
             }
         }
 

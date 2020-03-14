@@ -18,7 +18,7 @@ namespace Ctyar.Pingct
             {
                 var rootCommand = new RootCommand
                 {
-                    Handler = CommandHandler.Create(async () => { await RunAsync(); })
+                    Handler = CommandHandler.Create(async () => { await ScanAsync(); })
                 };
 
                 var configCommand = new Command("--config")
@@ -28,7 +28,15 @@ namespace Ctyar.Pingct
                 };
                 configCommand.AddAlias("-c");
 
+                var testCommand = new Command("--test")
+                {
+                    Handler = CommandHandler.Create(TestAsync),
+                    Description = "Just runs the tests"
+                };
+                testCommand.AddAlias("-t");
+
                 rootCommand.Add(configCommand);
+                rootCommand.Add(testCommand);
                 return rootCommand.InvokeAsync(args).Result;
             }
             catch (Exception ex)
@@ -38,7 +46,7 @@ namespace Ctyar.Pingct
             }
         }
 
-        private static async Task RunAsync()
+        private static async Task ScanAsync()
         {
             await GetServiceProvider().GetRequiredService<TestManager>().ScanAsync();
         }
@@ -46,6 +54,11 @@ namespace Ctyar.Pingct
         private static void Config()
         {
             GetServiceProvider().GetRequiredService<SettingsManager>().Config();
+        }
+
+        private static async Task TestAsync()
+        {
+            await GetServiceProvider().GetRequiredService<TestManager>().TestAsync(false);
         }
 
         private static ServiceProvider GetServiceProvider()
