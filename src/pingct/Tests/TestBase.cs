@@ -41,7 +41,7 @@ namespace Ctyar.Pingct.Tests
 
         protected async Task<TResult> ExecuteWithTimeoutAsync<TResult>(Func<Task<TResult>> action)
         {
-            var timeoutPolicy = Policy.TimeoutAsync(TimeSpan.FromMilliseconds(2500), TimeoutStrategy.Pessimistic);;
+            var timeoutPolicy = Policy.TimeoutAsync(TimeSpan.FromMilliseconds(2500), TimeoutStrategy.Pessimistic);
 
             return await timeoutPolicy.ExecuteAsync(action);
         }

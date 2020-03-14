@@ -2,6 +2,7 @@
 
 [![Build Status](https://dev.azure.com/ctyar/pingct/_apis/build/status/ctyar.pingct?branchName=master)](https://dev.azure.com/ctyar/pingct/_build/latest?definitionId=3&branchName=master)
 [![pingct](https://img.shields.io/nuget/v/pingct.svg)](https://www.nuget.org/packages/pingct/)
+[![CodeFactor](https://www.codefactor.io/repository/github/ctyar/pingct/badge)](https://www.codefactor.io/repository/github/ctyar/pingct)
 
 A simple Ping like tool to check the common network connection issues in Iran. `pingct` is designed to constantly check the network connection and in case of any issue run a set of tests to facilitate troubleshooting.
 
