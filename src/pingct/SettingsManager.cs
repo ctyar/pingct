@@ -38,9 +38,9 @@ namespace Ctyar.Pingct
                 return result;
             }
 
-            result = JsonSerializer.Deserialize<Settings>(fileContent);
+            result = JsonSerializer.Deserialize<Settings>(fileContent)!;
 
-            return result;
+            return result!;
         }
 
         private void SaveSettings(Settings settings)

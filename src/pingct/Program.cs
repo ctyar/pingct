@@ -78,7 +78,7 @@ namespace Ctyar.Pingct
                 .AddSingleton(provider =>
                 {
                     var configManager = provider.GetService<SettingsManager>();
-                    var settings = configManager.Read();
+                    var settings = configManager!.Read();
                     return settings;
                 })
                 .AddTransient<TestManager>()

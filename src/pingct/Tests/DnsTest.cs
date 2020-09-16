@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DnsClient;
-using Polly;
 using Polly.Timeout;
 
 namespace Ctyar.Pingct.Tests
@@ -25,7 +24,10 @@ namespace Ctyar.Pingct.Tests
 
             try
             {
-                var client = new LookupClient {UseCache = false};
+                var client = new LookupClient(new LookupClientOptions
+                {
+                    UseCache = false
+                });
 
                 var dnsQueryResponse = await ExecuteWithTimeoutAsync(
                     async () => await client.QueryAsync(_hostName, QueryType.A)
