@@ -16,7 +16,7 @@ namespace Ctyar.Pingct.Tests
         private long _roundTripTime;
 
         public PingTest(IConsoleManager consoleManager, PingReportType reportType, string hostName,
-            long maxPingSuccessTime, long maxPingWarningTime) : base(consoleManager)
+            long maxPingSuccessTime, long maxPingWarningTime)
         {
             _consoleManager = consoleManager;
             _reportType = reportType;

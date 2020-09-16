@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Polly;
 using Polly.Timeout;
@@ -8,34 +7,15 @@ namespace Ctyar.Pingct.Tests
 {
     internal abstract class TestBase : ITest
     {
-        private readonly IConsoleManager _consoleManager;
-
-        private long _time;
-
-        protected TestBase(IConsoleManager consoleManager)
-        {
-            _consoleManager = consoleManager;
-        }
-
         public async Task<bool> RunAsync()
         {
-#if DEBUG
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-#endif            
             var result = await RunCoreAsync();
-#if DEBUG
-            stopwatch.Stop();
-            _time = stopwatch.ElapsedMilliseconds;
-#endif
+
             return result;
         }
 
         public void Report()
         {
-#if DEBUG
-            _consoleManager.Print($"({_time})");
-#endif
             ReportCore();
         }
 

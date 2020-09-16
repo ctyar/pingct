@@ -15,7 +15,7 @@ namespace Ctyar.Pingct.Tests
 
         private bool _result;
 
-        public FreeInternetTest(IConsoleManager consoleManager) : base(consoleManager)
+        public FreeInternetTest(IConsoleManager consoleManager)
         {
             _consoleManager = consoleManager;
             _hostName = "https://twitter.com";

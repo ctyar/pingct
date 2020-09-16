@@ -12,7 +12,7 @@ namespace Ctyar.Pingct.Tests
         private readonly string _hostName;
         private bool _result;
 
-        public DnsTest(IConsoleManager consoleManager, Settings settings) : base(consoleManager)
+        public DnsTest(IConsoleManager consoleManager, Settings settings)
         {
             _consoleManager = consoleManager;
             _hostName = settings.Dns;
