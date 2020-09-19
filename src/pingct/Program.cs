@@ -21,19 +21,17 @@ namespace Ctyar.Pingct
                     Handler = CommandHandler.Create(async () => { await ScanAsync(); })
                 };
 
-                var configCommand = new Command("--config")
+                var configCommand = new Command("config")
                 {
                     Handler = CommandHandler.Create(Config),
                     Description = "Prints the path to the config file"
                 };
-                configCommand.AddAlias("-c");
 
-                var testCommand = new Command("--test")
+                var testCommand = new Command("test")
                 {
                     Handler = CommandHandler.Create(TestAsync),
-                    Description = "Just runs the tests"
+                    Description = "Runs the secondary tests"
                 };
-                testCommand.AddAlias("-t");
 
                 rootCommand.Add(configCommand);
                 rootCommand.Add(testCommand);
