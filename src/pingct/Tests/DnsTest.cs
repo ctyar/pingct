@@ -35,7 +35,8 @@ namespace Ctyar.Pingct.Tests
 
                 _result = !dnsQueryResponse.HasError;
             }
-            catch (Exception e) when (e is DnsResponseException || e is TimeoutRejectedException)
+            catch (Exception e) when (e is DnsResponseException || e is TimeoutRejectedException ||
+                                      e is ArgumentOutOfRangeException)
             {
             }
 
