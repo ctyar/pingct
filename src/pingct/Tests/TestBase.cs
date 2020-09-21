@@ -14,9 +14,9 @@ namespace Ctyar.Pingct.Tests
             return result;
         }
 
-        public void Report()
+        public void Report(IConsoleManager consoleManager)
         {
-            ReportCore();
+            ReportCore(consoleManager);
         }
 
         protected async Task<TResult> ExecuteWithTimeoutAsync<TResult>(Func<Task<TResult>> action)
@@ -28,6 +28,6 @@ namespace Ctyar.Pingct.Tests
 
         public abstract Task<bool> RunCoreAsync();
 
-        public abstract void ReportCore();
+        public abstract void ReportCore(IConsoleManager consoleManager);
     }
 }

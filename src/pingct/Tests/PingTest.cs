@@ -5,20 +5,16 @@ using System.Threading.Tasks;
 
 namespace Ctyar.Pingct.Tests
 {
-    internal class PingTest : TestBase
+    internal abstract class PingTest : TestBase
     {
-        private readonly IConsoleManager _consoleManager;
-        private readonly PingReportType _reportType;
-
         private readonly string _hostName;
         private readonly long _maxPingSuccessTime;
         private readonly long _maxPingWarningTime;
+        private readonly PingReportType _reportType;
         private long _roundTripTime;
 
-        public PingTest(IConsoleManager consoleManager, PingReportType reportType, string hostName,
-            long maxPingSuccessTime, long maxPingWarningTime)
+        protected PingTest(PingReportType reportType, string hostName, long maxPingSuccessTime, long maxPingWarningTime)
         {
-            _consoleManager = consoleManager;
             _reportType = reportType;
             _hostName = hostName;
             _maxPingSuccessTime = maxPingSuccessTime;
@@ -54,33 +50,30 @@ namespace Ctyar.Pingct.Tests
             return result;
         }
 
-        public override void ReportCore()
+        public override void ReportCore(IConsoleManager consoleManager)
         {
-            if (_reportType == PingReportType.NoReport)
-            {
-                return;
-            }
-
             if (_reportType == PingReportType.TestResult)
             {
-                _consoleManager.Print(string.Empty, MessageType.Info);
+                consoleManager.Print(string.Empty, MessageType.Info);
             }
 
-            PrintPing(_hostName, _roundTripTime, _maxPingSuccessTime, _maxPingWarningTime);
+            PrintPing(_hostName, _roundTripTime, _maxPingSuccessTime, _maxPingWarningTime, consoleManager);
         }
 
-        private void PrintPing(string ip, long time, long maxSuccessTime, long maxWarningTime)
+        private void PrintPing(string ip, long time, long maxSuccessTime, long maxWarningTime,
+            IConsoleManager consoleManager)
         {
-            _consoleManager.Print($"Reply from {ip}: time=", MessageType.Info);
+            consoleManager.Print($"Reply from {ip}: time=", MessageType.Info);
 
-            PrintPingValue(time, maxSuccessTime, maxWarningTime);
+            PrintPingValue(time, maxSuccessTime, maxWarningTime, consoleManager);
 
-            _consoleManager.Print("ms", MessageType.Info);
+            consoleManager.Print("ms", MessageType.Info);
 
-            _consoleManager.PrintLine();
+            consoleManager.PrintLine();
         }
 
-        private void PrintPingValue(long value, long maxSuccessValue, long maxWarningValue)
+        private void PrintPingValue(long value, long maxSuccessValue, long maxWarningValue,
+            IConsoleManager consoleManager)
         {
             var messageType = value switch
             {
@@ -90,7 +83,7 @@ namespace Ctyar.Pingct.Tests
                 _ => MessageType.Failure
             };
 
-            _consoleManager.Print(value.ToString(), messageType);
+            consoleManager.Print(value.ToString(), messageType);
         }
     }
 }

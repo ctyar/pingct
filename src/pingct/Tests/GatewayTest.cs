@@ -2,8 +2,8 @@
 {
     internal class GatewayTest : PingTest
     {
-        public GatewayTest(IConsoleManager consoleManager, Settings settings) : base(consoleManager,
-            PingReportType.TestResult, settings.Gateway, settings.MaxPingSuccessTime, settings.MaxPingWarningTime)
+        public GatewayTest(Settings settings) : base(PingReportType.TestResult, settings.Gateway,
+            settings.MaxPingSuccessTime, settings.MaxPingWarningTime)
         {
         }
     }

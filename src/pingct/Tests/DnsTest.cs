@@ -7,14 +7,11 @@ namespace Ctyar.Pingct.Tests
 {
     internal class DnsTest : TestBase
     {
-        private readonly IConsoleManager _consoleManager;
-
         private readonly string _hostName;
         private bool _result;
 
-        public DnsTest(IConsoleManager consoleManager, Settings settings)
+        public DnsTest(Settings settings)
         {
-            _consoleManager = consoleManager;
             _hostName = settings.Dns;
         }
 
@@ -43,13 +40,13 @@ namespace Ctyar.Pingct.Tests
             return _result;
         }
 
-        public override void ReportCore()
+        public override void ReportCore(IConsoleManager consoleManager)
         {
             var (message, type) = _result ? ("OK", MessageType.Success) : ("Not working", MessageType.Failure);
 
-            _consoleManager.Print("DNS: ", MessageType.Info);
-            _consoleManager.Print(message, type);
-            _consoleManager.PrintLine();
+            consoleManager.Print("DNS: ", MessageType.Info);
+            consoleManager.Print(message, type);
+            consoleManager.PrintLine();
         }
     }
 }

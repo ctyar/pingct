@@ -1,108 +1,101 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Ctyar.Pingct.Tests;
+using Spectre.Console;
 
 namespace Ctyar.Pingct
 {
     internal class TestManager
     {
         private readonly int _delay;
-        private readonly long _maxPingSuccessTime;
-        private readonly long _maxPingWarningTime;
-        private readonly string _ping;
-        private readonly IConsoleManager _consoleManager;
         private readonly EventManager _eventManager;
-        private readonly IEnumerable<ITest> _tests;
+        private readonly ReportPanel _mainPanel;
+        private readonly MainPingTest _mainPingTest;
+        private readonly List<ReportPanel> _reportPanels;
+        private readonly List<ITest> _tests;
+        private readonly ReportPanel _testsPanel;
 
-        public TestManager(IEnumerable<ITest> tests, IConsoleManager consoleManager, EventManager eventManager, Settings settings)
+        public TestManager(EventManager eventManager, Settings settings, MainPingTest mainPingTest,
+            IEnumerable<ITest> tests)
         {
-            _tests = tests;
-            _consoleManager = consoleManager;
             _eventManager = eventManager;
+            _mainPingTest = mainPingTest;
+            _tests = tests.ToList();
             _delay = settings.Delay;
-            _ping = settings.Ping;
-            _maxPingSuccessTime = settings.MaxPingSuccessTime;
-            _maxPingWarningTime = settings.MaxPingWarningTime;
+
+            Console.CursorVisible = false;
+            var lineCount = Console.WindowHeight - 4;
+
+            _mainPanel = new ReportPanel(lineCount, "Ping");
+            _testsPanel = new ReportPanel(lineCount, "Tests");
+
+            _reportPanels = new List<ReportPanel>
+            {
+                _mainPanel,
+                _testsPanel
+            };
         }
 
         public async Task ScanAsync()
         {
+            var isOnline = true;
+
             while (true)
             {
-                await KeepPingingAsync(_ping);
+                while (isOnline)
+                {
+                    isOnline = await _mainPingTest.RunAsync();
+
+                    PrintTest();
+
+                    await Task.Delay(_delay);
+                }
 
                 _eventManager.Disconnected();
 
-                await TestAsync(true);
+                while (!isOnline)
+                {
+                    isOnline = await _mainPingTest.RunAsync();
+
+                    var tasks = _tests.Select(item => item.RunAsync()).ToList();
+
+                    await Task.WhenAll(tasks);
+
+                    PrintAll();
+
+                    await Task.Delay(_delay);
+                }
 
                 _eventManager.Connected();
             }
         }
 
-        public async Task TestAsync(bool breakOnReconnect)
+        private void PrintAll()
         {
-            while (true)
+            _mainPingTest.Report(new PanelConsoleManager(_mainPanel));
+
+            foreach (var current in _tests)
             {
-                await RunAllTestsAsync();
-
-                PrintAllTests();
-
-                if (breakOnReconnect)
-                {
-                    var areWeBackOnline = await AreWeBackOnline(_ping);
-                    if (areWeBackOnline)
-                    {
-                        break;
-                    }
-                }
-
-                await Task.Delay(_delay);
+                current.Report(new PanelConsoleManager(_testsPanel));
             }
+
+            RefreshUi();
         }
 
-        private async Task RunAllTestsAsync()
+        private void PrintTest()
         {
-            var tasks = _tests.Select(item => item.RunAsync()).ToList();
+            _mainPingTest.Report(new PanelConsoleManager(_mainPanel));
 
-            await Task.WhenAll(tasks);
+            RefreshUi();
         }
 
-        private void PrintAllTests()
+        private void RefreshUi()
         {
-            foreach (var test in _tests)
-            {
-                _consoleManager.Print("    ", MessageType.Info);
-                test.Report();
-            }
-        }
+            Console.SetCursorPosition(0, 0);
 
-        private async Task KeepPingingAsync(string hostName)
-        {
-            var pingTest = new PingTest(_consoleManager, PingReportType.JustValue, hostName, _maxPingSuccessTime,
-                _maxPingWarningTime);
-
-            while (true)
-            {
-                var isStillOnline = await pingTest.RunAsync();
-
-                if (!isStillOnline)
-                {
-                    return;
-                }
-
-                pingTest.Report();
-
-                await Task.Delay(_delay);
-            }
-        }
-
-        private Task<bool> AreWeBackOnline(string hostName)
-        {
-            var pingTest = new PingTest(_consoleManager, PingReportType.NoReport, hostName, _maxPingSuccessTime,
-                _maxPingWarningTime);
-
-            return pingTest.RunAsync();
+            AnsiConsole.Render(new Columns(_reportPanels.Select(item => item.Render())));
         }
     }
 }

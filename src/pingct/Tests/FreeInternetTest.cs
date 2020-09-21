@@ -10,14 +10,12 @@ namespace Ctyar.Pingct.Tests
     {
         private static readonly HttpClient HttpClient = new HttpClient();
 
-        private readonly IConsoleManager _consoleManager;
         private readonly string _hostName;
 
         private bool _result;
 
-        public FreeInternetTest(IConsoleManager consoleManager)
+        public FreeInternetTest()
         {
-            _consoleManager = consoleManager;
             _hostName = "https://twitter.com";
         }
 
@@ -41,13 +39,13 @@ namespace Ctyar.Pingct.Tests
             return _result;
         }
 
-        public override void ReportCore()
+        public override void ReportCore(IConsoleManager consoleManager)
         {
             var (message, type) = _result ? ("OK", MessageType.Success) : ("Not working", MessageType.Failure);
             
-            _consoleManager.Print("Freedom: ", MessageType.Info);
-            _consoleManager.Print(message, type);
-            _consoleManager.PrintLine();
+            consoleManager.Print("Freedom: ", MessageType.Info);
+            consoleManager.Print(message, type);
+            consoleManager.PrintLine();
         }
     }
 }

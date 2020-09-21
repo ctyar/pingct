@@ -27,14 +27,7 @@ namespace Ctyar.Pingct
                     Description = "Prints the path to the config file"
                 };
 
-                var testCommand = new Command("test")
-                {
-                    Handler = CommandHandler.Create(TestAsync),
-                    Description = "Runs the secondary tests"
-                };
-
                 rootCommand.Add(configCommand);
-                rootCommand.Add(testCommand);
                 return rootCommand.InvokeAsync(args).Result;
             }
             catch (Exception ex)
@@ -54,11 +47,6 @@ namespace Ctyar.Pingct
             GetServiceProvider().GetRequiredService<SettingsManager>().Config();
         }
 
-        private static async Task TestAsync()
-        {
-            await GetServiceProvider().GetRequiredService<TestManager>().TestAsync(false);
-        }
-
         private static ServiceProvider GetServiceProvider()
         {
             var serviceCollection = new ServiceCollection();
@@ -75,14 +63,15 @@ namespace Ctyar.Pingct
                 .AddTransient<SettingsManager>()
                 .AddSingleton(provider =>
                 {
-                    var configManager = provider.GetService<SettingsManager>();
-                    var settings = configManager!.Read();
+                    var settingsManager = provider.GetService<SettingsManager>();
+                    var settings = settingsManager!.Read();
                     return settings;
                 })
                 .AddTransient<TestManager>()
                 .AddTransient<EventManager>()
                 .AddTransient<ProcessManager>()
                 .AddTransient<IConsoleManager, ConsoleManager>()
+                .AddTransient<MainPingTest>()
                 .AddTransient<ITest, GatewayTest>()
                 .AddTransient<ITest, InCountryConnectionTest>()
                 .AddTransient<ITest, DnsTest>()

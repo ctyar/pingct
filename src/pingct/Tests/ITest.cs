@@ -6,6 +6,6 @@ namespace Ctyar.Pingct.Tests
     {
         Task<bool> RunAsync();
 
-        void Report();
+        void Report(IConsoleManager consoleManager);
     }
 }

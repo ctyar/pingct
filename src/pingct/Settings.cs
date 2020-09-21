@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Ctyar.Pingct
+﻿namespace Ctyar.Pingct
 {
     internal class Settings
     {
