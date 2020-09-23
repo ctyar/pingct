@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 
 namespace Ctyar.Pingct
 {
@@ -7,20 +8,17 @@ namespace Ctyar.Pingct
         private const string SettingsFileName = "settings.json";
 
         private readonly StorageManager _storageManager;
-        private readonly IConsoleManager _consoleManager;
 
-        public SettingsManager(StorageManager storageManager, IConsoleManager consoleManager)
+        public SettingsManager(StorageManager storageManager)
         {
             _storageManager = storageManager;
-            _consoleManager = consoleManager;
         }
 
         public void Config()
         {
             var path = _storageManager.GetFilePath(SettingsFileName);
 
-            _consoleManager.Print(path);
-            _consoleManager.PrintLine();
+            Console.WriteLine(path);
         }
 
         public Settings Read()

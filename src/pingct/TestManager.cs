@@ -14,8 +14,8 @@ namespace Ctyar.Pingct
         private readonly MainPingTest _mainPingTest;
         private readonly List<ReportPanel> _reportPanels;
         private readonly List<ITest> _tests;
-        private readonly PanelConsoleManager _mainConsoleManager;
-        private readonly PanelConsoleManager _testConsoleManager;
+        private readonly PanelManager _mainManager;
+        private readonly PanelManager _testManager;
         private int _removeDelayCounter;
 
         public TestManager(EventManager eventManager, Settings settings, MainPingTest mainPingTest,
@@ -30,10 +30,10 @@ namespace Ctyar.Pingct
             var lineCount = Console.WindowHeight - 4;
 
             var mainPanel = new ReportPanel(lineCount, "Ping");
-            _mainConsoleManager = new PanelConsoleManager(mainPanel);
+            _mainManager = new PanelManager(mainPanel);
 
             var testsPanel = new ReportPanel(lineCount, "Tests");
-            _testConsoleManager = new PanelConsoleManager(testsPanel);
+            _testManager = new PanelManager(testsPanel);
 
             _reportPanels = new List<ReportPanel>
             {
@@ -79,11 +79,11 @@ namespace Ctyar.Pingct
 
         private void PrintAll()
         {
-            _mainPingTest.Report(_mainConsoleManager);
+            _mainPingTest.Report(_mainManager);
 
             foreach (var current in _tests)
             {
-                current.Report(_testConsoleManager);
+                current.Report(_testManager);
             }
 
             RefreshUi();
@@ -91,7 +91,7 @@ namespace Ctyar.Pingct
 
         private void PrintMainPing()
         {
-            _mainPingTest.Report(_mainConsoleManager);
+            _mainPingTest.Report(_mainManager);
 
             if (_removeDelayCounter > 0)
             {
@@ -99,7 +99,7 @@ namespace Ctyar.Pingct
             }
             else if (_removeDelayCounter == 0)
             {
-                _testConsoleManager.Remove();
+                _testManager.Remove();
             }
 
             RefreshUi();

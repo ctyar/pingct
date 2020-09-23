@@ -50,30 +50,30 @@ namespace Ctyar.Pingct.Tests
             return result;
         }
 
-        public override void Report(IConsoleManager consoleManager)
+        public override void Report(PanelManager panelManager)
         {
             if (_reportType == PingReportType.TestResult)
             {
-                consoleManager.Print(string.Empty, MessageType.Info);
+                panelManager.Print(string.Empty, MessageType.Info);
             }
 
-            PrintPing(_hostName, _roundTripTime, _maxPingSuccessTime, _maxPingWarningTime, consoleManager);
+            PrintPing(_hostName, _roundTripTime, _maxPingSuccessTime, _maxPingWarningTime, panelManager);
         }
 
         private void PrintPing(string ip, long time, long maxSuccessTime, long maxWarningTime,
-            IConsoleManager consoleManager)
+            PanelManager panelManager)
         {
-            consoleManager.Print($"Reply from {ip}: time=", MessageType.Info);
+            panelManager.Print($"Reply from {ip}: time=", MessageType.Info);
 
-            PrintPingValue(time, maxSuccessTime, maxWarningTime, consoleManager);
+            PrintPingValue(time, maxSuccessTime, maxWarningTime, panelManager);
 
-            consoleManager.Print("ms", MessageType.Info);
+            panelManager.Print("ms", MessageType.Info);
 
-            consoleManager.PrintLine();
+            panelManager.PrintLine();
         }
 
         private void PrintPingValue(long value, long maxSuccessValue, long maxWarningValue,
-            IConsoleManager consoleManager)
+            PanelManager panelManager)
         {
             var messageType = value switch
             {
@@ -83,7 +83,7 @@ namespace Ctyar.Pingct.Tests
                 _ => MessageType.Failure
             };
 
-            consoleManager.Print(value.ToString(), messageType);
+            panelManager.Print(value.ToString(), messageType);
         }
     }
 }

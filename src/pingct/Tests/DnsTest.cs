@@ -40,13 +40,13 @@ namespace Ctyar.Pingct.Tests
             return _result;
         }
 
-        public override void Report(IConsoleManager consoleManager)
+        public override void Report(PanelManager panelManager)
         {
             var (message, type) = _result ? ("OK", MessageType.Success) : ("Not working", MessageType.Failure);
 
-            consoleManager.Print("DNS: ", MessageType.Info);
-            consoleManager.Print(message, type);
-            consoleManager.PrintLine();
+            panelManager.Print("DNS: ", MessageType.Info);
+            panelManager.Print(message, type);
+            panelManager.PrintLine();
         }
     }
 }

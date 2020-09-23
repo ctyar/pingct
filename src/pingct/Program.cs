@@ -70,7 +70,6 @@ namespace Ctyar.Pingct
                 .AddTransient<TestManager>()
                 .AddTransient<EventManager>()
                 .AddTransient<ProcessManager>()
-                .AddTransient<IConsoleManager, ConsoleManager>()
                 .AddTransient<MainPingTest>()
                 .AddTransient<ITest, GatewayTest>()
                 .AddTransient<ITest, InCountryConnectionTest>()

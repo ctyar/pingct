@@ -1,17 +1,12 @@
 ﻿namespace Ctyar.Pingct
 {
-    internal class PanelConsoleManager : IConsoleManager
+    internal class PanelManager
     {
         private readonly ReportPanel _reportPanel;
 
-        public PanelConsoleManager(ReportPanel reportPanel)
+        public PanelManager(ReportPanel reportPanel)
         {
             _reportPanel = reportPanel;
-        }
-
-        public void Print(string message)
-        {
-            Print(message, MessageType.Info);
         }
 
         public void Print(string message, MessageType messageType)

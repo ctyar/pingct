@@ -9,7 +9,7 @@ namespace Ctyar.Pingct.Tests
     {
         public abstract Task<bool> RunAsync();
 
-        public abstract void Report(IConsoleManager consoleManager);
+        public abstract void Report(PanelManager panelManager);
 
         protected async Task<TResult> ExecuteWithTimeoutAsync<TResult>(Func<Task<TResult>> action)
         {
