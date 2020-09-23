@@ -39,6 +39,11 @@
             _reportPanel.Add();
         }
 
+        public void Remove()
+        {
+            _reportPanel.Remove();
+        }
+
         private void PrintSuccess(string message)
         {
             _reportPanel.Append($"[green]{message}[/]");

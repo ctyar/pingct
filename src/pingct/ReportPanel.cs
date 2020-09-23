@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using Spectre.Console;
 using Spectre.Console.Rendering;
@@ -11,6 +12,7 @@ namespace Ctyar.Pingct
         private readonly string _name;
         private readonly Queue<string> _values;
         private string _lastValue;
+        private readonly string _emptyLine;
 
         public ReportPanel(int capacity, string name)
         {
@@ -18,6 +20,7 @@ namespace Ctyar.Pingct
             _name = name;
             _values = new Queue<string>(_capacity);
             _lastValue = string.Empty;
+            _emptyLine = new string(' ', (Console.WindowWidth - 9) / 2);
         }
 
         public void Add()
@@ -44,7 +47,15 @@ namespace Ctyar.Pingct
         {
             return new Panel(Print())
                 .SetHeader(_name)
-                .RoundedBorder().Expand();
+                .RoundedBorder().Collapse();
+        }
+
+        public void Remove()
+        {
+            if (_values.Count > 0)
+            {
+                _values.Dequeue();
+            }
         }
 
         private string Print()
@@ -53,14 +64,14 @@ namespace Ctyar.Pingct
 
             foreach (var item in _values)
             {
-                result.AppendLine(item);
+                result.AppendLine(item.PadRight(_emptyLine.Length, ' '));
             }
 
             if (_values.Count < _capacity)
             {
                 for (var i = 0; i < _capacity - _values.Count; i++)
                 {
-                    result.AppendLine("                              ");
+                    result.AppendLine(_emptyLine);
                 }
             }
 

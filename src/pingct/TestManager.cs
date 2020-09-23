@@ -11,11 +11,12 @@ namespace Ctyar.Pingct
     {
         private readonly int _delay;
         private readonly EventManager _eventManager;
-        private readonly ReportPanel _mainPanel;
         private readonly MainPingTest _mainPingTest;
         private readonly List<ReportPanel> _reportPanels;
         private readonly List<ITest> _tests;
-        private readonly ReportPanel _testsPanel;
+        private readonly PanelConsoleManager _mainConsoleManager;
+        private readonly PanelConsoleManager _testConsoleManager;
+        private int _removeDelayCounter = 0;
 
         public TestManager(EventManager eventManager, Settings settings, MainPingTest mainPingTest,
             IEnumerable<ITest> tests)
@@ -28,13 +29,16 @@ namespace Ctyar.Pingct
             Console.CursorVisible = false;
             var lineCount = Console.WindowHeight - 4;
 
-            _mainPanel = new ReportPanel(lineCount, "Ping");
-            _testsPanel = new ReportPanel(lineCount, "Tests");
+            var mainPanel = new ReportPanel(lineCount, "Ping");
+            _mainConsoleManager = new PanelConsoleManager(mainPanel);
+
+            var testsPanel = new ReportPanel(lineCount, "Tests");
+            _testConsoleManager = new PanelConsoleManager(testsPanel);
 
             _reportPanels = new List<ReportPanel>
             {
-                _mainPanel,
-                _testsPanel
+                mainPanel,
+                testsPanel
             };
         }
 
@@ -48,12 +52,13 @@ namespace Ctyar.Pingct
                 {
                     isOnline = await _mainPingTest.RunAsync();
 
-                    PrintTest();
+                    PrintMainPing();
 
                     await Task.Delay(_delay);
                 }
 
                 _eventManager.Disconnected();
+                _removeDelayCounter = 4;
 
                 while (!isOnline)
                 {
@@ -74,19 +79,28 @@ namespace Ctyar.Pingct
 
         private void PrintAll()
         {
-            _mainPingTest.Report(new PanelConsoleManager(_mainPanel));
+            _mainPingTest.Report(_mainConsoleManager);
 
             foreach (var current in _tests)
             {
-                current.Report(new PanelConsoleManager(_testsPanel));
+                current.Report(_testConsoleManager);
             }
 
             RefreshUi();
         }
 
-        private void PrintTest()
+        private void PrintMainPing()
         {
-            _mainPingTest.Report(new PanelConsoleManager(_mainPanel));
+            _mainPingTest.Report(_mainConsoleManager);
+
+            if (_removeDelayCounter > 0)
+            {
+                _removeDelayCounter--;
+            }
+            else if (_removeDelayCounter == 0)
+            {
+                _testConsoleManager.Remove();
+            }
 
             RefreshUi();
         }
