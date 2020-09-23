@@ -16,7 +16,7 @@ namespace Ctyar.Pingct
         private readonly List<ITest> _tests;
         private readonly PanelConsoleManager _mainConsoleManager;
         private readonly PanelConsoleManager _testConsoleManager;
-        private int _removeDelayCounter = 0;
+        private int _removeDelayCounter;
 
         public TestManager(EventManager eventManager, Settings settings, MainPingTest mainPingTest,
             IEnumerable<ITest> tests)

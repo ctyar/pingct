@@ -15,7 +15,7 @@ namespace Ctyar.Pingct.Tests
             _hostName = settings.Dns;
         }
 
-        public override async Task<bool> RunCoreAsync()
+        public override async Task<bool> RunAsync()
         {
             _result = false;
 
@@ -40,7 +40,7 @@ namespace Ctyar.Pingct.Tests
             return _result;
         }
 
-        public override void ReportCore(IConsoleManager consoleManager)
+        public override void Report(IConsoleManager consoleManager)
         {
             var (message, type) = _result ? ("OK", MessageType.Success) : ("Not working", MessageType.Failure);
 

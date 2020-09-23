@@ -7,17 +7,9 @@ namespace Ctyar.Pingct.Tests
 {
     internal abstract class TestBase : ITest
     {
-        public async Task<bool> RunAsync()
-        {
-            var result = await RunCoreAsync();
+        public abstract Task<bool> RunAsync();
 
-            return result;
-        }
-
-        public void Report(IConsoleManager consoleManager)
-        {
-            ReportCore(consoleManager);
-        }
+        public abstract void Report(IConsoleManager consoleManager);
 
         protected async Task<TResult> ExecuteWithTimeoutAsync<TResult>(Func<Task<TResult>> action)
         {
@@ -25,9 +17,5 @@ namespace Ctyar.Pingct.Tests
 
             return await timeoutPolicy.ExecuteAsync(action);
         }
-
-        public abstract Task<bool> RunCoreAsync();
-
-        public abstract void ReportCore(IConsoleManager consoleManager);
     }
 }

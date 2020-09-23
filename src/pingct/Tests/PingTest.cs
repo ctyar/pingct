@@ -21,7 +21,7 @@ namespace Ctyar.Pingct.Tests
             _maxPingWarningTime = maxPingWarningTime;
         }
 
-        public override async Task<bool> RunCoreAsync()
+        public override async Task<bool> RunAsync()
         {
             var result = false;
             Ping? ping = default;
@@ -50,7 +50,7 @@ namespace Ctyar.Pingct.Tests
             return result;
         }
 
-        public override void ReportCore(IConsoleManager consoleManager)
+        public override void Report(IConsoleManager consoleManager)
         {
             if (_reportType == PingReportType.TestResult)
             {
