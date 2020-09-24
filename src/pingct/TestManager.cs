@@ -14,8 +14,8 @@ namespace Ctyar.Pingct
         private readonly MainPingTest _mainPingTest;
         private readonly List<ReportPanel> _reportPanels;
         private readonly List<ITest> _tests;
-        private readonly PanelManager _mainManager;
-        private readonly PanelManager _testManager;
+        private readonly PanelManager _mainPanelManager;
+        private readonly PanelManager _testPanelManager;
         private int _removeDelayCounter;
 
         public TestManager(EventManager eventManager, Settings settings, MainPingTest mainPingTest,
@@ -26,14 +26,11 @@ namespace Ctyar.Pingct
             _tests = tests.ToList();
             _delay = settings.Delay;
 
-            Console.CursorVisible = false;
-            var lineCount = Console.WindowHeight - 4;
+            var mainPanel = new ReportPanel("Ping");
+            _mainPanelManager = new PanelManager(mainPanel);
 
-            var mainPanel = new ReportPanel(lineCount, "Ping");
-            _mainManager = new PanelManager(mainPanel);
-
-            var testsPanel = new ReportPanel(lineCount, "Tests");
-            _testManager = new PanelManager(testsPanel);
+            var testsPanel = new ReportPanel("Tests");
+            _testPanelManager = new PanelManager(testsPanel);
 
             _reportPanels = new List<ReportPanel>
             {
@@ -79,11 +76,11 @@ namespace Ctyar.Pingct
 
         private void PrintAll()
         {
-            _mainPingTest.Report(_mainManager);
+            _mainPingTest.Report(_mainPanelManager);
 
             foreach (var current in _tests)
             {
-                current.Report(_testManager);
+                current.Report(_testPanelManager);
             }
 
             RefreshUi();
@@ -91,7 +88,7 @@ namespace Ctyar.Pingct
 
         private void PrintMainPing()
         {
-            _mainPingTest.Report(_mainManager);
+            _mainPingTest.Report(_mainPanelManager);
 
             if (_removeDelayCounter > 0)
             {
@@ -99,7 +96,7 @@ namespace Ctyar.Pingct
             }
             else if (_removeDelayCounter == 0)
             {
-                _testManager.Remove();
+                _testPanelManager.Remove();
             }
 
             RefreshUi();

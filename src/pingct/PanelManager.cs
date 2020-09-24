@@ -41,22 +41,22 @@
 
         private void PrintSuccess(string message)
         {
-            _reportPanel.Append($"[green]{message}[/]");
+            _reportPanel.Append($"[green]{message}[/]", message.Length);
         }
 
         private void PrintFailure(string message)
         {
-            _reportPanel.Append($"[red]{message}[/]");
+            _reportPanel.Append($"[red]{message}[/]", message.Length);
         }
 
         private void PrintWarning(string message)
         {
-            _reportPanel.Append($"[yellow]{message}[/]");
+            _reportPanel.Append($"[yellow]{message}[/]", message.Length);
         }
 
         private void PrintInfo(string message)
         {
-            _reportPanel.Append(message);
+            _reportPanel.Append(message, message.Length);
         }
     }
 }
