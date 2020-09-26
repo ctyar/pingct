@@ -4,7 +4,7 @@
 [![pingct](https://img.shields.io/nuget/v/pingct.svg)](https://www.nuget.org/packages/pingct/)
 [![CodeFactor](https://www.codefactor.io/repository/github/ctyar/pingct/badge)](https://www.codefactor.io/repository/github/ctyar/pingct)
 
-A simple Ping like tool to check the common network connection issues in Iran. `pingct` is designed to constantly check the network connection and in case of any issue run a set of tests to facilitate troubleshooting.
+A simple Ping like tool to check the network connection issues. `pingct` is designed to constantly check the network connectivity and in case of any issues run a set of tests to facilitate troubleshooting.
 
 ## Get started
 
@@ -31,8 +31,7 @@ Options:
   -?, -h, --help    Show help and usage information
 
 Commands:
-  -c, --config    Prints the path to the config file
-  -t, --test      Just runs the tests
+  config    Prints the path to the config file
 ```
 
 Currently, the tests are:
@@ -43,7 +42,7 @@ Currently, the tests are:
 
 
 ### Sample output:
-![image](https://user-images.githubusercontent.com/1432648/64917273-a76b9f00-d7a3-11e9-8c0c-d249224ec0c7.png)
+![image](https://user-images.githubusercontent.com/1432648/94337799-148e5300-fffa-11ea-92fd-ab1c278413ce.png)
 
 ## Pre-release builds
 Get the package from [here](https://github.com/ctyar/pingct/packages/48026).
