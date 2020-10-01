@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Ctyar.Pingct.Tests;
 using Spectre.Console;
@@ -41,52 +42,57 @@ namespace Ctyar.Pingct
 
         public async Task ScanAsync()
         {
-            var isOnline = true;
+            var wasOnline = true;
+            var tokenSource = new CancellationTokenSource();
+            var ct = tokenSource.Token;
 
             while (true)
             {
-                while (isOnline)
+                var isOnline = await _mainPingTest.RunAsync();
+
+                RefreshConsole();
+
+                if (isOnline && !wasOnline)
                 {
-                    isOnline = await _mainPingTest.RunAsync();
+                    _eventManager.Connected();
+                    tokenSource.Cancel();
 
-                    PrintMainPing();
+                    tokenSource = new CancellationTokenSource();
+                    ct = tokenSource.Token;
 
-                    await Task.Delay(_delay);
+                    _removeDelayCounter = 4;
+                }
+                else if (!isOnline && wasOnline)
+                {
+#pragma warning disable 4014
+                    Task.Run(() => RunTestsAsync(ct), ct);
+#pragma warning restore 4014
+
+                    _eventManager.Disconnected();
                 }
 
-                _eventManager.Disconnected();
-                _removeDelayCounter = 4;
+                wasOnline = isOnline;
 
-                while (!isOnline)
-                {
-                    isOnline = await _mainPingTest.RunAsync();
-
-                    var tasks = _tests.Select(item => item.RunAsync()).ToList();
-
-                    await Task.WhenAll(tasks);
-
-                    PrintAll();
-
-                    await Task.Delay(_delay);
-                }
-
-                _eventManager.Connected();
+                await Task.Delay(_delay);
             }
         }
 
-        private void PrintAll()
+        private async Task RunTestsAsync(CancellationToken ct)
         {
-            _mainPingTest.Report(_mainPanelManager);
-
-            foreach (var current in _tests)
+            while (!ct.IsCancellationRequested)
             {
-                current.Report(_testPanelManager);
-            }
+                var tasks = _tests.Select(item => item.RunAsync()).ToList();
 
-            RefreshUi();
+                await Task.WhenAll(tasks);
+
+                foreach (var current in _tests)
+                {
+                    current.Report(_testPanelManager);
+                }   
+            }
         }
 
-        private void PrintMainPing()
+        private void RefreshConsole()
         {
             _mainPingTest.Report(_mainPanelManager);
 
@@ -99,11 +105,6 @@ namespace Ctyar.Pingct
                 _testPanelManager.Remove();
             }
 
-            RefreshUi();
-        }
-
-        private void RefreshUi()
-        {
             Console.SetCursorPosition(0, 0);
 
             AnsiConsole.Render(new Columns(_reportPanels.Select(item => item.Render())));
