@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace Ctyar.Pingct
         private readonly PanelManager _mainPanelManager;
         private readonly PanelManager _testPanelManager;
         private int _removeDelayCounter;
+        private bool _remove;
 
         public TestManager(EventManager eventManager, Settings settings, MainPingTest mainPingTest,
             IEnumerable<ITest> tests)
@@ -60,6 +62,7 @@ namespace Ctyar.Pingct
                     tokenSource = new CancellationTokenSource();
                     ct = tokenSource.Token;
 
+                    _remove = true;
                     _removeDelayCounter = 4;
                 }
                 else if (!isOnline && wasOnline)
@@ -67,6 +70,8 @@ namespace Ctyar.Pingct
 #pragma warning disable 4014
                     Task.Run(() => RunTestsAsync(ct), ct);
 #pragma warning restore 4014
+
+                    _remove = false;
 
                     _eventManager.Disconnected();
                 }
@@ -79,8 +84,11 @@ namespace Ctyar.Pingct
 
         private async Task RunTestsAsync(CancellationToken ct)
         {
+            var stopWatch = new Stopwatch();
+
             while (!ct.IsCancellationRequested)
             {
+                stopWatch.Start();
                 var tasks = _tests.Select(item => item.RunAsync()).ToList();
 
                 await Task.WhenAll(tasks);
@@ -88,7 +96,14 @@ namespace Ctyar.Pingct
                 foreach (var current in _tests)
                 {
                     current.Report(_testPanelManager);
-                }   
+                }
+
+                stopWatch.Stop();
+                if (stopWatch.ElapsedMilliseconds < _delay)
+                {
+                    await Task.Delay(_delay - (int)stopWatch.ElapsedMilliseconds, ct);
+                }
+                stopWatch.Reset();
             }
         }
 
@@ -96,13 +111,16 @@ namespace Ctyar.Pingct
         {
             _mainPingTest.Report(_mainPanelManager);
 
-            if (_removeDelayCounter > 0)
+            if (_remove)
             {
-                _removeDelayCounter--;
-            }
-            else if (_removeDelayCounter == 0)
-            {
-                _testPanelManager.Remove();
+                if (_removeDelayCounter > 0)
+                {
+                    _removeDelayCounter--;
+                }
+                else
+                {
+                    _testPanelManager.Remove();
+                }
             }
 
             Console.SetCursorPosition(0, 0);
