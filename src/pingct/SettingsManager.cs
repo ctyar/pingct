@@ -32,7 +32,7 @@ namespace Ctyar.Pingct
                 result = new Settings();
 
                 SaveSettings(result);
-                
+
                 return result;
             }
 

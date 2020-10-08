@@ -42,7 +42,7 @@ namespace Ctyar.Pingct.Tests
         public override void Report(PanelManager panelManager)
         {
             var (message, type) = _result ? ("OK", MessageType.Success) : ("Not working", MessageType.Failure);
-            
+
             panelManager.Print("Freedom: ", MessageType.Info);
             panelManager.Print(message, type);
             panelManager.PrintLine();
