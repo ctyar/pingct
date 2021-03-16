@@ -75,7 +75,7 @@ namespace Ctyar.Pingct
                 .AddTransient<ITest, GatewayTest>()
                 .AddTransient<ITest, InCountryConnectionTest>()
                 .AddTransient<ITest, DnsTest>()
-                .AddTransient<ITest, FreeInternetTest>();
+                .AddTransient<ITest, HttpGetTest>();
         }
 
         private static void InitializeLogger()

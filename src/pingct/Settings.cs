@@ -16,6 +16,8 @@
 
         public string Dns { get; set; } = "facebook.com";
 
+        public string Get { get; set; } = "https://twitter.com";
+
         public string OnConnected { get; set; } = string.Empty;
 
         public string OnConnectedArgs { get; set; } = string.Empty;

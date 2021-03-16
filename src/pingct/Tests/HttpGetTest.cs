@@ -7,17 +7,17 @@ using Polly.Timeout;
 
 namespace Ctyar.Pingct.Tests
 {
-    internal class FreeInternetTest : TestBase
+    internal class HttpGetTest : TestBase
     {
-        private static readonly HttpClient HttpClient = new HttpClient();
+        private static readonly HttpClient HttpClient = new();
 
         private readonly string _hostName;
 
         private bool _result;
 
-        public FreeInternetTest()
+        public HttpGetTest(Settings settings)
         {
-            _hostName = "https://twitter.com";
+            _hostName = settings.Get;
         }
 
         public override async Task<bool> RunAsync(CancellationToken cancellationToken)
@@ -43,9 +43,9 @@ namespace Ctyar.Pingct.Tests
 
         public override void Report(PanelManager panelManager)
         {
-            var (message, type) = _result ? ("OK", MessageType.Success) : ("Not working", MessageType.Failure);
+            var (message, type) = _result ? (_hostName, MessageType.Success) : (_hostName, MessageType.Failure);
 
-            panelManager.Print("Freedom: ", MessageType.Info);
+            panelManager.Print("GET: ", MessageType.Info);
             panelManager.Print(message, type);
             panelManager.PrintLine();
         }
