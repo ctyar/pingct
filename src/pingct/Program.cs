@@ -1,7 +1,6 @@
 ﻿using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
-using System.Threading.Tasks;
 using Ctyar.Pingct.Tests;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -68,7 +67,6 @@ namespace Ctyar.Pingct
                     return settings;
                 })
                 .AddTransient<Gui>()
-                //.AddTransient<TestManager>()
                 .AddTransient<EventManager>()
                 .AddTransient<ProcessManager>()
                 .AddTransient<MainPingTest>()

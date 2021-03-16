@@ -44,7 +44,7 @@ namespace Ctyar.Pingct.Tests
 
         public override void Report(PanelManager panelManager)
         {
-            var (message, type) = _result ? ("OK", MessageType.Success) : ("Not working", MessageType.Failure);
+            var (message, type) = _result ? (_hostName, MessageType.Success) : (_hostName, MessageType.Failure);
 
             panelManager.Print("DNS: ", MessageType.Info);
             panelManager.Print(message, type);
