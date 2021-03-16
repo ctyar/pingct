@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Polly.Timeout;
 
@@ -19,14 +20,15 @@ namespace Ctyar.Pingct.Tests
             _hostName = "https://twitter.com";
         }
 
-        public override async Task<bool> RunAsync()
+        public override async Task<bool> RunAsync(CancellationToken cancellationToken)
         {
             _result = false;
 
             try
             {
                 var stream = await ExecuteWithTimeoutAsync(
-                    async () => await HttpClient.GetStreamAsync(_hostName)
+                    async (ct) => await HttpClient.GetStreamAsync(_hostName),
+                    cancellationToken
                 );
 
                 _result = true;

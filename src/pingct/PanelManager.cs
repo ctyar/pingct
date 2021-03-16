@@ -11,22 +11,7 @@
 
         public void Print(string message, MessageType messageType)
         {
-            if (messageType == MessageType.Info)
-            {
-                PrintInfo(message);
-            }
-            else if (messageType == MessageType.Success)
-            {
-                PrintSuccess(message);
-            }
-            else if (messageType == MessageType.Warning)
-            {
-                PrintWarning(message);
-            }
-            else
-            {
-                PrintFailure(message);
-            }
+            _reportPanel.Append(message, messageType);
         }
 
         public void PrintLine()
@@ -37,26 +22,6 @@
         public void Remove()
         {
             _reportPanel.Remove();
-        }
-
-        private void PrintSuccess(string message)
-        {
-            _reportPanel.Append($"[green]{message}[/]", message.Length);
-        }
-
-        private void PrintFailure(string message)
-        {
-            _reportPanel.Append($"[red]{message}[/]", message.Length);
-        }
-
-        private void PrintWarning(string message)
-        {
-            _reportPanel.Append($"[yellow]{message}[/]", message.Length);
-        }
-
-        private void PrintInfo(string message)
-        {
-            _reportPanel.Append(message, message.Length);
         }
     }
 }

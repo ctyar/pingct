@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Ctyar.Pingct.Tests
@@ -21,7 +22,7 @@ namespace Ctyar.Pingct.Tests
             _maxPingWarningTime = maxPingWarningTime;
         }
 
-        public override async Task<bool> RunAsync()
+        public override async Task<bool> RunAsync(CancellationToken cancellationToken)
         {
             var result = false;
             Ping? ping = default;
@@ -60,7 +61,7 @@ namespace Ctyar.Pingct.Tests
             PrintPing(_hostName, _roundTripTime, _maxPingSuccessTime, _maxPingWarningTime, panelManager);
         }
 
-        private void PrintPing(string ip, long time, long maxSuccessTime, long maxWarningTime,
+        private static void PrintPing(string ip, long time, long maxSuccessTime, long maxWarningTime,
             PanelManager panelManager)
         {
             panelManager.Print($"Reply from {ip}: time=", MessageType.Info);
@@ -72,7 +73,7 @@ namespace Ctyar.Pingct.Tests
             panelManager.PrintLine();
         }
 
-        private void PrintPingValue(long value, long maxSuccessValue, long maxWarningValue,
+        private static void PrintPingValue(long value, long maxSuccessValue, long maxWarningValue,
             PanelManager panelManager)
         {
             var messageType = value switch

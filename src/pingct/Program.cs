@@ -18,7 +18,7 @@ namespace Ctyar.Pingct
             {
                 var rootCommand = new RootCommand
                 {
-                    Handler = CommandHandler.Create(async () => { await ScanAsync(); })
+                    Handler = CommandHandler.Create(Scan)
                 };
 
                 var configCommand = new Command("config")
@@ -37,9 +37,9 @@ namespace Ctyar.Pingct
             }
         }
 
-        private static async Task ScanAsync()
+        private static void Scan()
         {
-            await GetServiceProvider().GetRequiredService<TestManager>().ScanAsync();
+            GetServiceProvider().GetRequiredService<Gui>().Run();
         }
 
         private static void Config()
@@ -67,7 +67,8 @@ namespace Ctyar.Pingct
                     var settings = settingsManager!.Read();
                     return settings;
                 })
-                .AddTransient<TestManager>()
+                .AddTransient<Gui>()
+                //.AddTransient<TestManager>()
                 .AddTransient<EventManager>()
                 .AddTransient<ProcessManager>()
                 .AddTransient<MainPingTest>()

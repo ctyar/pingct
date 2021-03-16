@@ -1,67 +1,81 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Spectre.Console;
-using Spectre.Console.Rendering;
+using System.Linq;
+using Terminal.Gui;
 
 namespace Ctyar.Pingct
 {
-    internal class ReportPanel
+    internal class ReportPanel : FrameView
     {
-        private readonly string _emptyLine;
-        private readonly int _height;
-        private readonly string _name;
-        private readonly Queue<(string, int)> _values;
-        private readonly int _width;
-        private string _lastValue;
-        private int _lastValueLength;
+        private int _capacity;
+        private Queue<List<(MessageType, string)>> _values;
+        private List<(MessageType, string)> _lastLine;
+        private const int Margin = 6;
+        private static readonly Terminal.Gui.Attribute Red = new(Color.BrightRed);
+        private static readonly Terminal.Gui.Attribute Green = new(Color.BrightGreen);
+        private static readonly Terminal.Gui.Attribute Yellow = new(Color.BrightYellow);
+        private static readonly Terminal.Gui.Attribute White = new(Color.White);
+        private static readonly ColorScheme RedScheme = new()
+        {
+            Disabled = Red,
+            Focus = Red,
+            HotFocus = Red,
+            HotNormal = Red,
+            Normal = Red,
+        };
+        private static readonly ColorScheme GreenScheme = new()
+        {
+            Disabled = Green,
+            Focus = Green,
+            HotFocus = Green,
+            HotNormal = Green,
+            Normal = Green,
+        };
+        private static readonly ColorScheme YellowScheme = new()
+        {
+            Disabled = Yellow,
+            Focus = Yellow,
+            HotFocus = Yellow,
+            HotNormal = Yellow,
+            Normal = Yellow,
+        };
+        private static readonly ColorScheme WhiteScheme = new()
+        {
+            Disabled = White,
+            Focus = White,
+            HotFocus = White,
+            HotNormal = White,
+            Normal = White,
+        };
 
         public ReportPanel(string name)
         {
-            _name = name;
-            _values = new Queue<(string, int)>(_height);
-            _lastValue = string.Empty;
-            _lastValueLength = 0;
+            Text = name;
+            _values = new();
+            _lastLine = new();
 
-            Console.CursorVisible = false;
+            _capacity = Driver.Rows - Margin;
 
-            _height = Console.WindowHeight - 3;
-
-            var panel = new Panel(string.Empty);
-            var panelEdge = 2; // Panel.EdgeWidth
-            var paddings = 2 * (panel.Padding.Left + panel.Padding.Right + panelEdge + 1);
-            _width = (Console.WindowWidth - paddings) / 2;
-
-            _emptyLine = new string(' ', _width);
+            Application.Resized += ResizeHandler;
         }
 
         public void Add()
         {
-            if (_values.Count < _height)
-            {
-                _values.Enqueue((_lastValue, _lastValueLength));
-            }
-            else
+            if (_values.Count == _capacity)
             {
                 _values.Dequeue();
-                _values.Enqueue((_lastValue, _lastValueLength));
             }
 
-            _lastValue = string.Empty;
-            _lastValueLength = 0;
+            _values.Enqueue(_lastLine);
+
+            _lastLine = new();
+
+            Render();
         }
 
-        public void Append(string value, int length)
+        public void Append(string value, MessageType messageType)
         {
-            _lastValue += value;
-            _lastValueLength += length;
-        }
-
-        public IRenderable Render()
-        {
-            return new Panel(Print())
-                .SetHeader(_name)
-                .RoundedBorder();
+            _lastLine.Add((messageType, value));
         }
 
         public void Remove()
@@ -70,53 +84,79 @@ namespace Ctyar.Pingct
             {
                 _values.Dequeue();
             }
+
+            Render();
         }
 
-        private string Print()
+        private void Render()
         {
-            var result = new StringBuilder();
+            RemoveAll();
 
-            var i = 0;
-            foreach (var (line, length) in _values)
+            var lines = _values.ToList();
+            for (var lineIndex = 0; lineIndex < lines.Count; lineIndex++)
             {
-                var printLine = Pad(line, length);
-                if (i == _height - 1)
-                {
-                    result.Append(printLine);
-                }
-                else
-                {
-                    result.AppendLine(printLine);
-                }
-
-                i++;
+                Add(GetLine(lines[lineIndex], lineIndex));
             }
 
-            for (var j = 0; j < _height - _values.Count; j++)
-            {
-                if (j == _height - _values.Count - 1)
-                {
-                    result.Append(_emptyLine);
-                }
-                else
-                {
-                    result.AppendLine(_emptyLine);
-                }
-            }
-
-            return result.ToString();
+            Application.Refresh();
         }
 
-        private string Pad(string value, int valueLength)
+        private void ResizeHandler(Application.ResizedEventArgs resizedEventArgs)
         {
-            if (valueLength >= _width)
+            _capacity = resizedEventArgs.Rows - Margin;
+            var resizedQueue = new Queue<List<(MessageType, string)>>(_capacity);
+            var copyCount = Math.Min(_capacity, _values.Count);
+
+            foreach (var item in _values.Take(copyCount))
             {
-                return value;
+                resizedQueue.Enqueue(item);
             }
 
-            var charCount = _width - valueLength;
+            _values = resizedQueue;
+        }
 
-            return value + new string(' ', charCount);
+        private static View GetLine(List<(MessageType, string)> line, int lineIndex)
+        {
+            var container = new View
+            {
+                X = 1,
+                Y = 1 + lineIndex,
+                Width = Dim.Fill(),
+                Height = 1,
+            };
+
+            Label? previous = null;
+
+            foreach (var item in line)
+            {
+                var label = GetLabel(item.Item1, item.Item2);
+                label.X = previous is null ? 0 : Pos.Right(previous);
+
+                container.Add(label);
+
+                previous = label;
+            }
+
+            return container;
+        }
+
+        private static Label GetLabel(MessageType messageType, string value)
+        {
+            var colorScheme = messageType switch
+            {
+                MessageType.Failure => RedScheme,
+                MessageType.Warning => YellowScheme,
+                MessageType.Success => GreenScheme,
+                _ => WhiteScheme,
+            };
+
+            return new Label
+            {
+                Width = value.Length,
+                Height = 1,
+                Text = value,
+                ColorScheme = colorScheme,
+            };
         }
     }
 }

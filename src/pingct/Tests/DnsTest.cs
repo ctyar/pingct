@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using DnsClient;
 using Polly.Timeout;
@@ -15,7 +16,7 @@ namespace Ctyar.Pingct.Tests
             _hostName = settings.Dns;
         }
 
-        public override async Task<bool> RunAsync()
+        public override async Task<bool> RunAsync(CancellationToken token)
         {
             _result = false;
 
@@ -27,7 +28,8 @@ namespace Ctyar.Pingct.Tests
                 });
 
                 var dnsQueryResponse = await ExecuteWithTimeoutAsync(
-                    async () => await client.QueryAsync(_hostName, QueryType.A)
+                    async (ct) => await client.QueryAsync(_hostName, QueryType.A, cancellationToken: ct),
+                    token
                 );
 
                 _result = !dnsQueryResponse.HasError;
