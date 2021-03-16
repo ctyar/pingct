@@ -10,7 +10,7 @@ namespace Ctyar.Pingct
         private int _capacity;
         private Queue<List<(MessageType, string)>> _values;
         private List<(MessageType, string)> _lastLine;
-        private const int Margin = 6;
+        private const int Margin = 3;
         private static readonly Terminal.Gui.Attribute Red = new(Color.BrightRed);
         private static readonly Terminal.Gui.Attribute Green = new(Color.BrightGreen);
         private static readonly Terminal.Gui.Attribute Yellow = new(Color.BrightYellow);

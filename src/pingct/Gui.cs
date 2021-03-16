@@ -52,10 +52,10 @@ namespace Ctyar.Pingct
 
             var window = new Window("pingct")
             {
-                X = 0,
-                Y = 0,
-                Width = Dim.Fill(),
-                Height = Dim.Fill(),
+                X = -1,
+                Y = -1,
+                Width = Dim.Fill(-1),
+                Height = Dim.Fill(-1),
                 ColorScheme = mainColorScheme,
             };
             top.Add(window);
@@ -63,48 +63,17 @@ namespace Ctyar.Pingct
             var pingPanel = new ReportPanel("Ping")
             {
                 X = 0,
-                Y = 1,
+                Y = 0,
                 Width = Dim.Percent(50),
                 Height = Dim.Fill(),
                 CanFocus = false
             };
             window.Add(pingPanel);
 
-            // Subpanel layout
-            /*var testsView = new View
-            {
-                X = Pos.Right(pingPanel),
-                Y = 1,
-                Width = Dim.Fill(),
-                Height = Dim.Fill(),
-                CanFocus = false
-            };
-
-            window.Add(testsView);
-
-            var panel1 = new ReportPanel("Panel1")
-            {
-                X = 0,
-                Y = 0,
-                Width = Dim.Fill(),
-                Height = Dim.Percent(50),
-                CanFocus = false
-            };
-            var panel2 = new ReportPanel("Panel2")
-            {
-                X = 0,
-                Y = Pos.Bottom(panel1),
-                Width = Dim.Fill(),
-                Height = Dim.Fill(),
-                CanFocus = false
-            };
-            testsView.Add(panel1);
-            testsView.Add(panel2);*/
-
             var testPanel = new ReportPanel("Tests")
             {
                 X = Pos.Right(pingPanel),
-                Y = 1,
+                Y = 0,
                 Width = Dim.Percent(50),
                 Height = Dim.Fill(),
                 CanFocus = false
