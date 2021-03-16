@@ -10,7 +10,7 @@ namespace Ctyar.Pingct
         private int _capacity;
         private Queue<List<(MessageType, string)>> _values;
         private List<(MessageType, string)> _lastLine;
-        private const int Margin = 3;
+        private const int Margin = 2;
         private static readonly Terminal.Gui.Attribute Red = new(Color.BrightRed);
         private static readonly Terminal.Gui.Attribute Green = new(Color.BrightGreen);
         private static readonly Terminal.Gui.Attribute Yellow = new(Color.BrightYellow);
@@ -39,9 +39,8 @@ namespace Ctyar.Pingct
             Normal = Yellow,
         };
 
-        public ReportPanel(string name)
+        public ReportPanel(string name) : base(name)
         {
-            Text = name;
             _values = new();
             _lastLine = new();
 
@@ -111,7 +110,7 @@ namespace Ctyar.Pingct
             var container = new View
             {
                 X = 1,
-                Y = 1 + lineIndex,
+                Y = lineIndex,
                 Width = Dim.Fill(),
                 Height = 1,
             };
