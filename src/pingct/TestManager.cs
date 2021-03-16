@@ -178,7 +178,7 @@ namespace Ctyar.Pingct
                 cancellationTokenSource.Cancel();
                 return new CancellationTokenSource();
             }
-            else if (wasOnline  && !isOnline)
+            else if (wasOnline && !isOnline)
             {
                 Task.Run(() => RunTestsAsync(cancellationTokenSource.Token), cancellationTokenSource.Token);
 

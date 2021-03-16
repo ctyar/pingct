@@ -41,7 +41,7 @@ namespace Ctyar.Pingct
 
             var top = Application.Top;
 
-            var attribute = Attribute.Make(Color.White, Color.Black);
+            var attribute = Attribute.Make(Color.Gray, Color.Black);
             var mainColorScheme = new ColorScheme
             {
                 Focus = attribute,

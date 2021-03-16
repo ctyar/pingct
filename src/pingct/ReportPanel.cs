@@ -14,7 +14,6 @@ namespace Ctyar.Pingct
         private static readonly Terminal.Gui.Attribute Red = new(Color.BrightRed);
         private static readonly Terminal.Gui.Attribute Green = new(Color.BrightGreen);
         private static readonly Terminal.Gui.Attribute Yellow = new(Color.BrightYellow);
-        private static readonly Terminal.Gui.Attribute White = new(Color.White);
         private static readonly ColorScheme RedScheme = new()
         {
             Disabled = Red,
@@ -38,14 +37,6 @@ namespace Ctyar.Pingct
             HotFocus = Yellow,
             HotNormal = Yellow,
             Normal = Yellow,
-        };
-        private static readonly ColorScheme WhiteScheme = new()
-        {
-            Disabled = White,
-            Focus = White,
-            HotFocus = White,
-            HotNormal = White,
-            Normal = White,
         };
 
         public ReportPanel(string name)
@@ -147,7 +138,7 @@ namespace Ctyar.Pingct
                 MessageType.Failure => RedScheme,
                 MessageType.Warning => YellowScheme,
                 MessageType.Success => GreenScheme,
-                _ => WhiteScheme,
+                _ => null,
             };
 
             return new Label
