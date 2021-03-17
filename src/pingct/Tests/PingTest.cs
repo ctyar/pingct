@@ -22,14 +22,14 @@ namespace Ctyar.Pingct.Tests
             _maxPingWarningTime = maxPingWarningTime;
         }
 
-        public override async Task<bool> RunAsync(CancellationToken cancellationToken)
+        public override async Task<bool> RunAsync(CancellationToken cancellationToken = default)
         {
             var result = false;
-            Ping? ping = default;
+            Ping? ping = null;
 
             try
             {
-                ping = new Ping();
+                ping = new();
 
                 _roundTripTime = (await ping.SendPingAsync(_hostName, 2000)).RoundtripTime;
 

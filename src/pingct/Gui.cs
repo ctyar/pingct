@@ -30,7 +30,7 @@ namespace Ctyar.Pingct
             var testManager = new TestManager(_mainPingTest, pingPanelManager, testPanelManager, _eventManager, _tests,
                 _settings);
 
-            _ = Task.Run(() => testManager.ScanAsync(default));
+            _ = Task.Run(() => testManager.ScanAsync());
 
             Application.Run();
         }
@@ -55,7 +55,7 @@ namespace Ctyar.Pingct
                 X = -1,
                 Y = -1,
                 Width = Dim.Fill(-1),
-                Height = Dim.Fill(-1),
+                Height = Dim.Fill(0),
                 ColorScheme = mainColorScheme,
             };
             top.Add(window);
@@ -80,7 +80,15 @@ namespace Ctyar.Pingct
             };
             window.Add(testPanel);
 
+            var quitItem = new StatusItem(Key.ControlQ, "~^Q~ Quit", () => QuitMenuItemHandler());
+            top.Add(new StatusBar(new StatusItem[] { quitItem, }));
+
             return (pingPanel, testPanel);
+        }
+
+        private static void QuitMenuItemHandler()
+        {
+            Application.RequestStop();
         }
     }
 }

@@ -29,24 +29,22 @@ namespace Ctyar.Pingct
             _delay = settings.Delay;
         }
 
-        public async Task ScanAsync(CancellationToken cancellationToken)
+        public async Task ScanAsync()
         {
             var testsCancellationTokenSource = new CancellationTokenSource();
 
             var wasOnline = true;
 
-            while (!cancellationToken.IsCancellationRequested)
+            while (true)
             {
-                var isOnline = await _mainPingTest.RunAsync(cancellationToken);
+                var isOnline = await _mainPingTest.RunAsync();
                 ReportPing();
 
                 testsCancellationTokenSource = CheckCurrentStatus(wasOnline, isOnline, testsCancellationTokenSource);
                 wasOnline = isOnline;
 
-                await Task.Delay(_delay, cancellationToken);
+                await Task.Delay(_delay);
             }
-
-            testsCancellationTokenSource.Cancel();
         }
 
         private CancellationTokenSource CheckCurrentStatus(bool wasOnline, bool isOnline,
