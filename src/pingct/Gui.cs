@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
 using Ctyar.Pingct.Tests;
 using Terminal.Gui;
 
@@ -12,6 +12,8 @@ namespace Ctyar.Pingct
         private readonly IEnumerable<ITest> _tests;
         private readonly Settings _settings;
 
+        private static TestManager? TestManager;
+
         public Gui(MainPingTest mainPingTest, EventManager eventManager, IEnumerable<ITest> tests, Settings settings)
         {
             _mainPingTest = mainPingTest;
@@ -22,32 +24,18 @@ namespace Ctyar.Pingct
 
         public void Run()
         {
-            var (pingPanel, testPanel) = InitializeUI();
-
-            var pingPanelManager = new PanelManager(pingPanel);
-            var testPanelManager = new PanelManager(testPanel);
-
-            var testManager = new TestManager(_mainPingTest, pingPanelManager, testPanelManager, _eventManager, _tests,
-                _settings);
-
-            _ = Task.Run(() => testManager.ScanAsync());
-
-            Application.Run();
-        }
-
-        private static (ReportPanel pingPanel, ReportPanel testPanel) InitializeUI()
-        {
             Application.Init();
 
             var top = Application.Top;
 
-            var attribute = Attribute.Make(Color.Gray, Color.Black);
+            var attribute = Terminal.Gui.Attribute.Make(Color.Gray, Color.Black);
             var mainColorScheme = new ColorScheme
             {
                 Focus = attribute,
                 HotFocus = attribute,
                 HotNormal = attribute,
-                Normal = attribute
+                Normal = attribute,
+                Disabled = attribute,
             };
 
             var window = new Window("pingct")
@@ -83,12 +71,34 @@ namespace Ctyar.Pingct
             var quitItem = new StatusItem(Key.ControlQ, "~^Q~ Quit", () => QuitMenuItemHandler());
             top.Add(new StatusBar(new StatusItem[] { quitItem, }));
 
-            return (pingPanel, testPanel);
+
+            SetupMainLoop(pingPanel, testPanel);
+
+            Application.Run();
+        }
+
+        private void SetupMainLoop(ReportPanel pingPanel, ReportPanel testPanel)
+        {
+            var pingPanelManager = new PanelManager(pingPanel);
+            var testPanelManager = new PanelManager(testPanel);
+
+            TestManager = new TestManager(_mainPingTest, pingPanelManager, testPanelManager, _eventManager, _tests,
+                _settings);
+            Application.MainLoop.AddTimeout(TimeSpan.FromMilliseconds(_settings.Delay), MainLoopHandler);
         }
 
         private static void QuitMenuItemHandler()
         {
             Application.RequestStop();
+        }
+
+        private static bool MainLoopHandler(MainLoop mainLoop)
+        {
+            mainLoop.Invoke(async () => {
+                await TestManager!.ScanAsync();
+            });
+
+            return true;
         }
     }
 }

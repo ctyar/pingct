@@ -17,6 +17,9 @@ namespace Ctyar.Pingct
         private readonly int _delay;
         private int _removeDelayCounter;
         private bool _remove;
+        private CancellationTokenSource _testsCancellationTokenSource;
+        private bool _isOnline;
+        private bool _wasOnline = true;
 
         public TestManager(MainPingTest mainPingTest, PanelManager pingPanelManager, PanelManager testPanelManager,
             EventManager eventManager, IEnumerable<ITest> tests, Settings settings)
@@ -27,24 +30,16 @@ namespace Ctyar.Pingct
             _eventManager = eventManager;
             _tests = tests.ToList();
             _delay = settings.Delay;
+            _testsCancellationTokenSource = new();
         }
 
         public async Task ScanAsync()
         {
-            var testsCancellationTokenSource = new CancellationTokenSource();
+            _isOnline = await _mainPingTest.RunAsync();
+            ReportPing();
 
-            var wasOnline = true;
-
-            while (true)
-            {
-                var isOnline = await _mainPingTest.RunAsync();
-                ReportPing();
-
-                testsCancellationTokenSource = CheckCurrentStatus(wasOnline, isOnline, testsCancellationTokenSource);
-                wasOnline = isOnline;
-
-                await Task.Delay(_delay);
-            }
+            _testsCancellationTokenSource = CheckCurrentStatus(_wasOnline, _isOnline, _testsCancellationTokenSource);
+            _wasOnline = _isOnline;
         }
 
         private CancellationTokenSource CheckCurrentStatus(bool wasOnline, bool isOnline,
