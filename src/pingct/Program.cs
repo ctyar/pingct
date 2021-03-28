@@ -1,6 +1,8 @@
-﻿using System;
-using System.CommandLine;
+﻿using System.CommandLine;
+using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
+using System.CommandLine.Parsing;
+using System.Threading.Tasks;
 using Ctyar.Pingct.Tests;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -9,31 +11,33 @@ namespace Ctyar.Pingct
 {
     internal class Program
     {
-        private static int Main(string[] args)
+        private static async Task Main(string[] args)
         {
             InitializeLogger();
 
-            try
-            {
-                var rootCommand = new RootCommand
-                {
-                    Handler = CommandHandler.Create(Scan)
-                };
+            await BuildCommandLine()
+                .UseDefaults()
+                .UseExceptionHandler((exception, context) => Log.Error(exception, "Stopped program because of exception"))
+                .Build()
+                .InvokeAsync(args);
+        }
 
-                var configCommand = new Command("config")
-                {
-                    Handler = CommandHandler.Create(Config),
-                    Description = "Prints the path to the config file"
-                };
-
-                rootCommand.Add(configCommand);
-                return rootCommand.InvokeAsync(args).Result;
-            }
-            catch (Exception ex)
+        private static CommandLineBuilder BuildCommandLine()
+        {
+            var rootCommand = new RootCommand
             {
-                Log.Error(ex, "Stopped program because of exception");
-                throw;
-            }
+                Handler = CommandHandler.Create(Scan)
+            };
+
+            var configCommand = new Command("config")
+            {
+                Handler = CommandHandler.Create(Config),
+                Description = "Prints the path to the config file"
+            };
+
+            rootCommand.Add(configCommand);
+
+            return new CommandLineBuilder(rootCommand);
         }
 
         private static void Scan()

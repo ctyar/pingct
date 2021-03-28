@@ -71,7 +71,6 @@ namespace Ctyar.Pingct
             var quitItem = new StatusItem(Key.ControlQ, "~^Q~ Quit", () => QuitMenuItemHandler());
             top.Add(new StatusBar(new StatusItem[] { quitItem, }));
 
-
             SetupMainLoop(pingPanel, testPanel);
 
             Application.Run();
