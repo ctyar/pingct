@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Ctyar.Pingct.Tests;
+using Terminal.Gui;
 
 namespace Ctyar.Pingct
 {
@@ -17,9 +17,9 @@ namespace Ctyar.Pingct
         private readonly int _delay;
         private int _removeDelayCounter;
         private bool _remove;
-        private CancellationTokenSource _testsCancellationTokenSource;
         private bool _isOnline;
         private bool _wasOnline = true;
+        private object? _testsToken;
 
         public TestManager(MainPingTest mainPingTest, PanelManager pingPanelManager, PanelManager testPanelManager,
             EventManager eventManager, IEnumerable<ITest> tests, Settings settings)
@@ -30,7 +30,6 @@ namespace Ctyar.Pingct
             _eventManager = eventManager;
             _tests = tests.ToList();
             _delay = settings.Delay;
-            _testsCancellationTokenSource = new();
         }
 
         public async Task ScanAsync()
@@ -38,12 +37,11 @@ namespace Ctyar.Pingct
             _isOnline = await _mainPingTest.RunAsync();
             ReportPing();
 
-            _testsCancellationTokenSource = CheckCurrentStatus(_wasOnline, _isOnline, _testsCancellationTokenSource);
+            CheckCurrentStatus(_wasOnline, _isOnline);
             _wasOnline = _isOnline;
         }
 
-        private CancellationTokenSource CheckCurrentStatus(bool wasOnline, bool isOnline,
-            CancellationTokenSource cancellationTokenSource)
+        private void CheckCurrentStatus(bool wasOnline, bool isOnline)
         {
             if (!wasOnline && isOnline)
             {
@@ -52,43 +50,37 @@ namespace Ctyar.Pingct
                 _remove = true;
                 _removeDelayCounter = 4;
 
-                cancellationTokenSource.Cancel();
-                return new CancellationTokenSource();
+                Application.MainLoop.RemoveTimeout(_testsToken);
             }
             else if (wasOnline && !isOnline)
             {
-                Task.Run(() => RunTestsAsync(cancellationTokenSource.Token), cancellationTokenSource.Token);
+                _testsToken = Application.MainLoop.AddTimeout(TimeSpan.FromMilliseconds(_delay), RunTestsHandler);
 
                 _remove = false;
 
                 _eventManager.Disconnected();
             }
-
-            return cancellationTokenSource;
         }
 
-        private async Task RunTestsAsync(CancellationToken cancellationToken)
+        private bool RunTestsHandler(MainLoop mainLoop)
         {
-            var stopWatch = new Stopwatch();
-
-            while (!cancellationToken.IsCancellationRequested)
+            mainLoop.Invoke(async () =>
             {
-                stopWatch.Start();
-                var tasks = _tests.Select(item => item.RunAsync(cancellationToken)).ToList();
+                await RunTestsAsync();
+            });
 
-                await Task.WhenAll(tasks);
+            return true;
+        }
 
-                foreach (var current in _tests)
-                {
-                    current.Report(_testPanelManager);
-                }
+        private async Task RunTestsAsync()
+        {
+            var tasks = _tests.Select(item => item.RunAsync(default)).ToList();
 
-                stopWatch.Stop();
-                if (stopWatch.ElapsedMilliseconds < _delay)
-                {
-                    await Task.Delay(_delay - (int)stopWatch.ElapsedMilliseconds, cancellationToken);
-                }
-                stopWatch.Reset();
+            await Task.WhenAll(tasks);
+
+            foreach (var test in _tests)
+            {
+                test.Report(_testPanelManager);
             }
         }
 

@@ -11,8 +11,7 @@ namespace Ctyar.Pingct
         private readonly EventManager _eventManager;
         private readonly IEnumerable<ITest> _tests;
         private readonly Settings _settings;
-
-        private static TestManager? TestManager;
+        private TestManager? _testManager;
 
         public Gui(MainPingTest mainPingTest, EventManager eventManager, IEnumerable<ITest> tests, Settings settings)
         {
@@ -81,7 +80,7 @@ namespace Ctyar.Pingct
             var pingPanelManager = new PanelManager(pingPanel);
             var testPanelManager = new PanelManager(testPanel);
 
-            TestManager = new TestManager(_mainPingTest, pingPanelManager, testPanelManager, _eventManager, _tests,
+            _testManager = new TestManager(_mainPingTest, pingPanelManager, testPanelManager, _eventManager, _tests,
                 _settings);
             Application.MainLoop.AddTimeout(TimeSpan.FromMilliseconds(_settings.Delay), MainLoopHandler);
         }
@@ -91,10 +90,11 @@ namespace Ctyar.Pingct
             Application.RequestStop();
         }
 
-        private static bool MainLoopHandler(MainLoop mainLoop)
+        private bool MainLoopHandler(MainLoop mainLoop)
         {
-            mainLoop.Invoke(async () => {
-                await TestManager!.ScanAsync();
+            mainLoop.Invoke(async () =>
+            {
+                await _testManager!.ScanAsync();
             });
 
             return true;

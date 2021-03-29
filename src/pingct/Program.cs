@@ -34,7 +34,6 @@ namespace Ctyar.Pingct
                 Handler = CommandHandler.Create(Config),
                 Description = "Prints the path to the config file"
             };
-
             rootCommand.Add(configCommand);
 
             return new CommandLineBuilder(rootCommand);
