@@ -67,7 +67,7 @@ namespace Ctyar.Pingct
             };
             window.Add(testPanel);
 
-            var quitItem = new StatusItem(Key.ControlQ, "~^Q~ Quit", () => QuitMenuItemHandler());
+            var quitItem = new StatusItem(Key.CtrlMask | Key.Q, "~^Q~ Quit", () => QuitMenuItemHandler());
             top.Add(new StatusBar(new StatusItem[] { quitItem, }));
 
             SetupMainLoop(pingPanel, testPanel);

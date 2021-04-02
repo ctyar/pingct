@@ -29,7 +29,7 @@
     <PackageReference Include="Polly" Version="7.2.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
-    <PackageReference Include="Terminal.Gui" Version="0.90.3" />
+    <PackageReference Include="Terminal.Gui" Version="1.0.0-beta.11" />
   </ItemGroup>
 
 </Project>
