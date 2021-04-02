@@ -67,8 +67,10 @@ namespace Ctyar.Pingct
             };
             window.Add(testPanel);
 
+            Colors.ColorSchemes["Menu"].Disabled = attribute;
             var quitItem = new StatusItem(Key.CtrlMask | Key.Q, "~^Q~ Quit", () => QuitMenuItemHandler());
-            top.Add(new StatusBar(new StatusItem[] { quitItem, }));
+            var statusBar = new StatusBar(new StatusItem[] { quitItem });
+            top.Add(statusBar);
 
             SetupMainLoop(pingPanel, testPanel);
 
