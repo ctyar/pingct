@@ -25,6 +25,8 @@ namespace Ctyar.Pingct
         {
             Application.Init();
 
+            Application.Driver.SetCursorVisibility(CursorVisibility.Invisible);
+
             var top = Application.Top;
 
             var attribute = Terminal.Gui.Attribute.Make(Color.Gray, Color.Black);
