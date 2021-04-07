@@ -21,9 +21,10 @@ stages:
 
     steps:
     - task: UseDotNet@2
-      displayName: 'Install .NET 5'
+      displayName: 'Install .NET SDK'
       inputs:
-        version: '5.0.x'
+        useGlobalJson: true
+        includePreviewVersions: true
 
     - task: DotNetCoreCLI@2
       displayName: 'Restore tools'
@@ -71,7 +72,7 @@ stages:
               nuGetFeedType: 'external'
               publishFeedCredentials: 'PingctGithubPackageRepository'
 
-#https://github.com/microsoft/azure-pipelines-yaml/issues/344
+# https://github.com/microsoft/azure-pipelines-yaml/issues/344
 - stage: PublishFinalPackageStage
   displayName: 'Publish final package'
   dependsOn: PublishAlphaPackageStage
