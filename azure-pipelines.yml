@@ -24,7 +24,6 @@ stages:
       displayName: 'Install .NET SDK'
       inputs:
         useGlobalJson: true
-        includePreviewVersions: true
 
     - task: DotNetCoreCLI@2
       displayName: 'Restore tools'
@@ -65,7 +64,7 @@ stages:
 
           # https://github.com/Microsoft/azure-pipelines-tasks/issues/7160
           - task: NuGetCommand@2
-            displayName: 'Push the packages to Nuget.org'
+            displayName: 'Push the packages to GitHub Packages'
             inputs:
               command: 'push'
               packagesToPush: '$(Pipeline.Workspace)/packages/*.nupkg'
