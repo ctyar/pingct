@@ -1,5 +1,8 @@
 # https://docs.microsoft.com/azure/devops/pipelines/yaml-schema
 
+variables:
+  - group: 'Secrets'
+
 stages:
 - stage: BuildStage
   displayName: 'Build'
@@ -62,14 +65,17 @@ stages:
             displayName: 'Download artifacts'
             artifact: 'packages'
 
-          # https://github.com/Microsoft/azure-pipelines-tasks/issues/7160
-          - task: NuGetCommand@2
+          - task: PowerShell@2
             displayName: 'Push the packages to GitHub Packages'
+            env:
+              GITHUB_API_KEY: $(GITHUB_API_KEY)
             inputs:
-              command: 'push'
-              packagesToPush: '$(Pipeline.Workspace)/packages/*.nupkg'
-              nuGetFeedType: 'external'
-              publishFeedCredentials: 'PingctGithubPackageRepository'
+              targetType: 'inline'
+              script: |
+                dotnet tool install -g gpr
+                gpr push --api-key $env:GITHUB_API_KEY $(Pipeline.Workspace)/packages/*.nupkg
+              failOnStderr: true
+              ignoreLASTEXITCODE: true
 
 # https://github.com/microsoft/azure-pipelines-yaml/issues/344
 - stage: PublishFinalPackageStage
