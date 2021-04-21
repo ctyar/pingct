@@ -9,16 +9,8 @@ stages:
   jobs:
   - job: BuildJob
     displayName: 'Build'
-    strategy:
-      matrix:
-        linux:
-          imageName: 'ubuntu-latest'
-        mac:
-          imageName: 'windows-latest'
-        windows:
-          imageName: 'macOS-latest'
     pool:
-      vmImage: $(imageName)
+      vmImage: 'ubuntu-latest'
     workspace:
       clean: all
 
@@ -54,7 +46,7 @@ stages:
   jobs:
   - deployment:
     pool:
-      vmImage: 'windows-latest'
+      vmImage: 'ubuntu-latest'
     environment: 'Github package repository'
     strategy:
       runOnce:
