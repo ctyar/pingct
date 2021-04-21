@@ -28,8 +28,8 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-preview.3.21201.4" Condition="'$(TargetFramework)'=='net6.0'" />
     <PackageReference Include="Polly" Version="7.2.2" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
-    <PackageReference Include="Terminal.Gui" Version="1.0.0-beta.11" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21216.1" />
+    <PackageReference Include="Terminal.Gui" Version="1.0.0-rc.1" />
   </ItemGroup>
 
 </Project>
