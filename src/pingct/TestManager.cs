@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Ctyar.Pingct.Tests;
@@ -15,11 +16,11 @@ namespace Ctyar.Pingct
         private readonly EventManager _eventManager;
         private readonly List<ITest> _tests;
         private readonly int _delay;
-        private int _removeDelayCounter;
-        private bool _remove;
+        private readonly Stopwatch _testsStopWatch;
+        private bool _isRunningTests;
+        private int _removeTestReportsDelayCounter;
         private bool _isOnline;
         private bool _wasOnline = true;
-        private object? _testsToken;
 
         public TestManager(MainPingTest mainPingTest, PanelManager pingPanelManager, PanelManager testPanelManager,
             EventManager eventManager, IEnumerable<ITest> tests, Settings settings)
@@ -30,6 +31,7 @@ namespace Ctyar.Pingct
             _eventManager = eventManager;
             _tests = tests.ToList();
             _delay = settings.Delay;
+            _testsStopWatch = new();
         }
 
         public async Task ScanAsync()
@@ -47,16 +49,14 @@ namespace Ctyar.Pingct
             {
                 _eventManager.Connected();
 
-                _remove = true;
-                _removeDelayCounter = 4;
-
-                Application.MainLoop.RemoveTimeout(_testsToken);
+                _isRunningTests = false;
+                _removeTestReportsDelayCounter = 4;
             }
             else if (wasOnline && !isOnline)
             {
-                _testsToken = Application.MainLoop.AddTimeout(TimeSpan.FromMilliseconds(_delay), RunTestsHandler);
+                Application.MainLoop.AddTimeout(TimeSpan.Zero, RunTestsHandler);
 
-                _remove = false;
+                _isRunningTests = true;
 
                 _eventManager.Disconnected();
             }
@@ -69,11 +69,13 @@ namespace Ctyar.Pingct
                 await RunTestsAsync();
             });
 
-            return true;
+            return false;
         }
 
         private async Task RunTestsAsync()
         {
+            _testsStopWatch.Restart();
+
             var tasks = _tests.Select(item => item.RunAsync(default)).ToList();
 
             await Task.WhenAll(tasks);
@@ -82,17 +84,30 @@ namespace Ctyar.Pingct
             {
                 test.Report(_testPanelManager);
             }
+
+            _testsStopWatch.Stop();
+            var currentDelay = _delay - _testsStopWatch.ElapsedMilliseconds;
+
+            if (currentDelay > 0)
+            {
+                await Task.Delay((int)currentDelay);
+            }
+
+            if (_isRunningTests)
+            {
+                Application.MainLoop.AddTimeout(TimeSpan.Zero, RunTestsHandler);
+            }
         }
 
         private void ReportPing()
         {
             _mainPingTest.Report(_pingPanelManager);
 
-            if (_remove)
+            if (!_isRunningTests)
             {
-                if (_removeDelayCounter > 0)
+                if (_removeTestReportsDelayCounter > 0)
                 {
-                    _removeDelayCounter--;
+                    _removeTestReportsDelayCounter--;
                 }
                 else
                 {
