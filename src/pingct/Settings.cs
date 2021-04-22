@@ -4,7 +4,7 @@
     {
         public string Ping { get; set; } = "4.2.2.4";
 
-        public int Delay { get; set; } = 1000;
+        public int Delay { get; set; } = 1500;
 
         public long MaxPingSuccessTime { get; set; } = 120;
 
