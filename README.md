@@ -1,6 +1,6 @@
 # pingct
 
-[![Build Status](https://dev.azure.com/ctyar/pingct/_apis/build/status/ctyar.pingct?branchName=master)](https://dev.azure.com/ctyar/pingct/_build/latest?definitionId=3&branchName=master)
+[![Build Status](https://dev.azure.com/ctyar/pingct/_apis/build/status/ctyar.pingct?branchName=main)](https://dev.azure.com/ctyar/pingct/_build/latest?definitionId=5&branchName=main)
 [![pingct](https://img.shields.io/nuget/v/pingct.svg)](https://www.nuget.org/packages/pingct/)
 
 A simple Ping like tool to check the network connection issues. `pingct` is designed to constantly check the network connectivity and in case of any issues run a set of tests to facilitate troubleshooting.
