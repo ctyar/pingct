@@ -1,7 +1,7 @@
 {
   "version": "0.6.0-alpha.{height}",
   "publicReleaseRefSpec": [
-    "^refs/heads/master$",
+    "^refs/heads/main",
     "^refs/tags/v\\d+\\.\\d+"
   ],
   "nugetPackageVersion": {
