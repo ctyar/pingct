@@ -1,5 +1,5 @@
 {
-  "version": "0.6.0",
+  "version": "0.7.0-alpha.{height}",
   "publicReleaseRefSpec": [
     "^refs/heads/main",
     "^refs/tags/v\\d+\\.\\d+"
@@ -9,7 +9,7 @@
   },
   "cloudBuild": {
     "buildNumber": {
-      "enabled": true,
+      "enabled": false,
       "setVersionVariables": true
     }
   }
