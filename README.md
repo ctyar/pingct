@@ -7,7 +7,7 @@ A simple Ping like tool to check the network connection issues. `pingct` is desi
 
 ## Get started
 
-Download the [.NET Core SDK](https://get.dot.net/).
+Download the [.NET SDK](https://get.dot.net/).
 
 Once installed, run this command:
 
@@ -46,7 +46,7 @@ Test types:
 Get the package from [here](https://github.com/ctyar/pingct/packages/48026).
 
 ## Build
-Install [.NET Core SDK](https://get.dot.net/).
+Install [.NET SDK](https://get.dot.net/).
 
 Run:
 ```
