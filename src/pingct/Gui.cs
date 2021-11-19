@@ -41,11 +41,17 @@ namespace Ctyar.Pingct
 
             var window = new Window("pingct")
             {
-                X = -1,
-                Y = -1,
-                Width = Dim.Fill(-1),
+                X = 0,
+                Y = 0,
+                Width = Dim.Fill(0),
                 Height = Dim.Fill(0),
                 ColorScheme = mainColorScheme,
+                Border = new Border()
+                {
+                    BorderStyle = BorderStyle.None,
+                    DrawMarginFrame = false,
+                    Effect3D = false,
+                }
             };
             top.Add(window);
 
