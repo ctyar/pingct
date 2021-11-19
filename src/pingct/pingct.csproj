@@ -22,14 +22,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DnsClient" Version="1.4.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.15" Condition="'$(TargetFramework)'=='netcoreapp3.1'" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" Condition="'$(TargetFramework)'=='net5.0'" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-preview.4.21253.7" Condition="'$(TargetFramework)'=='net6.0'" />
+    <PackageReference Include="DnsClient" Version="1.5.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.21" Condition="'$(TargetFramework)'=='netcoreapp3.1'" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" Condition="'$(TargetFramework)'=='net5.0'" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" Condition="'$(TargetFramework)'=='net6.0'" />
     <PackageReference Include="Polly" Version="7.2.2" />
-    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21216.1" />
-    <PackageReference Include="Terminal.Gui" Version="1.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21308.1" />
+    <PackageReference Include="Terminal.Gui" Version="1.3.1" />
   </ItemGroup>
 
 </Project>
