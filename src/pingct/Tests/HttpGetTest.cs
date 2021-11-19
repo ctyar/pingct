@@ -5,49 +5,48 @@ using System.Threading;
 using System.Threading.Tasks;
 using Polly.Timeout;
 
-namespace Ctyar.Pingct.Tests
+namespace Ctyar.Pingct.Tests;
+
+internal class HttpGetTest : TestBase
 {
-    internal class HttpGetTest : TestBase
+    private static readonly HttpClient HttpClient = new();
+
+    private readonly string _hostName;
+
+    private bool _result;
+
+    public HttpGetTest(Settings settings)
     {
-        private static readonly HttpClient HttpClient = new();
+        _hostName = settings.Get;
+    }
 
-        private readonly string _hostName;
+    public override async Task<bool> RunAsync(CancellationToken cancellationToken)
+    {
+        _result = false;
 
-        private bool _result;
-
-        public HttpGetTest(Settings settings)
+        try
         {
-            _hostName = settings.Get;
+            var stream = await ExecuteWithTimeoutAsync(
+                async (ct) => await HttpClient.GetStreamAsync(_hostName),
+                cancellationToken
+            );
+
+            _result = true;
+        }
+        catch (Exception e) when (e is HttpRequestException || e is OperationCanceledException ||
+                                  e is IOException || e is TimeoutRejectedException)
+        {
         }
 
-        public override async Task<bool> RunAsync(CancellationToken cancellationToken)
-        {
-            _result = false;
+        return _result;
+    }
 
-            try
-            {
-                var stream = await ExecuteWithTimeoutAsync(
-                    async (ct) => await HttpClient.GetStreamAsync(_hostName),
-                    cancellationToken
-                );
+    public override void Report(PanelManager panelManager)
+    {
+        var (message, type) = _result ? (_hostName, MessageType.Success) : (_hostName, MessageType.Failure);
 
-                _result = true;
-            }
-            catch (Exception e) when (e is HttpRequestException || e is OperationCanceledException ||
-                                      e is IOException || e is TimeoutRejectedException)
-            {
-            }
-
-            return _result;
-        }
-
-        public override void Report(PanelManager panelManager)
-        {
-            var (message, type) = _result ? (_hostName, MessageType.Success) : (_hostName, MessageType.Failure);
-
-            panelManager.Print("GET: ", MessageType.Info);
-            panelManager.Print(message, type);
-            panelManager.PrintLine();
-        }
+        panelManager.Print("GET: ", MessageType.Info);
+        panelManager.Print(message, type);
+        panelManager.PrintLine();
     }
 }

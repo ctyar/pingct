@@ -1,8 +1,7 @@
-﻿namespace Ctyar.Pingct
+﻿namespace Ctyar.Pingct;
+
+internal enum PingReportType
 {
-    internal enum PingReportType
-    {
-        JustValue,
-        TestResult
-    }
+    JustValue,
+    TestResult
 }

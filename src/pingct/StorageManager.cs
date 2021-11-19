@@ -1,35 +1,34 @@
 ﻿using System;
 using System.IO;
 
-namespace Ctyar.Pingct
+namespace Ctyar.Pingct;
+
+internal class StorageManager
 {
-    internal class StorageManager
+    public string? Read(string fileName)
     {
-        public string? Read(string fileName)
+        var filePath = GetFilePath(fileName);
+
+        if (!File.Exists(filePath))
         {
-            var filePath = GetFilePath(fileName);
-
-            if (!File.Exists(filePath))
-            {
-                return default;
-            }
-
-            return File.ReadAllText(filePath);
+            return default;
         }
 
-        public void Write(string fileName, string content)
-        {
-            File.WriteAllText(GetFilePath(fileName), content);
-        }
+        return File.ReadAllText(filePath);
+    }
 
-        public string GetFilePath(string fileName)
-        {
-            var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData,
-                Environment.SpecialFolderOption.Create), "pingct");
+    public void Write(string fileName, string content)
+    {
+        File.WriteAllText(GetFilePath(fileName), content);
+    }
 
-            Directory.CreateDirectory(directory);
+    public string GetFilePath(string fileName)
+    {
+        var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData,
+            Environment.SpecialFolderOption.Create), "pingct");
 
-            return Path.Combine(directory, fileName);
-        }
+        Directory.CreateDirectory(directory);
+
+        return Path.Combine(directory, fileName);
     }
 }

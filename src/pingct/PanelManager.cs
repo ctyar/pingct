@@ -1,27 +1,26 @@
-﻿namespace Ctyar.Pingct
+﻿namespace Ctyar.Pingct;
+
+internal class PanelManager
 {
-    internal class PanelManager
+    private readonly ReportPanel _reportPanel;
+
+    public PanelManager(ReportPanel reportPanel)
     {
-        private readonly ReportPanel _reportPanel;
+        _reportPanel = reportPanel;
+    }
 
-        public PanelManager(ReportPanel reportPanel)
-        {
-            _reportPanel = reportPanel;
-        }
+    public void Print(string message, MessageType messageType)
+    {
+        _reportPanel.Append(message, messageType);
+    }
 
-        public void Print(string message, MessageType messageType)
-        {
-            _reportPanel.Append(message, messageType);
-        }
+    public void PrintLine()
+    {
+        _reportPanel.Add();
+    }
 
-        public void PrintLine()
-        {
-            _reportPanel.Add();
-        }
-
-        public void Remove()
-        {
-            _reportPanel.Remove();
-        }
+    public void Remove()
+    {
+        _reportPanel.Remove();
     }
 }

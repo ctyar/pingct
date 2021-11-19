@@ -1,54 +1,53 @@
 ﻿using System;
 using System.Text.Json;
 
-namespace Ctyar.Pingct
+namespace Ctyar.Pingct;
+
+internal class SettingsManager
 {
-    internal class SettingsManager
+    private const string SettingsFileName = "settings.json";
+
+    private readonly StorageManager _storageManager;
+
+    public SettingsManager(StorageManager storageManager)
     {
-        private const string SettingsFileName = "settings.json";
+        _storageManager = storageManager;
+    }
 
-        private readonly StorageManager _storageManager;
+    public void Config()
+    {
+        var path = _storageManager.GetFilePath(SettingsFileName);
 
-        public SettingsManager(StorageManager storageManager)
+        Console.WriteLine(path);
+    }
+
+    public Settings Read()
+    {
+        Settings result;
+
+        var fileContent = _storageManager.Read(SettingsFileName);
+
+        if (fileContent is null)
         {
-            _storageManager = storageManager;
+            result = new Settings();
+
+            SaveSettings(result);
+
+            return result;
         }
 
-        public void Config()
+        result = JsonSerializer.Deserialize<Settings>(fileContent)!;
+
+        return result!;
+    }
+
+    private void SaveSettings(Settings settings)
+    {
+        var fileContent = JsonSerializer.Serialize(settings, new JsonSerializerOptions
         {
-            var path = _storageManager.GetFilePath(SettingsFileName);
+            WriteIndented = true
+        });
 
-            Console.WriteLine(path);
-        }
-
-        public Settings Read()
-        {
-            Settings result;
-
-            var fileContent = _storageManager.Read(SettingsFileName);
-
-            if (fileContent is null)
-            {
-                result = new Settings();
-
-                SaveSettings(result);
-
-                return result;
-            }
-
-            result = JsonSerializer.Deserialize<Settings>(fileContent)!;
-
-            return result!;
-        }
-
-        private void SaveSettings(Settings settings)
-        {
-            var fileContent = JsonSerializer.Serialize(settings, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
-
-            _storageManager.Write(SettingsFileName, fileContent);
-        }
+        _storageManager.Write(SettingsFileName, fileContent);
     }
 }

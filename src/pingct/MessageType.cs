@@ -1,10 +1,9 @@
-﻿namespace Ctyar.Pingct
+﻿namespace Ctyar.Pingct;
+
+internal enum MessageType
 {
-    internal enum MessageType
-    {
-        Info,
-        Success,
-        Warning,
-        Failure
-    }
+    Info,
+    Success,
+    Warning,
+    Failure
 }
