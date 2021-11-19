@@ -6,6 +6,8 @@
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>Ctyar.Pingct</RootNamespace>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <AnalysisLevel>preview</AnalysisLevel>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -17,8 +19,6 @@
     <Authors>Shahriyar Qulami</Authors>
     <PackageProjectUrl>https://github.com/ctyar/pingct</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ctyar/pingct</RepositoryUrl>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
 
   <ItemGroup>

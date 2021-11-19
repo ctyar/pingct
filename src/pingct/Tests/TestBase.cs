@@ -12,7 +12,7 @@ namespace Ctyar.Pingct.Tests
 
         public abstract void Report(PanelManager panelManager);
 
-        protected async Task<TResult> ExecuteWithTimeoutAsync<TResult>(Func<CancellationToken, Task<TResult>> action,
+        protected static async Task<TResult> ExecuteWithTimeoutAsync<TResult>(Func<CancellationToken, Task<TResult>> action,
             CancellationToken cancellationToken)
         {
             var timeoutPolicy = Policy.TimeoutAsync(TimeSpan.FromMilliseconds(2500), TimeoutStrategy.Pessimistic);
