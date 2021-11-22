@@ -12,31 +12,19 @@ internal class ReportPanel : FrameView
     private List<(MessageType, string)> _lastLine;
     // Top border (1) + bottom border (1) + status bar (1)
     private const int Margin = 3;
-    private static readonly Terminal.Gui.Attribute Red = new(Color.BrightRed);
-    private static readonly Terminal.Gui.Attribute Green = new(Color.BrightGreen);
-    private static readonly Terminal.Gui.Attribute Yellow = new(Color.BrightYellow);
+    private static readonly Terminal.Gui.Attribute Red = new(foreground: Color.BrightRed);
+    private static readonly Terminal.Gui.Attribute Green = new(foreground: Color.BrightGreen);
+    private static readonly Terminal.Gui.Attribute Yellow = new(foreground: Color.BrightYellow);
     private static readonly ColorScheme RedScheme = new()
     {
-        Disabled = Red,
-        Focus = Red,
-        HotFocus = Red,
-        HotNormal = Red,
         Normal = Red,
     };
     private static readonly ColorScheme GreenScheme = new()
     {
-        Disabled = Green,
-        Focus = Green,
-        HotFocus = Green,
-        HotNormal = Green,
         Normal = Green,
     };
     private static readonly ColorScheme YellowScheme = new()
     {
-        Disabled = Yellow,
-        Focus = Yellow,
-        HotFocus = Yellow,
-        HotNormal = Yellow,
         Normal = Yellow,
     };
 
