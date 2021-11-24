@@ -5,7 +5,7 @@ using Terminal.Gui;
 
 namespace Ctyar.Pingct;
 
-internal class ReportPanel : FrameView
+internal class PanelView : FrameView
 {
     private int _capacity;
     private Queue<List<(MessageType, string)>> _values;
@@ -28,7 +28,7 @@ internal class ReportPanel : FrameView
         Normal = Yellow,
     };
 
-    public ReportPanel(string name) : base(name)
+    public PanelView(string name) : base(name)
     {
         _values = new();
         _lastLine = new();

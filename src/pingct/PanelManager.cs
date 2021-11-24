@@ -2,9 +2,9 @@
 
 internal class PanelManager
 {
-    private readonly ReportPanel _reportPanel;
+    private readonly PanelView _reportPanel;
 
-    public PanelManager(ReportPanel reportPanel)
+    public PanelManager(PanelView reportPanel)
     {
         _reportPanel = reportPanel;
     }

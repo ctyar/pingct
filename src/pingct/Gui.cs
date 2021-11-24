@@ -55,7 +55,7 @@ internal class Gui
         };
         top.Add(window);
 
-        var pingPanel = new ReportPanel("Ping")
+        var pingPanel = new PanelView("Ping")
         {
             X = 0,
             Y = 0,
@@ -65,7 +65,7 @@ internal class Gui
         };
         window.Add(pingPanel);
 
-        var testPanel = new ReportPanel("Tests")
+        var testPanel = new PanelView("Tests")
         {
             X = Pos.Right(pingPanel),
             Y = 0,
@@ -85,7 +85,7 @@ internal class Gui
         Application.Run();
     }
 
-    private void SetupMainLoop(ReportPanel pingPanel, ReportPanel testPanel)
+    private void SetupMainLoop(PanelView pingPanel, PanelView testPanel)
     {
         var pingPanelManager = new PanelManager(pingPanel);
         var testPanelManager = new PanelManager(testPanel);

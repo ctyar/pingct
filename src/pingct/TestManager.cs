@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Ctyar.Pingct.Tests;
 using Terminal.Gui;
@@ -76,7 +77,7 @@ internal class TestManager
     {
         _testsStopWatch.Restart();
 
-        var tasks = _tests.Select(item => item.RunAsync(default)).ToList();
+        var tasks = _tests.Select(item => item.RunAsync(CancellationToken.None)).ToList();
 
         await Task.WhenAll(tasks);
 
