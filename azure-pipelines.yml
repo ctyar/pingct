@@ -21,18 +21,10 @@ stages:
         useGlobalJson: true
 
     - task: DotNetCoreCLI@2
-      displayName: 'Restore tools'
+      displayName: 'Pack'
       inputs:
-        command: custom
-        custom: tool
-        arguments: 'restore'
-
-    - task: DotNetCoreCLI@2
-      displayName: 'Run Cake'
-      inputs:
-        command: custom
-        custom: cake
-        arguments: 'build.cake'
+        command: pack
+        packDirectory: 'artifacts'
 
     - publish: '$(Build.Repository.LocalPath)/artifacts'
       displayName: 'Publish artifacts'

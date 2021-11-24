@@ -1,4 +1,4 @@
-dotnet-cake
+dotnet pack --configuration Release -o artifacts
 
 $version = (get-item .\artifacts\*.nupkg).Name -replace "pingct.","" -replace ".nupkg",""
 

@@ -50,6 +50,5 @@ Get the package from [here](https://github.com/ctyar/pingct/packages/48026).
 
 Run:
 ```
-$ dotnet tool restore
-$ dotnet-cake
+$ dotnet build
 ```
