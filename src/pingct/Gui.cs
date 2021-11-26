@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Ctyar.Pingct.Tests;
 using Terminal.Gui;
 
@@ -9,15 +8,15 @@ internal class Gui
 {
     private readonly MainPingTest _mainPingTest;
     private readonly EventManager _eventManager;
-    private readonly IEnumerable<ITest> _tests;
+    private readonly TestFactory _testFactory;
     private readonly Settings _settings;
     private TestManager? _testManager;
 
-    public Gui(MainPingTest mainPingTest, EventManager eventManager, IEnumerable<ITest> tests, Settings settings)
+    public Gui(MainPingTest mainPingTest, EventManager eventManager, TestFactory testFactory, Settings settings)
     {
         _mainPingTest = mainPingTest;
         _eventManager = eventManager;
-        _tests = tests;
+        _testFactory = testFactory;
         _settings = settings;
     }
 
@@ -90,8 +89,7 @@ internal class Gui
         var pingPanelManager = new PanelManager(pingPanel);
         var testPanelManager = new PanelManager(testPanel);
 
-        _testManager = new TestManager(_mainPingTest, pingPanelManager, testPanelManager, _eventManager, _tests,
-            _settings);
+        _testManager = new TestManager(_mainPingTest, pingPanelManager, testPanelManager, _eventManager, _testFactory, _settings);
         Application.MainLoop.AddTimeout(TimeSpan.FromMilliseconds(_settings.Delay), MainLoopHandler);
     }
 

@@ -24,15 +24,15 @@ internal class TestManager
     private bool _wasOnline = true;
 
     public TestManager(MainPingTest mainPingTest, PanelManager pingPanelManager, PanelManager testPanelManager,
-        EventManager eventManager, IEnumerable<ITest> tests, Settings settings)
+        EventManager eventManager, TestFactory testFactory, Settings settings)
     {
         _mainPingTest = mainPingTest;
         _pingPanelManager = pingPanelManager;
         _testPanelManager = testPanelManager;
         _eventManager = eventManager;
-        _tests = tests.ToList();
         _delay = settings.Delay;
         _testsStopWatch = new();
+        _tests = testFactory.GetAll();
     }
 
     public async Task ScanAsync()

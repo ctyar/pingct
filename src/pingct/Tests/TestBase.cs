@@ -8,6 +8,8 @@ namespace Ctyar.Pingct.Tests;
 
 internal abstract class TestBase : ITest
 {
+    public abstract string Name { get; }
+
     public abstract Task<bool> RunAsync(CancellationToken cancellationToken);
 
     public abstract void Report(PanelManager panelManager);

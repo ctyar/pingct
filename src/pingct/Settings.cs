@@ -10,13 +10,29 @@ internal class Settings
 
     public long MaxPingWarningTime { get; set; } = 170;
 
-    public string Gateway { get; set; } = "192.168.1.1";
-
-    public string InCountryHost { get; set; } = "aparat.com";
-
-    public string Dns { get; set; } = "facebook.com";
-
-    public string Get { get; set; } = "https://twitter.com";
+    public TestSetting[] Tests { get; set; } =
+    {
+        new()
+        {
+            Type = TestType.Ping,
+            Host = "192.168.0.1"
+        },
+        new()
+        {
+            Type = TestType.Ping,
+            Host = "zi-tel.com"
+        },
+        new()
+        {
+            Type = TestType.Dns,
+            Host = "facebook.com"
+        },
+        new()
+        {
+            Type = "Get",
+            Host = "https://twitter.com"
+        }
+    };
 
     public string OnConnected { get; set; } = string.Empty;
 
@@ -25,4 +41,11 @@ internal class Settings
     public string OnDisconnected { get; set; } = string.Empty;
 
     public string OnDisconnectedArgs { get; set; } = string.Empty;
+}
+
+public class TestSetting
+{
+    public string? Type { get; set; }
+
+    public string? Host { get; set; }
 }

@@ -10,14 +10,14 @@ namespace Ctyar.Pingct.Tests;
 internal class HttpGetTest : TestBase
 {
     private static readonly HttpClient HttpClient = new();
-
     private readonly string _hostName;
-
     private bool _result;
 
-    public HttpGetTest(Settings settings)
+    public override string Name => "Get";
+
+    public HttpGetTest(string hostName)
     {
-        _hostName = settings.Get;
+        _hostName = hostName;
     }
 
     public override async Task<bool> RunAsync(CancellationToken cancellationToken)

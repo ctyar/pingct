@@ -11,9 +11,11 @@ internal class DnsTest : TestBase
     private readonly string _hostName;
     private bool _result;
 
-    public DnsTest(Settings settings)
+    public override string Name => "Dns";
+
+    public DnsTest(string hostName)
     {
-        _hostName = settings.Dns;
+        _hostName = hostName;
     }
 
     public override async Task<bool> RunAsync(CancellationToken token)

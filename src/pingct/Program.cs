@@ -61,22 +61,19 @@ internal class Program
     private static void ConfigureServices(ServiceCollection serviceCollection)
     {
         serviceCollection
-            .AddTransient<StorageManager>()
-            .AddTransient<SettingsManager>()
+            .AddSingleton<StorageManager>()
+            .AddSingleton<SettingsManager>()
             .AddSingleton(provider =>
             {
                 var settingsManager = provider.GetService<SettingsManager>();
                 var settings = settingsManager!.Read();
                 return settings;
             })
-            .AddTransient<Gui>()
-            .AddTransient<EventManager>()
-            .AddTransient<ProcessManager>()
-            .AddTransient<MainPingTest>()
-            .AddTransient<ITest, GatewayTest>()
-            .AddTransient<ITest, InCountryConnectionTest>()
-            .AddTransient<ITest, DnsTest>()
-            .AddTransient<ITest, HttpGetTest>();
+            .AddSingleton<Gui>()
+            .AddSingleton<EventManager>()
+            .AddSingleton<ProcessManager>()
+            .AddSingleton<MainPingTest>()
+            .AddSingleton<TestFactory>();
     }
 
     private static void InitializeLogger()

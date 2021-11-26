@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ctyar.Pingct.Tests;
 
-internal abstract class PingTest : TestBase
+internal class PingTest : TestBase
 {
     private readonly string _hostName;
     private readonly long _maxPingSuccessTime;
@@ -14,7 +14,9 @@ internal abstract class PingTest : TestBase
     private readonly PingReportType _reportType;
     private long _roundTripTime;
 
-    protected PingTest(PingReportType reportType, string hostName, long maxPingSuccessTime, long maxPingWarningTime)
+    public override string Name => "Ping";
+
+    public PingTest(PingReportType reportType, string hostName, long maxPingSuccessTime, long maxPingWarningTime)
     {
         _reportType = reportType;
         _hostName = hostName;
