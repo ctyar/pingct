@@ -11,6 +11,7 @@ namespace Ctyar.Pingct;
 
 internal class TestManager
 {
+    private const int RemoveTestReportsDelay = 4;
     private readonly MainPingTest _mainPingTest;
     private readonly PanelManager _pingPanelManager;
     private readonly PanelManager _testPanelManager;
@@ -22,6 +23,7 @@ internal class TestManager
     private int _removeTestReportsDelayCounter;
     private bool _isOnline;
     private bool _wasOnline = true;
+    private TestRunType _testRunType;
 
     public TestManager(MainPingTest mainPingTest, PanelManager pingPanelManager, PanelManager testPanelManager,
         EventManager eventManager, TestFactory testFactory, Settings settings)
@@ -44,22 +46,42 @@ internal class TestManager
         _wasOnline = _isOnline;
     }
 
-    private void CheckCurrentStatus(bool wasOnline, bool isOnline)
+    public void ToggleTests(TestRunType testRunType)
     {
-        if (!wasOnline && isOnline)
-        {
-            _eventManager.Connected();
+        _testRunType = testRunType;
 
-            _isRunningTests = false;
-            _removeTestReportsDelayCounter = 4;
-        }
-        else if (wasOnline && !isOnline)
+        if (!_isRunningTests && _testRunType == TestRunType.On)
         {
             Application.MainLoop.AddTimeout(TimeSpan.Zero, RunTestsHandler);
 
             _isRunningTests = true;
+        }
+        else if (_testRunType == TestRunType.Off)
+        {
+            _removeTestReportsDelayCounter = RemoveTestReportsDelay;
+            _isRunningTests = false;
+        }
+    }
 
-            _eventManager.Disconnected();
+    private void CheckCurrentStatus(bool wasOnline, bool isOnline)
+    {
+        if (_testRunType == TestRunType.Auto)
+        {
+            if (!wasOnline && isOnline)
+            {
+                _eventManager.Connected();
+
+                _isRunningTests = false;
+                _removeTestReportsDelayCounter = RemoveTestReportsDelay;
+            }
+            else if (wasOnline && !isOnline)
+            {
+                Application.MainLoop.AddTimeout(TimeSpan.Zero, RunTestsHandler);
+
+                _isRunningTests = true;
+
+                _eventManager.Disconnected();
+            }
         }
     }
 

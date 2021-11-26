@@ -6,11 +6,15 @@ namespace Ctyar.Pingct;
 
 internal class Gui
 {
+    private static readonly string[] TestStatusItemTitles = { "~SPACE~ Tests: Auto", "~SPACE~ Tests: On", "~SPACE~ Tests: Off" };
+
     private readonly MainPingTest _mainPingTest;
     private readonly EventManager _eventManager;
     private readonly TestFactory _testFactory;
     private readonly Settings _settings;
     private TestManager? _testManager;
+    private StatusItem _testStatusItem = null!;
+    private TestRunType _testRunType;
 
     public Gui(MainPingTest mainPingTest, EventManager eventManager, TestFactory testFactory, Settings settings)
     {
@@ -76,7 +80,8 @@ internal class Gui
 
         Colors.ColorSchemes["Menu"].Disabled = attribute;
         var quitItem = new StatusItem(Key.CtrlMask | Key.Q, "~^Q~ Quit", () => QuitMenuItemHandler());
-        var statusBar = new StatusBar(new StatusItem[] { quitItem });
+        _testStatusItem = new StatusItem(Key.Space, TestStatusItemTitles[0], () => TestMenuItemHandler());
+        var statusBar = new StatusBar(new StatusItem[] { quitItem, _testStatusItem });
         top.Add(statusBar);
 
         SetupMainLoop(pingPanel, testPanel);
@@ -96,6 +101,14 @@ internal class Gui
     private static void QuitMenuItemHandler()
     {
         Application.RequestStop();
+    }
+
+    private void TestMenuItemHandler()
+    {
+        _testRunType = _testRunType.Next();
+        
+        _testStatusItem.Title = TestStatusItemTitles[(int)_testRunType];
+        _testManager!.ToggleTests(_testRunType);
     }
 
     private bool MainLoopHandler(MainLoop mainLoop)
