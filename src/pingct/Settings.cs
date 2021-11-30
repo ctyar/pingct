@@ -29,7 +29,7 @@ internal class Settings
         },
         new()
         {
-            Type = "Get",
+            Type = TestType.Get,
             Host = "https://twitter.com"
         }
     };

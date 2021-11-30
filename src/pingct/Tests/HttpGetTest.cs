@@ -26,8 +26,8 @@ internal class HttpGetTest : TestBase
 
         try
         {
-            var stream = await ExecuteWithTimeoutAsync(
-                async (ct) => await HttpClient.GetStreamAsync(_hostName),
+            var _ = await ExecuteWithTimeoutAsync(
+                async (_) => await HttpClient.GetStreamAsync(_hostName),
                 cancellationToken
             );
 

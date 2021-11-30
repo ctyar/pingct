@@ -1,6 +1,6 @@
 ﻿namespace Ctyar.Pingct;
 
-internal class TestType
+internal static class TestType
 {
     public const string Ping = "ping";
     public const string Dns = "dns";

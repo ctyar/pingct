@@ -46,8 +46,8 @@ internal class Gui
         {
             X = 0,
             Y = 0,
-            Width = Dim.Fill(0),
-            Height = Dim.Fill(0),
+            Width = Dim.Fill(),
+            Height = Dim.Fill(),
             ColorScheme = mainColorScheme,
             Border = new Border()
             {
@@ -79,9 +79,9 @@ internal class Gui
         window.Add(testPanel);
 
         Colors.ColorSchemes["Menu"].Disabled = attribute;
-        var quitItem = new StatusItem(Key.CtrlMask | Key.Q, "~^Q~ Quit", () => QuitMenuItemHandler());
-        _testStatusItem = new StatusItem(Key.Space, TestStatusItemTitles[0], () => TestMenuItemHandler());
-        var statusBar = new StatusBar(new StatusItem[] { quitItem, _testStatusItem });
+        var quitItem = new StatusItem(Key.CtrlMask | Key.Q, "~^Q~ Quit", QuitMenuItemHandler);
+        _testStatusItem = new StatusItem(Key.Space, TestStatusItemTitles[0], TestMenuItemHandler);
+        var statusBar = new StatusBar(new[] { quitItem, _testStatusItem });
         top.Add(statusBar);
 
         SetupMainLoop(pingPanel, testPanel);
@@ -106,7 +106,7 @@ internal class Gui
     private void TestMenuItemHandler()
     {
         _testRunType = _testRunType.Next();
-        
+
         _testStatusItem.Title = TestStatusItemTitles[(int)_testRunType];
         _testManager!.ToggleTests(_testRunType);
     }

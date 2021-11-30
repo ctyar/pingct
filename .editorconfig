@@ -23,10 +23,10 @@ dotnet_sort_system_directives_first = true
 file_header_template = unset
 
 # this. and Me. preferences
-dotnet_style_qualification_for_event = false:silent
-dotnet_style_qualification_for_field = false:silent
-dotnet_style_qualification_for_method = false:silent
-dotnet_style_qualification_for_property = false:silent
+dotnet_style_qualification_for_event=false:suggestion
+dotnet_style_qualification_for_field=false:suggestion
+dotnet_style_qualification_for_method=false:suggestion
+dotnet_style_qualification_for_property=false:suggestion
 
 # Language keywords vs BCL types preferences
 dotnet_style_predefined_type_for_locals_parameters_members = true:silent
@@ -39,7 +39,7 @@ dotnet_style_parentheses_in_other_operators = never_if_unnecessary:silent
 dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:silent
 
 # Modifier preferences
-dotnet_style_require_accessibility_modifiers = for_non_interface_members:silent
+dotnet_style_require_accessibility_modifiers=for_non_interface_members:suggestion
 
 # Expression-level preferences
 dotnet_style_coalesce_expression = true:suggestion
@@ -48,7 +48,7 @@ dotnet_style_explicit_tuple_names = true:suggestion
 dotnet_style_null_propagation = true:suggestion
 dotnet_style_object_initializer = true:suggestion
 dotnet_style_operator_placement_when_wrapping = beginning_of_line
-dotnet_style_prefer_auto_properties = true:silent
+dotnet_style_prefer_auto_properties=true:suggestion
 dotnet_style_prefer_compound_assignment = true:suggestion
 dotnet_style_prefer_conditional_expression_over_assignment = true:silent
 dotnet_style_prefer_conditional_expression_over_return = true:silent
@@ -63,9 +63,6 @@ dotnet_style_readonly_field = true:suggestion
 
 # Parameter preferences
 dotnet_code_quality_unused_parameters = all:suggestion
-
-# Suppression preferences
-dotnet_remove_unnecessary_suppression_exclusions = none
 
 #### C# Coding Conventions ####
 
@@ -101,6 +98,7 @@ csharp_preferred_modifier_order = public,private,protected,internal,static,exter
 # Code-block preferences
 csharp_prefer_braces =true:suggestion
 csharp_prefer_simple_using_statement = true:suggestion
+csharp_style_namespace_declarations=file_scoped:suggestion
 
 # Expression-level preferences
 csharp_prefer_simple_default_expression = true:suggestion
@@ -225,12 +223,16 @@ dotnet_naming_style._camelcase.required_prefix = _
 dotnet_naming_style._camelcase.required_suffix = 
 dotnet_naming_style._camelcase.word_separator = 
 dotnet_naming_style._camelcase.capitalization = camel_case
-csharp_style_namespace_declarations=file_scoped:suggestion
 
-[*.{cs,vb}]
-dotnet_style_prefer_auto_properties=true:suggestion
-dotnet_style_require_accessibility_modifiers=for_non_interface_members:suggestion
-dotnet_style_qualification_for_field=false:suggestion
-dotnet_style_qualification_for_property=false:suggestion
-dotnet_style_qualification_for_method=false:suggestion
-dotnet_style_qualification_for_event=false:suggestion
+dotnet_diagnostic.IDE0005.severity=suggestion
+dotnet_diagnostic.IDE0032.severity=suggestion
+dotnet_diagnostic.IDE0036.severity=suggestion
+dotnet_diagnostic.IDE0040.severity=suggestion
+dotnet_diagnostic.IDE0044.severity=suggestion
+dotnet_diagnostic.IDE0060.severity=suggestion
+dotnet_diagnostic.IDE0062.severity=suggestion
+dotnet_diagnostic.IDE0070.severity=suggestion
+dotnet_diagnostic.IDE0075.severity=suggestion
+dotnet_diagnostic.IDE0090.severity=suggestion
+dotnet_diagnostic.IDE0120.severity=suggestion
+dotnet_diagnostic.IDE0130.severity=suggestion

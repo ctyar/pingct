@@ -38,7 +38,7 @@ internal class SettingsManager
 
         result = JsonSerializer.Deserialize<Settings>(fileContent)!;
 
-        return result!;
+        return result;
     }
 
     private void SaveSettings(Settings settings)

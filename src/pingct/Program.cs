@@ -17,7 +17,7 @@ internal class Program
 
         await BuildCommandLine()
             .UseDefaults()
-            .UseExceptionHandler((exception, context) => Log.Error(exception, "Stopped program because of exception"))
+            .UseExceptionHandler((exception, _) => Log.Error(exception, "Stopped program because of exception"))
             .Build()
             .InvokeAsync(args);
     }

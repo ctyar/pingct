@@ -39,7 +39,7 @@ internal class TestManager
 
     public async Task ScanAsync()
     {
-        _isOnline = await _mainPingTest.RunAsync();
+        _isOnline = await _mainPingTest.RunAsync(CancellationToken.None);
         ReportPing();
 
         CheckCurrentStatus(_wasOnline, _isOnline);

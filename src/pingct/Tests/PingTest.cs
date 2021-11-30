@@ -24,7 +24,7 @@ internal class PingTest : TestBase
         _maxPingWarningTime = maxPingWarningTime;
     }
 
-    public override async Task<bool> RunAsync(CancellationToken cancellationToken = default)
+    public override async Task<bool> RunAsync(CancellationToken cancellationToken)
     {
         var result = false;
         Ping? ping = null;
