@@ -1,6 +1,5 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Builder;
-using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
 using System.Threading.Tasks;
 using Ctyar.Pingct.Tests;
@@ -24,29 +23,23 @@ internal class Program
 
     private static CommandLineBuilder BuildCommandLine()
     {
-        var rootCommand = new RootCommand
+        var rootCommand = new RootCommand();
+        rootCommand.SetHandler(() =>
         {
-            Handler = CommandHandler.Create(Scan)
-        };
+            GetServiceProvider().GetRequiredService<Gui>().Run();
+        });
 
         var configCommand = new Command("config")
         {
-            Handler = CommandHandler.Create(Config),
             Description = "Prints the path to the config file"
         };
+        configCommand.SetHandler(() =>
+        {
+            GetServiceProvider().GetRequiredService<SettingsManager>().Config();
+        });
         rootCommand.Add(configCommand);
 
         return new CommandLineBuilder(rootCommand);
-    }
-
-    private static void Scan()
-    {
-        GetServiceProvider().GetRequiredService<Gui>().Run();
-    }
-
-    private static void Config()
-    {
-        GetServiceProvider().GetRequiredService<SettingsManager>().Config();
     }
 
     private static ServiceProvider GetServiceProvider()
