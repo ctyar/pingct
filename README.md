@@ -33,14 +33,47 @@ Commands:
   config    Prints the path to the config file
 ```
 
-Test types:
-1. Ping
-1. DNS lookup
-1. HTTP GET request
+#### Config file
+
+```json
+{
+  "Ping": "4.2.2.4",
+  "Delay": 1500,
+  "MaxPingSuccessTime": 120,
+  "MaxPingWarningTime": 170,
+  "Tests": [
+    {
+      "Type": "ping",
+      "Host": "192.168.0.1"
+    },
+    {
+      "Type": "ping",
+      "Host": "zi-tel.com"
+    },
+    {
+      "Type": "dns",
+      "Host": "facebook.com"
+    },
+    {
+      "Type": "get",
+      "Host": "https://twitter.com"
+    }
+  ],
+  "OnConnected": "",
+  "OnConnectedArgs": "",
+  "OnDisconnected": "",
+  "OnDisconnectedArgs": ""
+}
+```
+
+#### Supported test types:
+1. `ping` Ping
+1. `dns` DNS lookup
+1. `get` HTTP GET request
 
 
-### Sample output:
-![image](https://user-images.githubusercontent.com/1432648/114851430-133a4180-9df7-11eb-9954-55db3fe9d93f.png)
+#### Sample output:
+![image](https://user-images.githubusercontent.com/1432648/151763302-146eb6f9-999d-4ea4-a528-875ae55b0be9.png)
 
 ## Pre-release builds
 Get the package from [here](https://github.com/ctyar/pingct/packages/48026).
