@@ -27,14 +27,14 @@ internal class HttpGetTest : TestBase
         try
         {
             var _ = await ExecuteWithTimeoutAsync(
-                async (_) => await HttpClient.GetStreamAsync(_hostName),
+                async _ => await HttpClient.GetStreamAsync(_hostName),
                 cancellationToken
             );
 
             _result = true;
         }
-        catch (Exception e) when (e is HttpRequestException || e is OperationCanceledException ||
-                                  e is IOException || e is TimeoutRejectedException)
+        catch (Exception e) when (e is HttpRequestException or OperationCanceledException or IOException or
+            TimeoutRejectedException)
         {
         }
 
@@ -43,10 +43,10 @@ internal class HttpGetTest : TestBase
 
     public override void Report(PanelManager panelManager)
     {
-        var (message, type) = _result ? (_hostName, MessageType.Success) : (_hostName, MessageType.Failure);
+        var messageType = _result ? MessageType.Success : MessageType.Failure;
 
         panelManager.Print("GET: ", MessageType.Info);
-        panelManager.Print(message, type);
+        panelManager.Print(_hostName, messageType);
         panelManager.PrintLine();
     }
 }

@@ -41,7 +41,7 @@ internal class PingTest : TestBase
                 result = true;
             }
         }
-        catch (Exception e) when (e is PingException || e is SocketException)
+        catch (Exception e) when (e is PingException or SocketException)
         {
             _roundTripTime = 0;
         }

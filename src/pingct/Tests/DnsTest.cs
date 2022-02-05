@@ -30,14 +30,13 @@ internal class DnsTest : TestBase
             });
 
             var dnsQueryResponse = await ExecuteWithTimeoutAsync(
-                async (ct) => await client.QueryAsync(_hostName, QueryType.A, cancellationToken: ct),
+                async ct => await client.QueryAsync(_hostName, QueryType.A, cancellationToken: ct),
                 token
             );
 
             _result = !dnsQueryResponse.HasError;
         }
-        catch (Exception e) when (e is DnsResponseException || e is TimeoutRejectedException ||
-                                  e is ArgumentOutOfRangeException)
+        catch (Exception e) when (e is DnsResponseException or TimeoutRejectedException or ArgumentOutOfRangeException)
         {
         }
 
@@ -46,10 +45,10 @@ internal class DnsTest : TestBase
 
     public override void Report(PanelManager panelManager)
     {
-        var (message, type) = _result ? (_hostName, MessageType.Success) : (_hostName, MessageType.Failure);
+        var messageType = _result ? MessageType.Success : MessageType.Failure;
 
         panelManager.Print("DNS: ", MessageType.Info);
-        panelManager.Print(message, type);
+        panelManager.Print(_hostName, messageType);
         panelManager.PrintLine();
     }
 }
