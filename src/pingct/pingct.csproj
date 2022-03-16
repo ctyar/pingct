@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net5.0;net6.0;net7.0</TargetFrameworks>
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <RootNamespace>Ctyar.Pingct</RootNamespace>
@@ -26,6 +26,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.22" Condition="'$(TargetFramework)'=='netcoreapp3.1'" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" Condition="'$(TargetFramework)'=='net5.0'" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" Condition="'$(TargetFramework)'=='net6.0'" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.3.22175.4" Condition="'$(TargetFramework)'=='net7.0'" />
     <PackageReference Include="Polly" Version="7.2.3" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta3.22106.2" />
