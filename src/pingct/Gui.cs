@@ -72,7 +72,7 @@ internal class Gui
         {
             X = Pos.Right(pingPanel),
             Y = 0,
-            Width = Dim.Percent(50),
+            Width = Dim.Fill(),
             Height = Dim.Fill(),
             CanFocus = false
         };
