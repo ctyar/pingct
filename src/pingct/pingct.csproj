@@ -13,7 +13,7 @@
   <PropertyGroup>
     <PackAsTool>true</PackAsTool>
     <PackageId>pingct</PackageId>
-    <PackageTags>network;ping;ip;dns;proxy;socks5</PackageTags>
+    <PackageTags>network;ping;ip;dnsproxy;socks5</PackageTags>
     <Title>Pingct</Title>
     <Description>A simple ping like tool to check the network connectivity.</Description>
     <Authors>Shahriyar Qulami</Authors>
@@ -23,13 +23,12 @@
 
   <ItemGroup>
     <PackageReference Include="DnsClient" Version="1.7.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.29" Condition="'$(TargetFramework)'=='netcoreapp3.1'" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" Condition="'$(TargetFramework)'=='net6.0'" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" Condition="'$(TargetFramework)'=='net6.0'" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" Condition="'$(TargetFramework)'=='net7.0'" />
     <PackageReference Include="Polly" Version="7.2.3" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
-    <PackageReference Include="Terminal.Gui" Version="1.8.2" />
+    <PackageReference Include="Terminal.Gui" Version="1.9.0" />
   </ItemGroup>
 
 </Project>
