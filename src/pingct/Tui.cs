@@ -72,10 +72,14 @@ internal class Tui
         };
         window.Add(testPanel);
 
-        Colors.ColorSchemes["Menu"].Disabled = attribute;
         var quitItem = new StatusItem(Key.CtrlMask | Key.Q, "~^Q~ Quit", QuitMenuItemHandler);
         _testStatusItem = new StatusItem(Key.Space, TestStatusItemTitles[0], TestMenuItemHandler);
         var statusBar = new StatusBar(new[] { quitItem, _testStatusItem });
+        statusBar.ColorScheme = new ColorScheme
+        {
+            HotNormal = Terminal.Gui.Attribute.Make(Color.BrightYellow, Color.Black),
+            Normal = Terminal.Gui.Attribute.Make(Color.White, Color.Black),
+        };
         top.Add(statusBar);
 
         SetupMainLoop(pingPanel, testPanel);
