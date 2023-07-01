@@ -1,27 +1,21 @@
 ﻿using System;
-using Ctyar.Pingct.Tests;
 using Terminal.Gui;
 
 namespace Ctyar.Pingct;
 
-internal class Gui
+internal class Tui
 {
     private static readonly string[] TestStatusItemTitles = { "~SPACE~ Tests: Auto", "~SPACE~ Tests: On", "~SPACE~ Tests: Off" };
 
-    private readonly MainPingTest _mainPingTest;
-    private readonly EventManager _eventManager;
-    private readonly TestFactory _testFactory;
     private readonly Settings _settings;
     private TestManager? _testManager;
     private StatusItem _testStatusItem = null!;
     private TestRunType _testRunType;
 
-    public Gui(MainPingTest mainPingTest, EventManager eventManager, TestFactory testFactory, Settings settings)
+    public Tui()
     {
-        _mainPingTest = mainPingTest;
-        _eventManager = eventManager;
-        _testFactory = testFactory;
-        _settings = settings;
+        var settingsManager = new SettingsManager();
+        _settings = settingsManager!.Read();
     }
 
     public void Run()
@@ -94,7 +88,7 @@ internal class Gui
         var pingPanelManager = new PanelManager(pingPanel);
         var testPanelManager = new PanelManager(testPanel);
 
-        _testManager = new TestManager(_mainPingTest, pingPanelManager, testPanelManager, _eventManager, _testFactory, _settings);
+        _testManager = new TestManager(pingPanelManager, testPanelManager, _settings);
         Application.MainLoop.AddTimeout(TimeSpan.FromMilliseconds(_settings.Delay), MainLoopHandler);
     }
 

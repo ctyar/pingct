@@ -2,8 +2,6 @@
 using System.CommandLine.Builder;
 using System.CommandLine.Parsing;
 using System.Threading.Tasks;
-using Ctyar.Pingct.Tests;
-using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 namespace Ctyar.Pingct;
@@ -26,7 +24,8 @@ internal class Program
         var rootCommand = new RootCommand();
         rootCommand.SetHandler(() =>
         {
-            GetServiceProvider().GetRequiredService<Gui>().Run();
+            new Tui().Run();
+            //GetServiceProvider().GetRequiredService<Gui>().Run();
         });
 
         var configCommand = new Command("config")
@@ -35,38 +34,11 @@ internal class Program
         };
         configCommand.SetHandler(() =>
         {
-            GetServiceProvider().GetRequiredService<SettingsManager>().Config();
+            new SettingsManager().Config();
         });
         rootCommand.Add(configCommand);
 
         return new CommandLineBuilder(rootCommand);
-    }
-
-    private static ServiceProvider GetServiceProvider()
-    {
-        var serviceCollection = new ServiceCollection();
-
-        ConfigureServices(serviceCollection);
-
-        return serviceCollection.BuildServiceProvider();
-    }
-
-    private static void ConfigureServices(ServiceCollection serviceCollection)
-    {
-        serviceCollection
-            .AddSingleton<StorageManager>()
-            .AddSingleton<SettingsManager>()
-            .AddSingleton(provider =>
-            {
-                var settingsManager = provider.GetService<SettingsManager>();
-                var settings = settingsManager!.Read();
-                return settings;
-            })
-            .AddSingleton<Gui>()
-            .AddSingleton<EventManager>()
-            .AddSingleton<ProcessManager>()
-            .AddSingleton<MainPingTest>()
-            .AddSingleton<TestFactory>();
     }
 
     private static void InitializeLogger()

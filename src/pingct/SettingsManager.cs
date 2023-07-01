@@ -7,16 +7,11 @@ internal class SettingsManager
 {
     private const string SettingsFileName = "settings.json";
 
-    private readonly StorageManager _storageManager;
-
-    public SettingsManager(StorageManager storageManager)
-    {
-        _storageManager = storageManager;
-    }
+    private static readonly StorageManager StorageManager = new();
 
     public void Config()
     {
-        var path = _storageManager.GetFilePath(SettingsFileName);
+        var path = StorageManager.GetFilePath(SettingsFileName);
 
         Console.WriteLine(path);
     }
@@ -25,7 +20,7 @@ internal class SettingsManager
     {
         Settings result;
 
-        var fileContent = _storageManager.Read(SettingsFileName);
+        var fileContent = StorageManager.Read(SettingsFileName);
 
         if (fileContent is null)
         {
@@ -48,6 +43,6 @@ internal class SettingsManager
             WriteIndented = true
         });
 
-        _storageManager.Write(SettingsFileName, fileContent);
+        StorageManager.Write(SettingsFileName, fileContent);
     }
 }
