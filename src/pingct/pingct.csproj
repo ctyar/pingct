@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -26,7 +26,7 @@
     <PackageReference Include="Polly" Version="7.2.4" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
-    <PackageReference Include="Terminal.Gui" Version="1.12.1" />
+    <PackageReference Include="Terminal.Gui" Version="1.13.1" />
   </ItemGroup>
 
 </Project>
