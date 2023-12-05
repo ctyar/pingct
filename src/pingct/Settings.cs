@@ -15,12 +15,12 @@ internal class Settings
         new()
         {
             Type = TestType.Ping,
-            Host = "192.168.0.1"
+            Host = "192.168.1.1"
         },
         new()
         {
             Type = TestType.Ping,
-            Host = "zi-tel.com"
+            Host = "bt.com"
         },
         new()
         {

@@ -44,11 +44,11 @@ Commands:
   "Tests": [
     {
       "Type": "ping",
-      "Host": "192.168.0.1"
+      "Host": "192.168.1.1"
     },
     {
       "Type": "ping",
-      "Host": "zi-tel.com"
+      "Host": "bt.com"
     },
     {
       "Type": "dns",
