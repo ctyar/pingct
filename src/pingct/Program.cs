@@ -25,7 +25,6 @@ internal class Program
         rootCommand.SetHandler(() =>
         {
             new Tui().Run();
-            //GetServiceProvider().GetRequiredService<Gui>().Run();
         });
 
         var configCommand = new Command("config")

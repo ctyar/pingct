@@ -267,6 +267,7 @@ dotnet_diagnostic.IDE0130.severity=suggestion
 csharp_style_prefer_method_group_conversion = true:silent
 csharp_style_prefer_top_level_statements = true:silent
 csharp_style_prefer_primary_constructors = false:suggestion
+resharper_convert_to_primary_constructor_highlighting = none
 
 [*.{cs,vb}]
 dotnet_style_coalesce_expression = true:suggestion
