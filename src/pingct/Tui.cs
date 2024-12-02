@@ -5,7 +5,7 @@ namespace Ctyar.Pingct;
 
 internal class Tui
 {
-    private static readonly string[] TestStatusItemTitles = { "~SPACE~ Tests: Auto", "~SPACE~ Tests: On", "~SPACE~ Tests: Off" };
+    private static readonly string[] TestStatusItemTitles = ["~SPACE~ Tests: Auto", "~SPACE~ Tests: On", "~SPACE~ Tests: Off"];
 
     private readonly Settings _settings;
     private TestManager? _testManager;
@@ -74,11 +74,13 @@ internal class Tui
 
         var quitItem = new StatusItem(Key.CtrlMask | Key.Q, "~^Q~ Quit", QuitMenuItemHandler);
         _testStatusItem = new StatusItem(Key.Space, TestStatusItemTitles[0], TestMenuItemHandler);
-        var statusBar = new StatusBar(new[] { quitItem, _testStatusItem });
-        statusBar.ColorScheme = new ColorScheme
+        var statusBar = new StatusBar([quitItem, _testStatusItem])
         {
-            HotNormal = Terminal.Gui.Attribute.Make(Color.BrightYellow, Color.Black),
-            Normal = Terminal.Gui.Attribute.Make(Color.White, Color.Black),
+            ColorScheme = new ColorScheme
+            {
+                HotNormal = Terminal.Gui.Attribute.Make(Color.BrightYellow, Color.Black),
+                Normal = Terminal.Gui.Attribute.Make(Color.White, Color.Black),
+            }
         };
         top.Add(statusBar);
 

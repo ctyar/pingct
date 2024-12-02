@@ -31,7 +31,7 @@ internal class PanelView : FrameView
     public PanelView(string name) : base(name)
     {
         _values = new();
-        _lastLine = new();
+        _lastLine = [];
 
         _capacity = Driver.Rows - Margin;
 
@@ -47,7 +47,7 @@ internal class PanelView : FrameView
 
         _values.Enqueue(_lastLine);
 
-        _lastLine = new();
+        _lastLine = [];
 
         Render();
     }

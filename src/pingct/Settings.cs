@@ -11,7 +11,7 @@ internal class Settings
     public long MaxPingWarningTime { get; set; } = 170;
 
     public TestSetting[] Tests { get; set; } =
-    {
+    [
         new()
         {
             Type = TestType.Ping,
@@ -32,7 +32,7 @@ internal class Settings
             Type = TestType.Get,
             Host = "https://twitter.com"
         }
-    };
+    ];
 
     public string OnConnected { get; set; } = string.Empty;
 

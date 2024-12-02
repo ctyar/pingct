@@ -8,6 +8,10 @@ internal class SettingsManager
     private const string SettingsFileName = "settings.json";
 
     private static readonly StorageManager StorageManager = new();
+    private static readonly JsonSerializerOptions JsonSerializerOptions = new()
+    {
+        WriteIndented = true
+    };
 
     public void Config()
     {
@@ -38,10 +42,7 @@ internal class SettingsManager
 
     private void SaveSettings(Settings settings)
     {
-        var fileContent = JsonSerializer.Serialize(settings, new JsonSerializerOptions
-        {
-            WriteIndented = true
-        });
+        var fileContent = JsonSerializer.Serialize(settings, JsonSerializerOptions);
 
         StorageManager.Write(SettingsFileName, fileContent);
     }
