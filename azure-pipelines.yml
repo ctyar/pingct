@@ -33,7 +33,7 @@ stages:
       inputs:
         command: 'build'
         projects: |
-          Swashbuckle.Auth.sln
+          pingct.sln
 
     - task: DotNetCoreCLI@2
       displayName: 'Pack'
