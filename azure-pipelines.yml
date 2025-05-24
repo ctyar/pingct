@@ -11,14 +11,29 @@ stages:
     displayName: 'Build'
     pool:
       vmImage: 'ubuntu-latest'
-    workspace:
-      clean: all
 
     steps:
+    - checkout: self
+      fetchDepth: 0
+
     - task: UseDotNet@2
       displayName: 'Install .NET SDK'
       inputs:
         useGlobalJson: true
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet format'
+      inputs:
+        command: 'custom'
+        custom: 'format'
+        arguments: '--verify-no-changes'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Build solution'
+      inputs:
+        command: 'build'
+        projects: |
+          Swashbuckle.Auth.sln
 
     - task: DotNetCoreCLI@2
       displayName: 'Pack'
@@ -30,59 +45,35 @@ stages:
       displayName: 'Publish artifacts'
       artifact: 'packages'
 
-- stage: PublishAlphaPackageStage
-  displayName: 'Publish alpha package'
-  dependsOn: BuildStage
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    - task: DotNetCoreCLI@2
+      displayName: 'Push to GitHub'
+      condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+      inputs:
+        command: 'custom'
+        custom: 'nuget'
+        arguments: 'push artifacts/*.nupkg --skip-duplicate --api-key $(GitHubPackageRepositoryKey) --source https://nuget.pkg.github.com/ctyar/index.json'
+
+- stage: DeployStage
+  displayName: 'Deploy'
   jobs:
-  - deployment:
-    pool:
-      vmImage: 'ubuntu-latest'
-    environment: 'Github package repository'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
+    - deployment: NugetDeployJob
+      displayName: 'Deploy to Nuget.org'
+      pool:
+        vmImage: 'ubuntu-latest'
+      environment: 'NugetEnvironment'
+      strategy:
+        runOnce:
+          deploy:
+            steps:
 
-          - download: current
-            displayName: 'Download artifacts'
-            artifact: 'packages'
+            - download: current
+              displayName: 'Download artifacts'
+              artifact: 'packages'
 
-          - task: PowerShell@2
-            displayName: 'Push the packages to GitHub Packages'
-            env:
-              GITHUB_API_KEY: $(GITHUB_API_KEY)
-            inputs:
-              targetType: 'inline'
-              script: |
-                dotnet tool install -g gpr
-                gpr push --api-key $env:GITHUB_API_KEY $(Pipeline.Workspace)/packages/*.nupkg
-              failOnStderr: true
-              ignoreLASTEXITCODE: true
-
-# https://github.com/microsoft/azure-pipelines-yaml/issues/344
-- stage: PublishFinalPackageStage
-  displayName: 'Publish final package'
-  dependsOn: PublishAlphaPackageStage
-  condition: succeeded()
-  jobs:
-  - deployment:
-    pool:
-      vmImage: 'ubuntu-latest'
-    environment: 'Nuget org'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-
-          - download: current
-            displayName: 'Download artifacts'
-            artifact: 'packages'
-
-          - task: NuGetCommand@2
-            displayName: 'Push the packages to Nuget.org'
-            inputs:
-              command: 'push'
-              packagesToPush: '$(Pipeline.Workspace)/packages/*.nupkg'
-              nuGetFeedType: 'external'
-              publishFeedCredentials: 'PingctNugetConnection'
+            - task: DotNetCoreCLI@2
+              displayName: 'Push to Nuget.org'
+              condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+              inputs:
+                command: 'custom'
+                custom: 'nuget'
+                arguments: 'push $(Pipeline.Workspace)/packages/*.nupkg --api-key $(NugetKey) --source https://api.nuget.org/v3/index.json'
