@@ -23,14 +23,14 @@ $ pingct
 ## Usage
 
 ```
-  pingct [options] [command]
+  pingct [command] [options]
 
 Options:
-  --version         Show version information
-  -?, -h, --help    Show help and usage information
+  -?, -h, --help  Show help and usage information
+  --version       Show version information
 
 Commands:
-  config    Prints the path to the config file
+  config  Prints the path to the config file
 ```
 
 #### Config file
