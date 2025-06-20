@@ -1,43 +1,72 @@
-﻿using System.CommandLine;
-using System.CommandLine.Builder;
-using System.CommandLine.Parsing;
-using System.Threading.Tasks;
+﻿using System;
+using System.CommandLine;
 using Serilog;
 
 namespace Ctyar.Pingct;
 
 internal class Program
 {
-    private static async Task Main(string[] args)
+    private static int Main(string[] args)
     {
         InitializeLogger();
 
-        await BuildCommandLine()
-            .UseDefaults()
-            .UseExceptionHandler((exception, _) => Log.Error(exception, "Stopped program because of exception"))
-            .Build()
-            .InvokeAsync(args);
+        var rootCommand = BuildCommandLine();
+
+        var parseResult = rootCommand.Parse(args);
+
+        if (parseResult.Errors.Count > 0)
+        {
+            foreach (var parseError in parseResult.Errors)
+            {
+                Console.Error.WriteLine(parseError.Message);
+            }
+
+            return 1;
+        }
+
+        parseResult.Invoke();
+
+        return 0;
     }
 
-    private static CommandLineBuilder BuildCommandLine()
+    private static RootCommand BuildCommandLine()
     {
         var rootCommand = new RootCommand();
-        rootCommand.SetHandler(() =>
+
+        rootCommand.SetAction(parseResult =>
         {
-            new Tui().Run();
+            try
+            {
+                new Tui().Run();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Stopped program because of exception");
+
+                throw;
+            }
         });
 
         var configCommand = new Command("config")
         {
             Description = "Prints the path to the config file"
         };
-        configCommand.SetHandler(() =>
+        configCommand.SetAction(parseResult =>
         {
-            new SettingsManager().Config();
+            try
+            {
+                new SettingsManager().Config();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Stopped program because of exception");
+
+                throw;
+            }
         });
         rootCommand.Add(configCommand);
 
-        return new CommandLineBuilder(rootCommand);
+        return rootCommand;
     }
 
     private static void InitializeLogger()
