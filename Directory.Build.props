@@ -5,6 +5,6 @@
       <Version>3.8.118</Version>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.2.25" PrivateAssets="All" />
+    <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.2.39" PrivateAssets="All" />
   </ItemGroup>
 </Project>
