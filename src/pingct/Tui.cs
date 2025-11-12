@@ -87,6 +87,7 @@ internal class Tui
         SetupMainLoop(pingPanel, testPanel);
 
         Application.Run();
+        Application.Shutdown();
     }
 
     private void SetupMainLoop(PanelView pingPanel, PanelView testPanel)
