@@ -73,7 +73,7 @@ Commands:
 
 
 #### Sample output:
-![image](https://user-images.githubusercontent.com/1432648/151763302-146eb6f9-999d-4ea4-a528-875ae55b0be9.png)
+![Screenshot](https://raw.githubusercontent.com/ctyar/pingct/refs/heads/main/doc/images/screenshot.png)
 
 ## Pre-release builds
 Get the package from [here](https://github.com/ctyar/pingct/packages/48026).
